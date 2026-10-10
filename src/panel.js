@@ -426,7 +426,12 @@ function buildShellHtml() {
                             </div>
                         </div>
                     </div>
-                    <div class="btn-row"><button id="ra_jb_save" class="btn red">💾 保存破限设置</button></div>
+                    <div class="btn-row">
+                        <button id="ra_jb_export" class="btn green small">📤 导出破限</button>
+                        <button id="ra_jb_import" class="btn blue small">📥 导入破限</button>
+                        <button id="ra_jb_save" class="btn red">💾 保存破限设置</button>
+                        <input type="file" id="ra_jb_file_input" accept=".json" style="display:none;">
+                    </div>
                 </div>
 
                 <div class="sub-content" data-subcontent="tags" style="padding:16px;display:none;">
@@ -1570,6 +1575,73 @@ function wireJailbreakControls() {
             d.jailbreak = { items: ui.jailbreakItems };
         });
         window.toastr?.success?.('破限设置已保存');
+    });
+
+    on($('ra_jb_export'), 'click', () => {
+        try {
+            ui.jailbreakItems = collectJailbreakFromUI();
+            const exportData = {
+                _meta: {
+                    type: 'RUBY_JAILBREAK',
+                    version: '1.0.0',
+                    exportTime: new Date().toISOString(),
+                    description: '由RUBY分析系统导出的破限配置（仅含自定义破限消息）',
+                    itemCount: ui.jailbreakItems.length,
+                },
+                jailbreak: jailbreak.normalizeJailbreakConfig({ items: ui.jailbreakItems }),
+            };
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ruby_jailbreak_${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            window.toastr?.success?.(`破限配置已导出（${ui.jailbreakItems.length} 条）`);
+        } catch (e) {
+            window.toastr?.error?.('导出失败: ' + e.message);
+        }
+    });
+
+    on($('ra_jb_import'), 'click', () => {
+        $('ra_jb_file_input')?.click();
+    });
+
+    on($('ra_jb_file_input'), 'change', async (e) => {
+        const file = e.target?.files?.[0];
+        if (!file) return;
+        try {
+            const text = await file.text();
+            const raw = JSON.parse(text);
+            // 兼容多种来源：破限单独导出 / 完整配置模板 / 裸 {items} / 裸数组
+            let jbRaw;
+            if (raw && raw._meta?.type === 'RUBY_JAILBREAK') {
+                jbRaw = raw.jailbreak;
+            } else if (raw && raw._meta?.type === 'RUBY_ANALYZER_PRESET') {
+                jbRaw = raw.jailbreak;
+            } else if (raw && Array.isArray(raw.items)) {
+                jbRaw = raw;
+            } else if (Array.isArray(raw)) {
+                jbRaw = { items: raw };
+            } else {
+                throw new Error('无法识别的破限配置格式');
+            }
+            const normalized = jailbreak.normalizeJailbreakConfig(jbRaw);
+            const count = normalized.items.length;
+            if (!window.confirm(`确定从"${file.name}"导入破限配置吗？（共 ${count} 条消息）导入后会立即覆盖当前破限列表并保存。`)) return;
+
+            ui.jailbreakItems = normalized.items;
+            ui.collapsedJb.clear();
+            renderJailbreakItems();
+            withConfigData((d) => {
+                d.jailbreak = { items: ui.jailbreakItems };
+            });
+            window.toastr?.success?.(`破限配置已导入（${count} 条）`);
+        } catch (err) {
+            window.toastr?.error?.('导入失败: ' + err.message);
+        } finally {
+            e.target.value = '';
+        }
     });
 }
 
