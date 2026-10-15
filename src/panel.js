@@ -103,6 +103,27 @@ function withConfigData(mutator) {
     config.flushCardPersistNow().catch(() => { /* flush 内部已上报错误 */ });
 }
 
+/** 全局破限加载：优先从全局 UI 设置读取（源真相），回退到配置层数据。
+ *  破限保存为全局设置后，切换预设/角色卡不会丢失；同步到配置层数据确保引擎读到正确值。 */
+function loadJailbreakItemsGlobal(data) {
+    const uiCfg = config.getUi();
+    const globalJb = uiCfg.jailbreak;
+    if (globalJb && Array.isArray(globalJb.items) && globalJb.items.length > 0) {
+        const items = jailbreak.normalizeJailbreakConfig(globalJb).items;
+        // 同步到配置层数据，确保引擎在任何角色卡上都能读到正确的破限
+        const dataJbStr = JSON.stringify(data.jailbreak?.items || []);
+        const globalJbStr = JSON.stringify(globalJb.items);
+        if (dataJbStr !== globalJbStr) {
+            data.jailbreak = { items };
+            config.saveConfigData(data);
+            config.flushCardPersistNow().catch(() => { /* 非关键同步 */ });
+        }
+        return items;
+    }
+    // 无全局破限时回退到配置层数据（可能为角色卡旧版存储或默认值）
+    return jailbreak.getJailbreakItems(data);
+}
+
 function getEditingPreset(data) {
     const cfgData = data || config.resolveConfig().data;
     const preset = cfgData.presets.find((p) => p.id === ui.editingPresetId);
@@ -181,7 +202,7 @@ function refreshAll() {
     checkEntryStatus(data);
     renderPresetList(data);
     loadApiTab(data);
-    ui.jailbreakItems = jailbreak.getJailbreakItems(data);
+    ui.jailbreakItems = loadJailbreakItemsGlobal(data);
     renderJailbreakItems();
     ui.tags = [...(data.customContentTags || [])];
     renderTagsList();
@@ -417,7 +438,7 @@ function buildShellHtml() {
                         <div class="form-header red">■ 自定义破限消息</div>
                         <div class="form-body">
                             <div class="tip" style="margin-top:0;margin-bottom:12px;">
-                                💡 任务提示词会固定作为 <code>user</code> 消息发送。这里可以调整它前后的破限消息、消息角色和注入位置；<code>{{taskType}}</code> 会自动替换为当前任务名。
+                                💡 任务提示词会固定作为 <code>user</code> 消息发送。这里可以调整它前后的破限消息、消息角色和注入位置；<code>{{taskType}}</code> 会自动替换为当前任务名。<br>🔒 破限设置为<strong>全局保存</strong>，切换预设/角色卡或导入配置模板均不会覆盖。
                             </div>
                             <div id="ra_jailbreak_items"></div>
                             <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
@@ -1571,10 +1592,12 @@ function wireJailbreakControls() {
 
     on($('ra_jb_save'), 'click', () => {
         ui.jailbreakItems = collectJailbreakFromUI();
+        config.saveUi({ jailbreak: { items: ui.jailbreakItems } });
+        ui.jailbreakItems = collectJailbreakFromUI();
         withConfigData((d) => {
             d.jailbreak = { items: ui.jailbreakItems };
         });
-        window.toastr?.success?.('破限设置已保存');
+        window.toastr?.success?.('破限设置已保存（全局生效）');
     });
 
     on($('ra_jb_export'), 'click', () => {
@@ -1631,12 +1654,13 @@ function wireJailbreakControls() {
             if (!window.confirm(`确定从"${file.name}"导入破限配置吗？（共 ${count} 条消息）导入后会立即覆盖当前破限列表并保存。`)) return;
 
             ui.jailbreakItems = normalized.items;
+            config.saveUi({ jailbreak: { items: ui.jailbreakItems } });
             ui.collapsedJb.clear();
             renderJailbreakItems();
             withConfigData((d) => {
                 d.jailbreak = { items: ui.jailbreakItems };
             });
-            window.toastr?.success?.(`破限配置已导入（${count} 条）`);
+            window.toastr?.success?.(`破限配置已导入（${count} 条，全局生效）`);
         } catch (err) {
             window.toastr?.error?.('导入失败: ' + err.message);
         } finally {
@@ -3239,7 +3263,7 @@ function generateExportData() {
         customContentTags: data.customContentTags || [],
         summaryProvider: data.summaryProvider || '',
         yuzukiIncludePlot: data.yuzukiIncludePlot !== false,
-        jailbreak: jailbreak.normalizeJailbreakConfig(data.jailbreak),
+        jailbreak: jailbreak.normalizeJailbreakConfig(config.getUi().jailbreak || data.jailbreak),
         gen: data.gen || {},
         activePresetId: data.activePresetId,
         presets: scrubSecretsForExport(data.presets),
@@ -3286,7 +3310,7 @@ function wirePresetIoControls() {
                 d.customContentTags = parsed.customContentTags;
                 d.summaryProvider = parsed.summaryProvider;
                 d.yuzukiIncludePlot = parsed.yuzukiIncludePlot !== false;
-                d.jailbreak = parsed.jailbreak;
+                // 破限为全局设置，导入模板时不覆盖——保留用户已保存的全局破限
                 d.gen = parsed.gen;
                 d.presets = parsed.presets;
                 d.activePresetId = parsed.activePresetId;
