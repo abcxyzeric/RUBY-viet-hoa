@@ -21,7 +21,7 @@ async function rubyCommandCallback(args, text) {
         if (sub === 'cardwriter' || sub === 'cw') {
             const action = String(args?.action || '').trim().toLowerCase();
             if (action === 'start') {
-                return await startSession(String(args?.step || 'Step0')) ? 'cardwriter session started' : 'cardwriter session start failed';
+                return await startSession(String(args?.step || 'StepW')) ? 'cardwriter session started' : 'cardwriter session start failed';
             }
             if (action === 'end') {
                 return await endSession({ keepDrafts: true }) ? 'cardwriter session ended (drafts kept)' : 'cardwriter session end failed';

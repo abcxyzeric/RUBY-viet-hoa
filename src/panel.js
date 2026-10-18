@@ -754,14 +754,14 @@ function buildShellHtml() {
                             <div class="form-header blue">■ 会话控制</div>
                             <div class="form-body">
                                 <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                                    <button id="ra_cw_start" class="btn green">▶️ 开始写卡会话（Step0）</button>
+                                    <button id="ra_cw_start" class="btn green">▶️ 开始写卡会话（StepW）</button>
                                     <button id="ra_cw_end" class="btn red">⏹️ 结束会话</button>
                                     <button id="ra_cw_end_clear" class="btn red">🧹 结束并清空写卡条目</button>
                                     <button id="ra_cw_open_book" class="btn outline">📖 打开《ruby写卡初稿》</button>
                                 </div>
                                 <div class="tip" style="margin-top:10px;">
-                                    开始会话后，RUBY 会在聊天附加世界书注入规则/人设（深度0、排序999强调）与当前步骤指令；
-                                    你用自己的预设和 API 正常对话，RUBY 只监听。检测到步骤的 yaml 完成标记后自动存草稿并切换下一步骤。
+                                    开始会话后，RUBY 在聊天附加世界书注入规则/人设、流程路线图、编号知识与当前步骤指令；
+                                    你用自己的预设和 API 正常对话，RUBY 只监听。检测到 <ruby新条目>/<ruby更新条目> 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。
                                 </div>
                             </div>
                         </div>
@@ -778,15 +778,13 @@ function buildShellHtml() {
                             <div class="form-header blue">■ 写卡选项</div>
                             <div class="form-body">
                                 <div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:10px;">
-                                    <label class="checkbox_label"><input type="radio" name="ra_cw_mode" value="fast" checked> ⚡ 快速模式（检测到完成标记自动切换）</label>
-                                    <label class="checkbox_label"><input type="radio" name="ra_cw_mode" value="dialogue"> 💬 对话模式（切换前弹确认，可选"我还想聊聊"继续纠正）</label>
                                 </div>
-                                <label class="checkbox_label"><input id="ra_cw_draft" type="checkbox" checked> 完成时自动写入《ruby写卡初稿》世界书</label>
+                                <label class="checkbox_label"><input id="ra_cw_draft" type="checkbox" checked> 记录自动写入《ruby写卡初稿》世界书</label>
                                 <label class="checkbox_label"><input id="ra_cw_guide" type="checkbox" checked> 注入步骤说明（对应气泡文本）</label>
                                 <div class="tip" style="margin-top:8px;">
-                                    💬 对话模式下检测到完成标记会弹出确认框：确认切换 / 我还想聊聊（后者注入"创作者不完全满意、继续讨论"的临时条目，切换下一阶段时自动清除）。<br>
-                                    🧹 进入 Step4 自动清理 Step1/2 的条目与草稿；进入 Step8 自动清理 Step7；Step6.5 已从流程移除。<br>
-                                    🏁 全部完成后手动点「总览」进入收尾：Ruby 返回含「玩家已完成」的 yaml 后，自动只保留美学/角色/NSFW设定与分析提示词，其余 RUBY 条目全部清除。
+                                    📦 记录制：AI 输出 &lt;ruby新条目&gt; 新入库 / &lt;ruby更新条目 编号="X"&gt; 覆盖更新已有记录（编号知识常驻注入，AI 知道该更新哪条）。<br>
+                                    🔁 步骤不自动切换：每步可反复产出，做完做透再手动走下一步；Step7（动态任务设计）一次只允许定稿一个任务。<br>
+                                    🏁 全部完成后手动点「合成角色卡」：Ruby 汇总清单跟你确认，输出 &lt;ruby合成&gt; 后 RUBY 整理聊天世界书为干净条目、自动生成 RubyAnalyzer 分析方案，并下载 v3 角色卡 JSON。
                                 </div>
                             </div>
                         </div>
@@ -800,11 +798,11 @@ function buildShellHtml() {
                             <div class="form-header blue">■ 工作原理</div>
                             <div class="form-body">
                                 <div class="status-box">
-                                    ① 注入：步骤指令经聊天附加世界书注入，走酒馆原生生成通道（你的预设/API），RUBY 不代发消息。<br>
-                                    ② 监听：每条 AI 回复后检测当前步骤的完成标记（XML 包裹的 yaml 代码块）。<br>
-                                    ③ 草稿：检测到标记 → yaml 提取 → 写入《ruby写卡初稿》：角色内容按顺序排在角色后（order 100+）、世界/NPC/速览排在角色前、分析提示词放入关闭条目并按角色名设置关键词。<br>
-                                    ④ 切换：当前步骤条目自动关闭，下一步骤条目自动开启，进度存于聊天元数据（换聊天不串进度）。<br>
-                                    ⑤ 结束：草稿保留在《ruby写卡初稿》，可一键打开检查。
+                                    ① 注入：规则/人设/路线图/编号知识/步骤指令经聊天附加世界书注入，走酒馆原生生成通道（你的预设/API），RUBY 不代发消息。<br>
+                                    ② 监听：每条 AI 回复后检测记录标记——&lt;ruby新条目&gt; 新记录 / &lt;ruby更新条目 编号="X"&gt; 更新记录 X（编号没命中时按人物名相似度兜底合并）。<br>
+                                    ③ 记录：检测到标记 → yaml 提取 → 写入《ruby写卡初稿》：按步骤各有默认位置与顺序，分析提示词放关闭条目；编号知识同步刷新。<br>
+                                    ④ 停留：不自动切换步骤，每步可反复产出；进度存于聊天元数据（换聊天不串进度）。<br>
+                                    ⑤ 合成：合成角色卡阶段输出 &lt;ruby合成&gt; JSON 清单 → 确认 → 聊天世界书整理为干净条目 + RubyAnalyzer 方案自动生成 + 下载 v3 角色 JSON。
                                 </div>
                             </div>
                         </div>
@@ -3432,15 +3430,14 @@ function renderCardWriterTab() {
     const s = cardwriter.getState();
     const statusEl = $('ra_cw_status');
     if (statusEl) {
-        const modeLabel = cardwriter.getSettings().mode === 'dialogue' ? '💬 对话模式' : '⚡ 快速模式';
         const stepLine = s.active
             ? `当前步骤：<strong>${h(s.stepId || '—')}</strong> ${s.stepId ? `（${h(s.stepName)}）` : ''}`
             : '未激活';
         statusEl.innerHTML = `
-            <div>${s.active ? '<span class="status-ok">🟢 写卡会话进行中</span>' : '<span class="status-warn">⚪ 未激活</span>'} · ${modeLabel}</div>
+            <div>${s.active ? '<span class="status-ok">🟢 写卡会话进行中</span>' : '<span class="status-warn">⚪ 未激活</span>'} · 📦 记录制</div>
             <div style="margin-top:6px;">${stepLine}</div>
             <div style="margin-top:6px;font-size:12px;color:#666;">
-                草稿数：${s.draftCount} · 最近操作：${h(s.lastAction || '无')}${s.lastError ? `<br><span class="status-err">错误：${h(s.lastError)}</span>` : ''}
+                记录数：${s.draftCount} · 最近操作：${h(s.lastAction || '无')}${s.lastError ? `<br><span class="status-err">错误：${h(s.lastError)}</span>` : ''}
             </div>`;
     }
 
@@ -3475,22 +3472,10 @@ function wireCardWriterControls() {
     const guideEl = $('ra_cw_guide');
     if (draftEl) draftEl.checked = settings.draftToBook;
     if (guideEl) guideEl.checked = settings.showGuide;
-    const modeFast = document.querySelector('#ra_panel input[name="ra_cw_mode"][value="fast"]');
-    const modeDialogue = document.querySelector('#ra_panel input[name="ra_cw_mode"][value="dialogue"]');
-    if (modeFast) modeFast.checked = settings.mode !== 'dialogue';
-    if (modeDialogue) modeDialogue.checked = settings.mode === 'dialogue';
-    const modeRadios = [modeFast, modeDialogue].filter(Boolean);
-    for (const radio of modeRadios) {
-        radio.addEventListener('change', () => {
-            if (!radio.checked) return;
-            cardwriter.saveSettings({ mode: radio.value });
-            cwPushLog(`模式切换：${radio.value === 'dialogue' ? '对话模式' : '快速模式'}`);
-        });
-    }
 
     on($('ra_cw_start'), 'click', async () => {
-        if (await cardwriter.startSession('Step0')) {
-            cwPushLog('写卡会话开始 → Step0');
+        if (await cardwriter.startSession('StepW')) {
+            cwPushLog('写卡会话开始 → StepW 世界观讨论');
             renderCardWriterTab();
         }
     });
@@ -3513,7 +3498,7 @@ function wireCardWriterControls() {
     });
     on(draftEl, 'change', () => {
         cardwriter.saveSettings({ draftToBook: !!draftEl.checked });
-        cwPushLog(`草稿写入：${draftEl.checked ? '开' : '关'}`);
+        cwPushLog(`记录写入：${draftEl.checked ? '开' : '关'}`);
     });
     on(guideEl, 'change', () => {
         cardwriter.saveSettings({ showGuide: !!guideEl.checked });
@@ -3525,7 +3510,7 @@ function wireCardWriterControls() {
         renderCardWriterTab();
     });
     window.addEventListener('ruby:cardwriter-draft', (e) => {
-        cwPushLog(`草稿写入：${e.detail?.stepId} → ${e.detail?.key}`);
+        cwPushLog(`记录${e.detail?.action === 'update' ? '更新' : '写入'}：${e.detail?.stepId} → ${e.detail?.key}`);
     });
 
     renderCardWriterTab();
