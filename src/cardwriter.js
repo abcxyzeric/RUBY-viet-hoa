@@ -227,15 +227,17 @@ function recordKey(stepId, num) {
     return `${RECORD_PREFIX}${stepId}_${safe}`;
 }
 
-/** 从记录 yaml 提取展示名：character: 行 → 顶层首键 → 任务行 → 兜底 */
+/** 从记录 yaml 提取展示名：character: 行 → 任务名: 行 → 顶层首键 → 兜底 */
 function extractRecordLabel(yamlText) {
     const s = String(yamlText || '');
     let m = s.match(/^\s*character:\s*(.+)$/m);
     if (m) return m[1].trim().replace(/^["']|["']$/g, '').slice(0, 24);
-    m = s.match(/^[^\s#:'"][^:]{0,30}?:(?=[ \t]|$)/m);
-    if (m) return m[1] ? m[1].trim() : m[0].replace(/:$/, '').trim();
-    m = s.match(/^任务:\s*(.+)$/m);
+    m = s.match(/^\s*任务名:\s*(.+)$/m);
+    if (m) return m[1].trim().slice(0, 24);
+    m = s.match(/^\s*任务:\s*(.+)$/m);
     if (m) return m[1].trim().replace(/^生成/, '').slice(0, 24);
+    m = s.match(/^[^\s#:'"][^:]{0,30}?:(?=[ \t]|$)/m);
+    if (m) return m[0].replace(/:$/, '').trim();
     return '';
 }
 
@@ -306,6 +308,23 @@ export function extractManifest(text) {
     } catch {
         return null;
     }
+}
+
+/** 切换标记：创作者表示可以进入下一步时 AI 输出 <ruby切换/>（可带 步骤="StepX"）。返回 {target} 或 null */
+export function extractSwitch(text) {
+    const s = String(text || '');
+    let m = s.match(/<ruby切换(?:\s+步骤\s*=\s*["']([^"']+)["'])?\s*\/>/);
+    if (!m) m = s.match(/<ruby切换(?:\s+步骤\s*=\s*["']([^"']+)["'])?\s*>\s*<\/ruby切换>/);
+    if (!m) return null;
+    return { target: m[1] || '' };
+}
+
+/** 主链上的下一步（跳过工具步骤 StepX 与 Overview） */
+function nextStepOf(stepId) {
+    const main = CARDWRITER_DATA.steps.filter((s) => s.id !== 'Overview' && s.id !== 'StepX');
+    const i = main.findIndex((s) => s.id === stepId);
+    if (i < 0 || i === main.length - 1) return null;
+    return main[i + 1].id;
 }
 
 /** 从世界书 entries 收集记录清单：[{stepId, num, label, key}] */
@@ -584,6 +603,17 @@ async function refreshRoadmapEntry(book, entries, stepId) {
 }
 
 // ---------- 步骤切换与会话 ----------
+
+/** 内部切换核心（无 busy 守卫）：供 handleGenerationEnded 在记录落库后执行切换标记 */
+async function applyStepSwitch(stepId) {
+    const book = await ensureDraftBook();
+    await setStepEntries(book, stepId);
+    state.stepId = stepId;
+    state.lastStepId = stepId;
+    state.lastAction = `切换标记 → ${stepId} ${getStep(stepId)?.name || ''}`;
+    await writeProgress({ stepId, stepName: getStep(stepId)?.name || '' });
+    notify('info', `RUBY写卡：已自动切换到 ${stepId} ${getStep(stepId)?.name || ''}`);
+}
 
 export async function switchStep(stepId, { manual = false } = {}) {
     if (state.busy) return false;
@@ -1046,34 +1076,32 @@ async function buildCharacterCardFromManifest(manifest) {
 
 // ---------- 消息监听 ----------
 
-function lastAiMessage() {
-    const c = ctx();
-    const chat = c?.chat;
-    if (!Array.isArray(chat) || chat.length === 0) return null;
-    for (let i = chat.length - 1; i >= 0; i--) {
-        if (chat[i]?.is_user === false && String(chat[i]?.mes || '').trim()) {
-            return { index: i, message: chat[i] };
-        }
-    }
-    return null;
-}
-
 async function handleGenerationEnded() {
     if (!state.active || state.busy) return;
-    const last = lastAiMessage();
-    if (!last) return;
-    if (last.index <= state.lastHandledMessage) return; // 防重复（流式期间事件可能多次触发）
-    state.lastHandledMessage = last.index;
+    const c = ctx();
+    const chat = c?.chat;
+    if (!Array.isArray(chat)) return;
 
-    const text = String(last.message.mes || '');
+    // 批量收集未处理的 AI 楼：错过事件窗口（busy/切换竞态）的楼下次事件补处理，标记永不丢失
+    const pending = [];
+    for (let i = Math.max(state.lastHandledMessage + 1, 0); i < chat.length; i++) {
+        if (chat[i]?.is_user === false && String(chat[i]?.mes || '').trim()) {
+            pending.push({ index: i, message: chat[i] });
+        }
+    }
+    if (pending.length === 0) return;
+    state.lastHandledMessage = pending[pending.length - 1].index;
+
     const stepId = state.stepId;
     if (!stepId) return;
+    const texts = pending.map((p) => String(p.message.mes || ''));
+    const text = texts.join('\n\n');
 
     // 合成阶段：<ruby合成> JSON → 确认 → 构建
     if (stepId === 'Overview') {
         const manifest = extractManifest(text);
         if (!manifest) {
-            state.lastAction = '收到回复（合成阶段未检测到 <ruby合成> 标记）';
+            state.lastAction = `收到回复（合成阶段未检测到 <ruby合成> 标记）`;
             emitState();
             return;
         }
@@ -1106,9 +1134,10 @@ async function handleGenerationEnded() {
         return;
     }
 
-    // 记录阶段：捕捉 <ruby新条目>/<ruby更新条目 编号>
+    // 记录阶段：捕捉 <ruby新条目>/<ruby更新条目 编号>；随后处理 <ruby切换/>（记录与切换可同楼共存）
     let records = extractRecords(text);
-    if (records.length === 0) {
+    const switchMark = extractSwitch(text);
+    if (records.length === 0 && !switchMark) {
         state.lastAction = `收到回复（${stepId} 无记录标记，视为讨论）`;
         emitState();
         return;
@@ -1131,9 +1160,26 @@ async function handleGenerationEnded() {
             const step = getStep(stepId);
             state.lastAction = `${stepId} 已${r0.action === 'new' ? '记录' : '更新'} ${r0.key}（${r0.label}）——可继续本步骤，或手动切换下一步`;
             await writeProgress({ stepId, stepName: step?.name || '' });
-            notify('info', `RUBY写卡：${r0.action === 'new' ? '已记录' : '已更新'} ${r0.label}（${stepId} ${step?.name || ''}）。本步骤可继续产出，完成后手动切换下一步`);
+            notify('info', `RUBY写卡：${r0.action === 'new' ? '已记录' : '已更新'} ${r0.label}（${stepId} ${step?.name || ''}）`);
             for (const r of results) {
                 window.dispatchEvent(new CustomEvent('ruby:cardwriter-draft', { detail: { stepId, key: r.key, action: r.action } }));
+            }
+        }
+
+        // 切换标记：创作者表示可以进入下一步（记录已先行落库）
+        if (switchMark) {
+            const target = switchMark.target || nextStepOf(stepId);
+            if (target && getStep(target) && target !== 'Overview') {
+                await applyStepSwitch(target);
+            } else if (switchMark.target === 'Overview' || (!target && stepId === 'Step7')) {
+                // 主链终点：引导进入合成阶段
+                await applyStepSwitch('Overview');
+            } else if (!target) {
+                state.lastAction = `${stepId} 切换标记无效（已是主链最后一步），请手动进入合成角色卡`;
+                notify('warning', 'RUBY写卡：当前已是主流程最后一步，请在写卡页手动进入「合成角色卡」');
+            } else {
+                state.lastAction = `${stepId} 切换目标无效：${switchMark.target}`;
+                notify('warning', `RUBY写卡：切换目标无效（${switchMark.target}），已忽略`);
             }
         }
     } catch (e) {
