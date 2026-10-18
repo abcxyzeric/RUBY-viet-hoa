@@ -57,6 +57,9 @@ SillyTavern/public/scripts/extensions/third-party/ruby-analyzer
 /ruby run startup=true   手动执行开局任务
 /ruby run all=true       手动执行全部启用任务
 /ruby reload             重载配置（切换绑定/方案后生效）
+/ruby preset             列出全部配置方案（标出当前激活）
+/ruby preset <名称|id>   切换配置方案：activePresetId 写卡立即落盘 + 引擎重武装
+                         （角色卡可携带多套方案如小马版/老马版，由开局选择前端 runSlash 调用）
 /ruby cw                 打开写卡页签
 /ruby cw status          查看写卡会话状态
 /ruby cw action=start    开始写卡会话（可加 step=Step3 指定起始步骤）

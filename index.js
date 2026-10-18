@@ -4,11 +4,13 @@ import { initCardWriter, startSession, endSession, getState as getCwState } from
 import { ensureOrb } from './src/orb.js';
 import { initSettingsDrawer, initTheme } from './src/settings.js';
 import { openPanel } from './src/panel.js';
+import * as config from './src/config.js';
 
 let commandRegistered = false;
 
 async function rubyCommandCallback(args, text) {
-    const sub = String(text || args?.subcommand || '').trim().toLowerCase() || 'panel';
+    const rawText = String(text || args?.subcommand || '').trim();
+    const sub = rawText.toLowerCase().split(/\s+/)[0] || 'panel';
 
     try {
         if (sub === 'panel' || sub === 'open') {
@@ -29,6 +31,33 @@ async function rubyCommandCallback(args, text) {
             }
             openPanel('cardwriter');
             return 'cardwriter panel opened';
+        }
+        if (sub === 'preset') {
+            // /ruby preset [名称|id] —— 前端开局选择 HTML 通过 runSlash 调用
+            // 切换 activePresetId → 写卡（立即落盘）→ 引擎重武装
+            const name = rawText.split(/\s+/).slice(1).join(' ').trim();
+            const { data } = config.resolveConfig();
+            const presets = Array.isArray(data?.presets) ? data.presets : [];
+            if (!presets.length) return 'no presets configured';
+            if (!name) {
+                return 'presets: ' + presets.map((p) => `${p.name || p.id}${p.id === data.activePresetId ? ' [active]' : ''}`).join(' | ');
+            }
+            const target = presets.find((p) => p.id === name)
+                || presets.find((p) => String(p.name || '') === name)
+                || presets.find((p) => String(p.name || '').includes(name) || String(p.id).includes(name));
+            if (!target) {
+                return `preset not found: ${name} (available: ${presets.map((p) => p.name || p.id).join(', ')})`;
+            }
+            if (target.id === data.activePresetId) {
+                reinit();
+                return `preset already active: ${target.name || target.id} (engine re-armed)`;
+            }
+            data.activePresetId = target.id;
+            config.saveConfigData(data);
+            await config.flushCardPersistNow();
+            reinit();
+            const enabled = (target.tasks || []).filter((t) => t.enabled).length;
+            return `preset switched: ${target.name || target.id} | tasks: ${enabled}/${(target.tasks || []).length} enabled | engine re-armed`;
         }
         if (sub === 'status') {
             const es = getEngineState();
@@ -68,7 +97,7 @@ async function rubyCommandCallback(args, text) {
             }
             return await forceRun('task', taskId);
         }
-        return 'usage: /ruby [panel | status | run | reload]  (run: task=<id> | startup=true | all=true | director=true)';
+        return 'usage: /ruby [panel | status | run | reload | preset <名称>]  (run: task=<id> | startup=true | all=true | director=true)';
     } catch (e) {
         return `RUBY error: ${e.message}`;
     }
