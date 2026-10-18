@@ -336,3 +336,62 @@ export async function scanBookKeys(bookName) {
     }
     return [...new Set(allKeys)].sort((a, b) => a.localeCompare(b, 'zh-Hans-CN'));
 }
+
+/**
+ * 双版本条目组整备（供 /ruby preset 调用，前端开局选择 HTML 的落地实现）。
+ *
+ * 约定：孪生条目名以「老马版」结尾（如 沛霖老马版），其原版条目名为去掉后缀的名字（沛霖）。
+ * - activeSuffix = '老马版'：启用孪生组、禁用原版组
+ * - activeSuffix = '小马版'：启用原版组、禁用孪生组
+ * - 两边都不到的共享条目一概不动
+ *
+ * 直接经 loadWorldInfo 取真实 uid 再 /setentryfield 写 disable——不做 uid 盲扫，
+ * 不触发宿主对无效 uid 的 toastr 告警。返回统计 {laoCount, changedLao, changedXiao}。
+ */
+export async function setVersionEntryGroups(bookName, activeSuffix) {
+    const suffix = String(activeSuffix || '').trim();
+    if (suffix !== '老马版' && suffix !== '小马版') {
+        throw new Error(`unknown version suffix: ${activeSuffix}`);
+    }
+    if (!bookName) throw new Error('world book name missing');
+    const data = await loadBookData(bookName);
+    if (!data?.entries || typeof data.entries !== 'object') {
+        throw new Error(`world book not found: ${bookName}`);
+    }
+
+    const wantLao = suffix === '老马版';
+    const byUid = new Map();
+    const laoBases = new Set();
+    const groups = [];
+    for (const [uidRaw, entry] of Object.entries(data.entries)) {
+        const uid = parseInt(uidRaw, 10);
+        byUid.set(uid, entry);
+        const comment = String(entry?.comment ?? '').trim();
+        if (comment.endsWith('老马版')) {
+            laoBases.add(comment.slice(0, -3));
+            groups.push({ uid, group: 'lao' });
+        } else {
+            groups.push({ uid, comment });
+        }
+    }
+    for (const g of groups) {
+        if (g.group === undefined) {
+            g.group = laoBases.has(g.comment) ? 'xiao' : 'shared';
+        }
+    }
+
+    let changedLao = 0;
+    let changedXiao = 0;
+    for (const g of groups) {
+        if (g.group === 'shared' || isNaN(g.uid)) continue;
+        const targetDisabled = (g.group === 'lao') !== wantLao ? 1 : 0;
+        const entry = byUid.get(g.uid);
+        const currentDisabled = !!entry?.disable;
+        if (currentDisabled === !!targetDisabled) continue;
+        await st(`/setentryfield file=${q(bookName)} uid=${g.uid} field=disable ${targetDisabled}`);
+        if (g.group === 'lao') changedLao++;
+        else changedXiao++;
+    }
+    await persistBook(bookName);
+    return { laoCount: laoBases.size, changedLao, changedXiao };
+}

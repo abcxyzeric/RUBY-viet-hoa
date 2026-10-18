@@ -5,6 +5,7 @@ import { ensureOrb } from './src/orb.js';
 import { initSettingsDrawer, initTheme } from './src/settings.js';
 import { openPanel } from './src/panel.js';
 import * as config from './src/config.js';
+import * as worldbook from './src/worldbook.js';
 
 let commandRegistered = false;
 
@@ -48,16 +49,34 @@ async function rubyCommandCallback(args, text) {
             if (!target) {
                 return `preset not found: ${name} (available: ${presets.map((p) => p.name || p.id).join(', ')})`;
             }
+
+            // 双版本条目组整备：preset 名含 老马版/小马版 后缀时，同步切换世界书条目组
+            // （loadWorldInfo 取真实 uid 后逐条 /setentryfield，不做 uid 盲扫、不触发宿主 toastr）
+            let versionNote = '';
+            const presetName = String(target.name || '');
+            if (presetName.includes('老马版') || presetName.includes('小马版')) {
+                const suffix = presetName.includes('老马版') ? '老马版' : '小马版';
+                try {
+                    const charBookName = await worldbook.getCharBookName();
+                    if (charBookName) {
+                        const stats = await worldbook.setVersionEntryGroups(charBookName, suffix);
+                        versionNote = ` | entries: ${suffix} 组已整备（孪生 ${stats.laoCount} 条：启停改动 lao=${stats.changedLao} xiao=${stats.changedXiao}）`;
+                    }
+                } catch (e) {
+                    warn(`version entry groups toggle failed: ${e?.message || e}`);
+                }
+            }
+
             if (target.id === data.activePresetId) {
                 reinit();
-                return `preset already active: ${target.name || target.id} (engine re-armed)`;
+                return `preset already active: ${target.name || target.id}${versionNote} (engine re-armed)`;
             }
             data.activePresetId = target.id;
             config.saveConfigData(data);
             await config.flushCardPersistNow();
             reinit();
             const enabled = (target.tasks || []).filter((t) => t.enabled).length;
-            return `preset switched: ${target.name || target.id} | tasks: ${enabled}/${(target.tasks || []).length} enabled | engine re-armed`;
+            return `preset switched: ${target.name || target.id} | tasks: ${enabled}/${(target.tasks || []).length} enabled${versionNote} | engine re-armed`;
         }
         if (sub === 'status') {
             const es = getEngineState();
