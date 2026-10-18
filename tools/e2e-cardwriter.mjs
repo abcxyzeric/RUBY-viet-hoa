@@ -1,7 +1,5 @@
-#!/usr/bin/env node
 // 端到端回归测试：完整写卡对话（8楼：记录/更新/带目标切换）→ v2 引擎 → 合成下载 → 产物校验（v3规格/条目/灯位/RubyAnalyzer任务）
 // 用法: node tools/e2e-cardwriter.mjs
-#!/usr/bin/env node
 // 端到端验证：完整写卡对话（含记录/更新/切换标记）→ 真实 v2 引擎 → 出卡 → 下载内容校验
 import { EventEmitter } from 'node:events';
 
