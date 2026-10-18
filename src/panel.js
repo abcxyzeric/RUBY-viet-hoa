@@ -350,8 +350,8 @@ function buildShellHtml() {
                             <div class="form-row" id="ra_api_model_wrap">
                                 <span class="form-label">模型名称</span>
                                 <span class="form-value" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                                    <select id="ra_api_model_select" class="w250 hidden"></select>
-                                    <input id="ra_api_model_text" class="w250" placeholder="如 deepseek-chat / gpt-4o-mini">
+                                    <input id="ra_api_model_text" class="w250" placeholder="如 deepseek-chat / gpt-4o-mini（可自由填写）">
+                                    <select id="ra_api_model_select" class="w250 hidden" title="从已拉取的列表快捷选择；不想要列表值时直接在左侧输入框自由填写"></select>
                                     <button id="ra_api_connect" class="btn outline small">连接/拉取模型</button>
                                 </span>
                             </div>
@@ -383,8 +383,8 @@ function buildShellHtml() {
                                     <div class="form-row" style="margin:0;">
                                         <span class="form-label">模型名称</span>
                                         <span class="form-value" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                                            <select id="ra_dir_api_model_select" class="w250 hidden"></select>
-                                            <input id="ra_dir_api_model_text" class="w250" placeholder="默认=当前RUBY API模型">
+                                            <input id="ra_dir_api_model_text" class="w250" placeholder="默认=当前RUBY API模型（可自由填写）">
+                                            <select id="ra_dir_api_model_select" class="w250 hidden" title="从已拉取的列表快捷选择；不想要列表值时直接在左侧输入框自由填写"></select>
                                             <button id="ra_dir_api_connect" class="btn outline small">连接/拉取模型</button>
                                         </span>
                                     </div>
@@ -1218,6 +1218,17 @@ function renderPresetDetail(data, presetId) {
     el.innerHTML = html;
 }
 
+/** 模型下拉选项：头部占位项提示可自由填写，正文为拉取到的模型列表 */
+function buildModelOptions(models) {
+    const header = '<option value="">— 从列表选择 / 输入框自由填写 —</option>';
+    return header + models.map((id) => `<option value="${h(id)}">${h(id)}</option>`).join('');
+}
+
+/** 把下拉选中态同步到当前模型值：在列表内选中对应项，否则停在头部占位项（保留输入框自定义值） */
+function syncModelSelectValue(select, models, value) {
+    select.value = models.includes(value) ? value : '';
+}
+
 function loadApiTab(data) {
     const apiCfg = config.getApiConfig();
     const uiCfg = config.getUi();
@@ -1239,9 +1250,8 @@ function loadApiTab(data) {
     $('ra_dir_api_model_text').value = dirApi.model || '';
     const dirModelSelect = $('ra_dir_api_model_select');
     if (Array.isArray(apiCfg.cache) && apiCfg.cache.length > 0 && dirApi.enabled) {
-        dirModelSelect.innerHTML = apiCfg.cache.map((id) => `<option value="${h(id)}">${h(id)}</option>`).join('');
-        if (dirApi.model) dirModelSelect.value = dirApi.model;
-        else if (apiCfg.model) dirModelSelect.value = apiCfg.model;
+        dirModelSelect.innerHTML = buildModelOptions(apiCfg.cache);
+        syncModelSelectValue(dirModelSelect, apiCfg.cache, dirApi.model || apiCfg.model || '');
     }
     syncDirectorApiUi();
     updateDirectorApiHighlight();
@@ -1249,8 +1259,8 @@ function loadApiTab(data) {
     const modelSelect = $('ra_api_model_select');
     const modelText = $('ra_api_model_text');
     if (Array.isArray(apiCfg.cache) && apiCfg.cache.length > 0) {
-        modelSelect.innerHTML = apiCfg.cache.map((id) => `<option value="${h(id)}">${h(id)}</option>`).join('');
-        if (apiCfg.model) modelSelect.value = apiCfg.model;
+        modelSelect.innerHTML = buildModelOptions(apiCfg.cache);
+        syncModelSelectValue(modelSelect, apiCfg.cache, apiCfg.model || '');
     }
     modelText.value = apiCfg.model || '';
 
@@ -1277,9 +1287,9 @@ function loadApiTab(data) {
         $('ra_api_key_wrap').classList.toggle('hidden', !isCustom);
         $('ra_api_connect').classList.toggle('hidden', !isCustom);
         $('ra_api_stream_label')?.classList.toggle('hidden', !isCustom);
-        const hasOptions = modelSelect.options.length > 0;
-        modelSelect.classList.toggle('hidden', !isCustom || !hasOptions);
-        modelText.classList.toggle('hidden', !isCustom || hasOptions);
+        // 输入框常驻（模型名真值来源，可自由填写）；下拉仅在已拉取到列表时作为快捷选择出现
+        modelText.classList.toggle('hidden', !isCustom);
+        modelSelect.classList.toggle('hidden', !isCustom || !modelSelect.options.length);
     };
     syncProviderUi();
     providerSel.onchange = () => {
@@ -1290,9 +1300,17 @@ function loadApiTab(data) {
     };
     modelSelect.onchange = () => {
         const chosen = modelSelect.value || '';
-        if (chosen) {
-            config.saveApiConfig({ provider: providerSel.value, model: chosen });
-            window.toastr?.success?.('已选择模型');
+        if (!chosen) return; // 头部占位项：不动输入框的自定义值
+        modelText.value = chosen;
+        config.saveApiConfig({ provider: providerSel.value, model: chosen });
+        window.toastr?.success?.('已选择模型');
+    };
+    modelText.onchange = () => {
+        // 自由填写：失焦/回车即保存；若恰好在已拉取列表中，同步下拉选中态
+        const value = modelText.value.trim();
+        config.saveApiConfig({ provider: providerSel.value, model: value });
+        if (Array.isArray(config.getApiConfig().cache)) {
+            syncModelSelectValue(modelSelect, config.getApiConfig().cache, value);
         }
     };
 }
@@ -1344,7 +1362,14 @@ function wirePlayerSections() {
         config.saveDirectorApiConfig({ key: $('ra_dir_api_key').value });
     });
     on($('ra_dir_api_model_text'), 'change', () => {
-        config.saveDirectorApiConfig({ model: $('ra_dir_api_model_text').value.trim() });
+        // 自由填写：失焦/回车即保存；若恰好在已拉取列表中，同步下拉选中态
+        const value = $('ra_dir_api_model_text').value.trim();
+        config.saveDirectorApiConfig({ model: value });
+        const dirSelect = $('ra_dir_api_model_select');
+        const apiCfg = config.getApiConfig();
+        if (Array.isArray(apiCfg.cache) && apiCfg.cache.length) {
+            syncModelSelectValue(dirSelect, apiCfg.cache, value);
+        }
     });
     on($('ra_dir_api_model_select'), 'change', () => {
         const chosen = $('ra_dir_api_model_select').value || '';
@@ -1367,14 +1392,17 @@ function wirePlayerSections() {
             const models = await ai.fetchModelList(base, key);
             if (!models.length) { window.toastr?.warning?.('未获取到模型'); return; }
             const modelSelect = $('ra_dir_api_model_select');
-            modelSelect.innerHTML = models.map((id) => `<option value="${h(id)}">${h(id)}</option>`).join('');
-            const current = config.getDirectorApiConfig().model;
-            modelSelect.value = models.includes(current) ? current : models[0];
-            $('ra_dir_api_model_text').value = modelSelect.value;
+            const modelText = $('ra_dir_api_model_text');
+            modelSelect.innerHTML = buildModelOptions(models);
+            // 保留已填写的模型名（自由填写优先），未填时默认列表第一个
+            const current = modelText.value.trim();
+            const model = current || models[0];
+            modelText.value = model;
+            syncModelSelectValue(modelSelect, models, model);
             modelSelect.classList.remove('hidden');
-            $('ra_dir_api_model_text').classList.add('hidden');
-            config.saveDirectorApiConfig({ model: modelSelect.value });
-            window.toastr?.success?.(`获取成功：${models.length} 个模型`);
+            modelText.classList.remove('hidden');
+            config.saveDirectorApiConfig({ model });
+            window.toastr?.success?.(`获取成功：${models.length} 个模型${current && !models.includes(current) ? '（当前填写不在列表中，已保留）' : ''}`);
         } catch (e) {
             window.toastr?.error?.(e.message || '连接失败');
         } finally {
@@ -1394,12 +1422,17 @@ function wirePlayerSections() {
             const models = await ai.fetchModelList(base, key);
             if (!models.length) { window.toastr?.warning?.('未获取到模型'); return; }
             const modelSelect = $('ra_api_model_select');
-            modelSelect.innerHTML = models.map((id) => `<option value="${h(id)}">${h(id)}</option>`).join('');
-            config.saveApiConfig({ provider: 'custom', url: base, key, cache: models, model: models[0] });
-            modelSelect.value = models[0];
+            const modelText = $('ra_api_model_text');
+            modelSelect.innerHTML = buildModelOptions(models);
+            // 保留已填写的模型名（自由填写优先），未填时默认列表第一个
+            const current = modelText.value.trim();
+            const model = current || models[0];
+            modelText.value = model;
+            syncModelSelectValue(modelSelect, models, model);
             modelSelect.classList.remove('hidden');
-            $('ra_api_model_text').classList.add('hidden');
-            window.toastr?.success?.(`获取成功：${models.length} 个模型`);
+            modelText.classList.remove('hidden');
+            config.saveApiConfig({ provider: 'custom', url: base, key, cache: models, model });
+            window.toastr?.success?.(`获取成功：${models.length} 个模型${current && !models.includes(current) ? '（当前填写不在列表中，已保留）' : ''}`);
         } catch (e) {
             window.toastr?.error?.(e.message || '连接失败');
         } finally {
@@ -1422,10 +1455,9 @@ function wirePlayerSections() {
     on($('ra_api_save'), 'click', () => {
         try {
             const providerSel = $('ra_api_provider');
-            const modelSelect = $('ra_api_model_select');
             const isCustom = providerSel.value === 'custom';
-            const hasSelectOptions = modelSelect.options.length > 0 && !modelSelect.classList.contains('hidden');
-            const modelValue = isCustom ? (hasSelectOptions ? modelSelect.value : $('ra_api_model_text').value.trim()) : '';
+            // 模型名一律以输入框为准（下拉只是快捷选择，选择时会写回输入框）
+            const modelValue = isCustom ? $('ra_api_model_text').value.trim() : '';
 
             config.saveApiConfig({
                 provider: providerSel.value,

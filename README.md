@@ -44,6 +44,10 @@ SillyTavern/public/scripts/extensions/third-party/ruby-analyzer
 | 酒馆主 API | 原生 `generateRaw`（quiet 调用） | 仅借用酒馆主通道发送：**绕过预设的提示词注入**——主提示词、越狱、角色卡、聊天记录一概不进入上下文，发送的只有 RUBY 自己组装的破限消息与任务提示词（与酒馆自身静默提示词同一机制）；RUBY 生成参数通过官方 `CHAT_COMPLETION_SETTINGS_READY` 事件钩子覆写到本次请求。出站请求与普通生成同源同形 |
 | 自定义 OpenAI 兼容端点 | 原生 `ChatCompletionService`（ST 1.16 官方请求服务） | 酒馆官方为扩展提供的 chat completion 请求服务：同一后端端点、同一负载组装约定、同一 SSE 解析器（`EventSourceStream` + `getStreamingReply`）。地址填到版本段（如 `https://api.deepseek.com/beta`），服务端自动拼接 `/chat/completions`；可一键拉取模型列表 |
 
+### 模型名称：自由填写 + 快捷选择
+
+主 API 与独立导演 API 的模型名称均为**输入框常驻、可自由填写**（拉取列表前后都可直接手输任意模型名，覆盖中转站的自定义模型、`model:deepseek/chat` 之类的带前缀写法等）。点击「连接/拉取模型」后出现的下拉只作快捷选择：选中即回填输入框并保存；头部占位项「— 从列表选择 / 输入框自由填写 —」不动输入框已填的自定义值，不在列表中的填写值在重新拉取后也会保留。保存与运行一律以输入框的值为准。
+
 ## 斜杠命令
 
 ```
