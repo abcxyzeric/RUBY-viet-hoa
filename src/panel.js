@@ -3219,22 +3219,22 @@ function renderBindingTab(layer) {
 
     const identity = config.getCharacterIdentity();
     if (!identity) {
-        statusEl.innerHTML = '<span class="status-warn">⚠ 请先打开一个角色对话（角色卡）——RUBY 配置保存在角色卡内，未打开角色卡无法绑定</span>';
+        statusEl.innerHTML = `<span class="status-warn">${t('⚠ 请先打开一个角色对话（角色卡）——RUBY 配置保存在角色卡内，未打开角色卡无法绑定')}</span>`;
     } else {
         const { source } = config.resolveConfig();
         const bound = layer === 'character';
         const layerLabel = !bound
-            ? '<span class="status-warn">全局（未绑定角色卡 ⚠️）——保存修改将自动绑定到当前角色卡，或点击下方按钮立即绑定</span>'
+            ? `<span class="status-warn">${t('全局（未绑定角色卡 ⚠️）——保存修改将自动绑定到当前角色卡，或点击下方按钮立即绑定')}</span>`
             : (source === 'card'
-                ? '<span class="status-ok">角色卡内嵌 ✓（配置已写入角色卡 data.extensions，随卡片导出/分享）</span>'
-                : '<span class="status-warn">本地旧版存储（仅存于本机 settings.json）——保存修改将自动迁移写入角色卡</span>');
+                ? `<span class="status-ok">${t('角色卡内嵌 ✓（配置已写入角色卡 data.extensions，随卡片导出/分享）')}</span>`
+                : `<span class="status-warn">${t('本地旧版存储（仅存于本机 settings.json）——保存修改将自动迁移写入角色卡')}</span>`);
         statusEl.innerHTML = `
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                 <span style="font-size:22px;">${bound ? (source === 'card' ? '📇' : '🔗') : '🌍'}</span>
                 <div>
-                    <div style="font-weight:700;font-size:15px;">当前角色：${h(identity.name)}</div>
+                    <div style="font-weight:700;font-size:15px;">${t('当前角色：')}${h(identity.name)}</div>
                     <div style="font-size:13px;margin-top:4px;">
-                        配置层：<strong>${layerLabel}</strong>
+                        ${t('配置层：')}<strong>${layerLabel}</strong>
                     </div>
                 </div>
             </div>`;
@@ -3473,13 +3473,13 @@ function renderCardWriterTab() {
     const statusEl = $('ra_cw_status');
     if (statusEl) {
         const stepLine = s.active
-            ? `当前步骤：<strong>${h(s.stepId || '—')}</strong> ${s.stepId ? `（${h(s.stepName)}）` : ''}`
-            : '未激活';
+            ? `${t('当前步骤：')}<strong>${h(s.stepId || '—')}</strong> ${s.stepId ? `（${h(t(s.stepName))}）` : ''}`
+            : t('未激活');
         statusEl.innerHTML = `
-            <div>${s.active ? '<span class="status-ok">🟢 写卡会话进行中</span>' : '<span class="status-warn">⚪ 未激活</span>'} · 📦 记录制</div>
+            <div>${s.active ? `<span class="status-ok">${t('🟢 写卡会话进行中')}</span>` : `<span class="status-warn">${t('⚪ 未激活')}</span>`} · ${t('📦 记录制')}</div>
             <div style="margin-top:6px;">${stepLine}</div>
             <div style="margin-top:6px;font-size:12px;color:#666;">
-                记录数：${s.draftCount} · 最近操作：${h(s.lastAction || '无')}${s.lastError ? `<br><span class="status-err">错误：${h(s.lastError)}</span>` : ''}
+                ${t('记录数：')}${s.draftCount} · ${t('最近操作：')}${h(t(s.lastAction) || t('无'))}${s.lastError ? `<br><span class="status-err">${t('错误：')}${h(t(s.lastError))}</span>` : ''}
             </div>`;
         translateDom(statusEl);
     }
@@ -3490,14 +3490,14 @@ function renderCardWriterTab() {
         stepsEl.innerHTML = steps.map((st) => {
             const isCur = s.active && s.stepId === st.id;
             const cls = isCur ? 'cw-step cur' : 'cw-step';
-            const tag = st.id === 'Overview' ? '🏁收尾' : (st.tool ? '🔧工具' : (st.optional ? '◇可选' : ''));
-            return `<button class="${cls}" data-step="${h(st.id)}" title="切换到 ${h(st.id)} ${h(st.name)}">${isCur ? '✦ ' : ''}${h(st.id === 'Overview' ? '' : st.id + ' ')}${h(st.name)}${tag ? ` <span class="cw-tag">${tag}</span>` : ''}</button>`;
+            const tag = st.id === 'Overview' ? t('🏁收尾') : (st.tool ? t('🔧工具') : (st.optional ? t('◇可选') : ''));
+            return `<button class="${cls}" data-step="${h(st.id)}" title="${t('切换到')} ${h(st.id)} ${h(t(st.name))}">${isCur ? '✦ ' : ''}${h(st.id === 'Overview' ? '' : st.id + ' ')}${h(t(st.name))}${tag ? ` <span class="cw-tag">${tag}</span>` : ''}</button>`;
         }).join('');
         translateDom(stepsEl);
         stepsEl.querySelectorAll('.cw-step').forEach((btn) => {
             btn.addEventListener('click', async () => {
                 if (!cardwriter.getState().active) {
-                    window.toastr?.warning?.('请先开始写卡会话');
+                    window.toastr?.warning?.(t('请先开始写卡会话'));
                     return;
                 }
                 const ok = await cardwriter.switchStep(btn.dataset.step, { manual: true });

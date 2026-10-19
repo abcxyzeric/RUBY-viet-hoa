@@ -558,7 +558,97 @@ export const VI_DICT = {
     "暂无自定义标签": "Chưa có thẻ tùy chỉnh nào",
     "暂无角色绑定，所有角色使用全局配置": "Chưa có nhân vật nào được liên kết, mọi nhân vật dùng cấu hình toàn cục",
     "当前角色：": "Nhân vật hiện tại: ",
-    "配置层：": "Tầng cấu hình: "
+    "配置层：": "Tầng cấu hình: ",
+
+    // Cảnh báo liên kết thẻ nhân vật (Ảnh 1)
+    "⚠ 请先打开一个角色对话（角色卡）——RUBY 配置保存在角色卡内，未打开角色卡无法绑定": "⚠ Vui lòng mở cuộc trò chuyện nhân vật (Thẻ nhân vật) trước — Cấu hình RUBY được lưu trong thẻ nhân vật, chưa mở thẻ nhân vật thì không thể liên kết",
+    "请先打开一个角色对话（角色卡）——RUBY 配置保存在角色卡内，未打开角色卡无法绑定": "Vui lòng mở cuộc trò chuyện nhân vật (Thẻ nhân vật) trước — Cấu hình RUBY được lưu trong thẻ nhân vật, chưa mở thẻ nhân vật thì không thể liên kết",
+    "请先打开一个角色对话（角色卡）": "Vui lòng mở một cuộc trò chuyện nhân vật (Thẻ nhân vật) trước",
+    "全局（未绑定角色卡 ⚠️）——保存修改将自动绑定到当前角色卡，或点击下方按钮立即绑定": "Toàn cục (Chưa liên kết thẻ nhân vật ⚠️) — Lưu thay đổi sẽ tự động liên kết với thẻ nhân vật hiện tại, hoặc bấm nút bên dưới để liên kết ngay",
+    "角色卡内嵌 ✓（配置已写入角色卡 data.extensions，随卡片导出/分享）": "Nhúng trong thẻ nhân vật ✓ (Cấu hình đã ghi vào data.extensions của thẻ, xuất/chia sẻ cùng thẻ)",
+    "本地旧版存储（仅存于本机 settings.json）——保存修改将自动迁移写入角色卡": "Lưu trữ cục bộ bản cũ (Chỉ lưu trong settings.json của máy) — Lưu thay đổi sẽ tự động chuyển đổi ghi vào thẻ nhân vật",
+    "📇 绑定配置到此角色卡": "📇 Liên kết cấu hình với thẻ nhân vật này",
+    "绑定配置到此角色卡": "Liên kết cấu hình với thẻ nhân vật này",
+    "🔒 API密钥是全局本地的，与绑定无关，任何情况下都不会被导出或写入角色卡。": "🔒 API Key là dữ liệu cục bộ toàn cục, không liên quan đến việc liên kết, trong mọi trường hợp đều không bị xuất ra hay ghi vào thẻ nhân vật.",
+    "API密钥是全局本地的，与绑定无关，任何情况下都不会被导出或写入角色卡。": "API Key là dữ liệu cục bộ toàn cục, không liên quan đến việc liên kết, trong mọi trường hợp đều không bị xuất ra hay ghi vào thẻ nhân vật.",
+
+    // Chế độ viết card (Ảnh 2)
+    "无": "Không có",
+    "未激活": "Chưa kích hoạt",
+    "⚪ 未激活": "⚪ Chưa kích hoạt",
+    "🟢 写卡会话进行中": "🟢 Phiên viết card đang diễn ra",
+    "📦 记录制": "📦 Chế độ ghi chép",
+    "记录数：": "Số bản ghi: ",
+    "最近操作：": "Thao tác gần nhất: ",
+    "错误：": "Lỗi: ",
+    "切换到": "Chuyển sang",
+    "🏁收尾": "🏁 Thu dọn",
+    "🔧工具": "🔧 Công cụ",
+    "◇可选": "◇ Tùy chọn",
+    "请先开始写卡会话": "Vui lòng bắt đầu phiên viết card trước",
+    "开始会话后，RUBY 在聊天附加世界书注入规则/人设、流程路线图、编号知识与当前步骤指令；你用自己的预设和 API 正常对话，RUBY 只监听。检测到 <ruby新条目>/<ruby更新条目> 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。": "Sau khi bắt đầu phiên, RUBY sẽ chèn quy tắc/thiết lập nhân vật, lộ trình quy trình, kiến thức mã số và chỉ thị bước hiện tại vào Sách thế giới phụ của chat; Bạn trò chuyện bình thường bằng preset và API của riêng mình, RUBY chỉ lắng nghe. Khi phát hiện nhãn <ruby新条目>/<ruby更新条目> sẽ lập tức lưu vào kho ghi nhớ, không tự động chuyển bước — mỗi bước đều có thể làm việc lặp lại nhiều lần.",
+    "开始会话后，RUBY 在聊天附加世界书注入规则/人设、流程路线图、编号知识与当前步骤指令； 你用自己的预设和 API 正常对话，RUBY 只监听。检测到 <ruby新条目>/<ruby更新条目> 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。": "Sau khi bắt đầu phiên, RUBY sẽ chèn quy tắc/thiết lập nhân vật, lộ trình quy trình, kiến thức mã số và chỉ thị bước hiện tại vào Sách thế giới phụ của chat; Bạn trò chuyện bình thường bằng preset và API của riêng mình, RUBY chỉ lắng nghe. Khi phát hiện nhãn <ruby新条目>/<ruby更新条目> sẽ lập tức lưu vào kho ghi nhớ, không tự động chuyển bước — mỗi bước đều có thể làm việc lặp lại nhiều lần.",
+    "开始会话后，RUBY 在聊天附加世界书注入规则/人设、流程路线图、编号知识与当前步骤指令；你用自己的预设和 API 正常对话，RUBY 只监听。检测到 &lt;ruby新条目&gt;/&lt;ruby更新条目&gt; 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。": "Sau khi bắt đầu phiên, RUBY sẽ chèn quy tắc/thiết lập nhân vật, lộ trình quy trình, kiến thức mã số và chỉ thị bước hiện tại vào Sách thế giới phụ của chat; Bạn trò chuyện bình thường bằng preset và API của riêng mình, RUBY chỉ lắng nghe. Khi phát hiện nhãn &lt;ruby新条目&gt;/&lt;ruby更新条目&gt; sẽ lập tức lưu vào kho ghi nhớ, không tự động chuyển bước — mỗi bước đều có thể làm việc lặp lại nhiều lần.",
+    "开始会话后，RUBY 在聊天附加世界书注入规则/人设、流程路线图、编号知识与当前步骤指令； 你用自己的预设和 API 正常对话，RUBY 只监听。检测到 &lt;ruby新条目&gt;/&lt;ruby更新条目&gt; 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。": "Sau khi bắt đầu phiên, RUBY sẽ chèn quy tắc/thiết lập nhân vật, lộ trình quy trình, kiến thức mã số và chỉ thị bước hiện tại vào Sách thế giới phụ của chat; Bạn trò chuyện bình thường bằng preset và API của riêng mình, RUBY chỉ lắng nghe. Khi phát hiện nhãn &lt;ruby新条目&gt;/&lt;ruby更新条目&gt; sẽ lập tức lưu vào kho ghi nhớ, không tự động chuyển bước — mỗi bước đều có thể làm việc lặp lại nhiều lần.",
+
+    // Toastr và thông báo tương tác
+    "API设置已保存": "Đã lưu cài đặt API",
+    "保存失败:": "Lưu thất bại: ",
+    "保存失败: ": "Lưu thất bại: ",
+    "由RUBY分析系统导出的破限配置（仅含自定义破限消息）": "Cấu hình Jailbreak được xuất bởi Hệ thống Phân tích RUBY (chỉ bao gồm tin nhắn Jailbreak tùy chỉnh)",
+    "导出失败:": "Xuất thất bại: ",
+    "导出失败: ": "Xuất thất bại: ",
+    "无法识别的破限配置格式": "Định dạng cấu hình Jailbreak không hợp lệ",
+    "导入失败:": "Nhập thất bại: ",
+    "导入失败: ": "Nhập thất bại: ",
+    "请输入标签名": "Vui lòng nhập tên thẻ",
+    "标签名只能包含字母、数字、下划线和连字符": "Tên thẻ chỉ được chứa chữ cái, chữ số, dấu gạch dưới và dấu gạch nối",
+    "标签已存在": "Thẻ đã tồn tại",
+    "标签设置已保存": "Đã lưu cài đặt thẻ",
+    "剧情摘要时间线已并入总结素材": "Dòng thời gian tóm tắt cốt truyện đã được hợp nhất vào tư liệu tóm tắt",
+    "总结素材仅使用记忆总结表": "Tư liệu tóm tắt chỉ sử dụng bảng tóm tắt ký ức",
+    "已停用总结接口，恢复纯原文模式": "Đã tắt giao diện tóm tắt, quay về chế độ văn bản gốc thuần túy",
+    "未找到角色世界书": "Không tìm thấy Sách thế giới của nhân vật",
+    "当前AI回复楼层数（从聊天记录现算，无需重置）": "Số lầu phản hồi của AI hiện tại (tính trực tiếp từ lịch sử chat, không cần đặt lại)",
+    "当前AI回复楼层数；导演模式下以“自上次导演起的偏移”显示": "Số lầu phản hồi của AI hiện tại; trong chế độ Đạo diễn hiển thị theo \"độ lệch từ lần Đạo diễn trước\"",
+    "⚠️ 未打开角色卡：导演配置保存在全局层，不会随角色卡导出": "⚠️ Chưa mở thẻ nhân vật: Cấu hình Đạo diễn lưu ở tầng toàn cục, không đi kèm theo thẻ khi xuất",
+    "已保存导演配置": "Đã lưu cấu hình Đạo diễn",
+    "✍️ 手动简介（优先使用）": "✍️ Giới thiệu thủ công (ưu tiên sử dụng)",
+    "🔍 自动提取简介": "🔍 Tự động trích xuất giới thiệu",
+    "⚠️ 未捕捉到简介": "⚠️ Không bắt được giới thiệu",
+    "提示词条目内容为空，或不含「该任务是为了/任务说明」等标记——导演将只收到任务名称。": "Nội dung mục prompt trống, hoặc không chứa các nhãn như \"该任务是为了/任务说明\" — Đạo diễn sẽ chỉ nhận được tên nhiệm vụ.",
+    "该任务未配置提示词条目——导演将只收到任务名称。": "Nhiệm vụ này chưa được cấu hình mục prompt — Đạo diễn sẽ chỉ nhận được tên nhiệm vụ.",
+    "⚠️ 提取失败": "⚠️ Trích xuất thất bại",
+    "⬅ 返回任务配置": "⬅ Quay lại cấu hình nhiệm vụ",
+    "进入导演模式": "Vào chế độ Đạo diễn",
+    "⚠️ 未打开角色卡：任务将暂存于全局层，不会随角色卡导出。建议打开角色卡后再配置": "⚠️ Chưa mở thẻ nhân vật: Nhiệm vụ sẽ lưu tạm ở tầng toàn cục, không đi kèm theo thẻ khi xuất. Khuyến nghị mở thẻ nhân vật trước khi cấu hình",
+    "⚠️ 未打开角色卡：配置保存在全局层，不会随角色卡导出": "⚠️ Chưa mở thẻ nhân vật: Cấu hình lưu ở tầng toàn cục, không đi kèm theo thẻ khi xuất",
+    "已保存当前方案配置": "Đã lưu cấu hình gói hiện tại",
+    "确定清空所有任务吗？此操作不可恢复。": "Bạn có chắc chắn muốn xóa tất cả nhiệm vụ? Thao tác này không thể hoàn tác.",
+    "已清空所有任务": "Đã xóa tất cả nhiệm vụ",
+    "该方案已经是当前激活状态": "Gói này hiện đang ở trạng thái kích hoạt",
+    "已激活该方案": "Đã kích hoạt gói này",
+    "至少需要保留一个方案": "Cần giữ lại ít nhất một gói cấu hình",
+    "已删除方案": "Đã xóa gói cấu hình",
+    "已将当前配置写入角色卡并绑定（随卡片导出）": "Đã ghi cấu hình hiện tại vào thẻ nhân vật và liên kết (đi kèm khi xuất thẻ)",
+    "由RUBY分析系统导出的配置模板（含多方案；密钥类字段已在导出前擦除）": "Mẫu cấu hình được xuất bởi Hệ thống Phân tích RUBY (bao gồm nhiều gói; các trường mật khẩu/key đã được xóa trước khi xuất)",
+    "配置模板已导出": "Đã xuất mẫu cấu hình",
+    "请先打开角色卡：导入的配置将自动绑定到当前角色卡": "Vui lòng mở thẻ nhân vật trước: Cấu hình được nhập sẽ tự động liên kết với thẻ hiện tại",
+    "写卡会话开始 → StepW 世界观讨论": "Bắt đầu phiên viết card → StepW Thảo luận Thế giới quan",
+    "会话结束（草稿保留）": "Kết thúc phiên (Giữ lại bản thảo)",
+    "确定清空写卡条目吗？将删除聊天世界书中 RUBY 创建的步骤条目与草稿（其他条目不动）。": "Bạn có chắc chắn muốn xóa các mục viết card? Thao tác này sẽ xóa các mục theo bước và bản thảo do RUBY tạo trong Sách thế giới của chat (các mục khác giữ nguyên).",
+    "会话结束（条目清空）": "Kết thúc phiên (Đã xóa các mục)",
+    "打开《ruby写卡初稿》世界书": "Mở Sách thế giới 《Bản thảo viết card ruby》",
+    "状态更新": "Cập nhật trạng thái",
+    "当前角色：": "Nhân vật hiện tại: ",
+    "配置层：": "Tầng cấu hình: ",
+    "点击步骤卡可手动切换（跳转/回退）。✦=当前步骤。可选/工具步骤按需切换。": "Bấm vào thẻ bước để chuyển đổi thủ công (nhảy bước / quay lại). ✦ = Bước hiện tại. Các bước tùy chọn / công cụ chuyển đổi theo nhu cầu.",
+    "导入配置后，点击下方按钮检查所需的世界书条目是否存在。": "Sau khi nhập cấu hình, bấm nút bên dưới để kiểm tra xem các mục Sách thế giới cần thiết đã tồn tại hay chưa.",
+    "这是分析结果写入的聊天世界书条目名称，不要与\"提示词条目\"重复。": "Đây là tên mục Sách thế giới chat mà kết quả phân tích sẽ ghi vào, không được trùng với \"Mục prompt\".",
+    "勾选后会在发送API前扫描正文；未填写关键词时，命中周期就照常分析；填写多个关键词时，命中任意一个才发送。": "Tích chọn sẽ quét chính văn trước khi gửi API; khi không điền từ khóa thì đến chu kỳ vẫn phân tích bình thường; khi điền nhiều từ khóa thì chỉ cần trúng bất kỳ một từ nào mới gửi.",
+    "🔵蓝灯=始终激活 | 🟢绿灯=关键词触发 | ⚫禁用条目=不注入故事 | 🚫不可递归=禁止递归触发": "🔵 Đèn xanh dương = Luôn kích hoạt | 🟢 Đèn xanh lá = Kích hoạt theo từ khóa | ⚫ Mục tắt = Không chèn vào cốt truyện | 🚫 Không đệ quy = Cấm kích hoạt đệ quy",
+    "手动执行会让导演立即重新规划本周期（重读正文生成新调度表），不影响已保存的周期参数。": "Thực thi thủ công sẽ khiến Đạo diễn lập tức tái lập kế hoạch cho chu kỳ này (đọc lại chính văn để tạo lịch trình mới), không ảnh hưởng đến các tham số chu kỳ đã lưu.",
+    "暂无启用的任务——请先在任务配置页添加并启用任务，导演才有可调度的对象。": "Chưa có nhiệm vụ nào được bật — Vui lòng thêm và bật nhiệm vụ ở trang Cấu hình nhiệm vụ trước để Đạo diễn có đối tượng điều phối."
 };
 
 export const VI_PATTERNS = [
@@ -573,7 +663,16 @@ export const VI_PATTERNS = [
     [/(\d+)\s*个分析任务/g, "$1 nhiệm vụ phân tích"],
     [/上次执行：(.+)/g, "Lần thực hiện trước: $1"],
     [/上次错误：(.+)/g, "Lỗi lần trước: $1"],
+    [/记录数：(\d+)\s*·\s*最近操作：无/g, "Số bản ghi: $1 · Thao tác gần nhất: Không có"],
     [/记录数：(\d+)\s*·\s*最近操作：(.+)/g, "Số bản ghi: $1 · Thao tác gần nhất: $2"],
+    [/·\s*最近操作：无/g, "· Thao tác gần nhất: Không có"],
+    [/·\s*Thao tác gần nhất：\s*无/g, "· Thao tác gần nhất: Không có"],
+    [/Thao tác gần nhất:\s*无/g, "Thao tác gần nhất: Không có"],
+    [/最近操作：无/g, "Thao tác gần nhất: Không có"],
+    [/确定将\s*["'“](.+?)["'”]\s*设为当前使用的方案吗？/g, "Bạn có chắc chắn muốn đặt \"$1\" làm gói cấu hình hiện tại không?"],
+    [/确定从\s*(.+?)\s*导入/g, "Xác nhận nhập từ $1"],
+    [/确定删除方案\s*["'“](.+?)["'”]\s*吗？/g, "Bạn có chắc chắn muốn xóa gói cấu hình \"$1\" không?"],
+    [/确定删除\s*(.+?)\s*吗？/g, "Bạn có chắc chắn muốn xóa $1 không?"],
     [/当前步骤：/g, "Bước hiện tại: "],
 
     // Mẫu thống kê và số đếm (Ảnh 5 & Trình quản lý)
@@ -673,7 +772,13 @@ export const VI_HTML = {
     "🎯 <strong>配置方案</strong>：创作者可以预设多套不同的任务配置，您可以根据需要切换。<br> 切换方案后，分析任务会按新方案的设定执行。":
         "🎯 <strong>Gói cấu hình</strong>: Tác giả có thể thiết lập sẵn nhiều bộ cấu hình nhiệm vụ khác nhau để bạn chuyển đổi tùy nhu cầu.<br> Sau khi chuyển gói, các nhiệm vụ phân tích sẽ thực thi theo thiết lập của gói mới.",
 
-    // Mô hình lấy thẻ làm trung tâm
+    // Mô hình lấy thẻ làm trung tâm (bản 4 dòng đầy đủ theo panel.js)
+    "💡 <strong>卡片中心模型</strong>：RUBY 任务配置只随角色卡存在（写入卡内 <code>data.extensions</code> 字段）。打开角色卡后，导入模板或新建/修改任务会<strong>自动绑定并写入当前角色卡</strong>，导出/分享卡片即携带，其他环境导入即生效。<br> 💡 <strong>任务归属</strong>：配置整体保存在角色卡的 <code>data.extensions</code> 字段，任务只随这张卡生效，无需为任务单独指定角色。<br> ⚠️ 未打开角色卡时配置只能暂存于全局层（不随卡导出），请打开角色卡后再配置；引擎只执行已绑定角色卡的配置。<br> 🔒 API密钥是全局本地的，与绑定无关，任何情况下都不会被导出或写入角色卡。":
+        "💡 <strong>Mô hình lấy thẻ nhân vật làm trung tâm</strong>: Cấu hình nhiệm vụ RUBY chỉ tồn tại theo thẻ nhân vật (được ghi vào trường <code>data.extensions</code> của thẻ). Sau khi mở thẻ nhân vật, việc nhập mẫu hoặc tạo mới/sửa nhiệm vụ sẽ <strong>tự động liên kết và ghi vào thẻ nhân vật hiện tại</strong>, xuất/chia sẻ thẻ sẽ mang theo cấu hình, nhập sang môi trường khác sẽ có hiệu lực ngay.<br> 💡 <strong>Quy thuộc nhiệm vụ</strong>: Toàn bộ cấu hình được lưu trong trường <code>data.extensions</code> của thẻ nhân vật, nhiệm vụ chỉ có hiệu lực cùng thẻ này, không cần chỉ định riêng nhân vật cho nhiệm vụ.<br> ⚠️ Khi chưa mở thẻ nhân vật, cấu hình chỉ có thể lưu tạm ở tầng toàn cục (không đi kèm theo thẻ khi xuất), vui lòng mở thẻ nhân vật trước khi cấu hình; động cơ chỉ thực thi cấu hình của thẻ đã được liên kết.<br> 🔒 API Key là dữ liệu cục bộ toàn cục, không liên quan đến việc liên kết, trong mọi trường hợp đều không bị xuất ra hay ghi vào thẻ nhân vật.",
+
+    "💡 <strong>卡片中心模型</strong>：RUBY 任务配置只随角色卡存在（写入卡内 <code>data.extensions</code> 字段）。打开角色卡后，导入模板或新建/修改任务会<strong>自动绑定并写入当前角色卡</strong>，导出/分享卡片即携带，其他环境导入即生效。<br>💡 <strong>任务归属</strong>：配置整体保存在角色卡的 <code>data.extensions</code> 字段，任务只随这张卡生效，无需为任务单独指定角色。<br>⚠️ 未打开角色卡时配置只能暂存于全局层（不随卡导出），请打开角色卡后再配置；引擎只执行已绑定角色卡的配置。<br>🔒 API密钥是全局本地的，与绑定无关，任何情况下都不会被导出或写入角色卡。":
+        "💡 <strong>Mô hình lấy thẻ nhân vật làm trung tâm</strong>: Cấu hình nhiệm vụ RUBY chỉ tồn tại theo thẻ nhân vật (được ghi vào trường <code>data.extensions</code> của thẻ). Sau khi mở thẻ nhân vật, việc nhập mẫu hoặc tạo mới/sửa nhiệm vụ sẽ <strong>tự động liên kết và ghi vào thẻ nhân vật hiện tại</strong>, xuất/chia sẻ thẻ sẽ mang theo cấu hình, nhập sang môi trường khác sẽ có hiệu lực ngay.<br>💡 <strong>Quy thuộc nhiệm vụ</strong>: Toàn bộ cấu hình được lưu trong trường <code>data.extensions</code> của thẻ nhân vật, nhiệm vụ chỉ có hiệu lực cùng thẻ này, không cần chỉ định riêng nhân vật cho nhiệm vụ.<br>⚠️ Khi chưa mở thẻ nhân vật, cấu hình chỉ có thể lưu tạm ở tầng toàn cục (không đi kèm theo thẻ khi xuất), vui lòng mở thẻ nhân vật trước khi cấu hình; động cơ chỉ thực thi cấu hình của thẻ đã được liên kết.<br>🔒 API Key là dữ liệu cục bộ toàn cục, không liên quan đến việc liên kết, trong mọi trường hợp đều không bị xuất ra hay ghi vào thẻ nhân vật.",
+
     "💡 <strong>卡片中心模型</strong>：RUBY 任务配置只随角色卡存在（写入卡内 <code>data.extensions</code> 字段）。打开角色卡后，导入模板或新建/修改任务会<strong>自动绑定并写入当前角色卡</strong>，导出/分享卡片即携带，其他环境导入即生效。<br> 💡 <strong>任务归属</strong>：配置整体保存在角色卡的 <code>data.extensions</code> 字段，任务只随这张卡生效，无需为任务单独指定角色。<br> ⚠️ 未打开角色卡时配置只能暂存于全局层（不随卡导出），请打开角色卡后再配置；引擎只执行已绑定角色卡的配置。<br>":
         "💡 <strong>Mô hình lấy thẻ nhân vật làm trung tâm</strong>: Cấu hình nhiệm vụ RUBY chỉ tồn tại cùng thẻ nhân vật (được ghi vào trường <code>data.extensions</code> của thẻ). Sau khi mở thẻ nhân vật, việc nhập mẫu hoặc tạo mới/sửa nhiệm vụ sẽ <strong>tự động liên kết và ghi vào thẻ nhân vật hiện tại</strong>, xuất/chia sẻ thẻ sẽ mang theo cấu hình, nhập sang môi trường khác sẽ có hiệu lực ngay.<br> 💡 <strong>Quy thuộc nhiệm vụ</strong>: Toàn bộ cấu hình được lưu trong trường <code>data.extensions</code> của thẻ nhân vật, nhiệm vụ chỉ có hiệu lực cùng thẻ này, không cần chỉ định riêng nhân vật cho nhiệm vụ.<br> ⚠️ Khi chưa mở thẻ nhân vật, cấu hình chỉ có thể lưu tạm ở tầng toàn cục (không xuất theo thẻ), vui lòng mở thẻ nhân vật trước khi cấu hình; engine chỉ thực thi cấu hình đã liên kết với thẻ nhân vật.<br>",
 
@@ -697,14 +802,47 @@ export const VI_HTML = {
     "🔒 API密钥只保存在本机扩展设置（settings.json），<u>绝不</u>写入角色卡、聊天世界书或导出模板。<br>🔒 所有分析调用走酒馆官方请求通道（generateRaw / ChatCompletionService），由酒馆服务端转发出站，与正常聊天生成同形，无独立客户端特征；全程异步后台执行。<br>🔒 更新通过酒馆扩展管理器的官方通道进行（manifest 已启用自动更新）。":
         "🔒 API Key chỉ lưu trong cài đặt extension máy cục bộ (settings.json), <u>tuyệt đối không</u> ghi vào Thẻ nhân vật, Sách thế giới cuộc trò chuyện hoặc mẫu xuất cấu hình.<br>🔒 Mọi yêu cầu phân tích đều đi qua kênh chính thức của SillyTavern (generateRaw / ChatCompletionService), được máy chủ SillyTavern chuyển tiếp đi, cùng định dạng với quá trình sinh hội thoại thông thường, không có dấu hiệu client riêng biệt; toàn bộ chạy ngầm bất đồng bộ.<br>🔒 Cập nhật được thực hiện qua kênh chính thức của Trình quản lý Extension SillyTavern (manifest đã bật tự động cập nhật).",
 
-    // Chế độ Viết Card (Writer Mode)
+    // Chế độ Viết Card (Writer Mode - đầy đủ các biến thể khoảng trắng và tag)
+    "开始会话后，RUBY 在聊天附加世界书注入规则/人设、流程路线图、编号知识与当前步骤指令； 你用自己的预设和 API 正常对话，RUBY 只监听。检测到 &lt;ruby新条目&gt;/&lt;ruby更新条目&gt; 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。":
+        "Sau khi bắt đầu phiên, RUBY sẽ chèn quy tắc/thiết lập, lộ trình quy trình, kiến thức mã số và chỉ thị bước hiện tại vào Sách thế giới phụ của chat; Bạn trò chuyện bình thường bằng preset và API của riêng mình, RUBY chỉ lắng nghe. Khi phát hiện nhãn &lt;ruby新条目&gt;/&lt;ruby更新条目&gt; sẽ lập tức lưu vào kho ghi nhớ, không tự động chuyển bước — mỗi bước đều có thể làm việc lặp lại nhiều lần.",
+
     "开始会话后，RUBY 在聊天附加世界书注入规则/人设、流程路线图、编号知识与当前步骤指令；你用自己的预设和 API 正常对话，RUBY 只监听。检测到 &lt;ruby新条目&gt;/&lt;ruby更新条目&gt; 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。":
-        "Sau khi bắt đầu phiên, RUBY sẽ chèn quy tắc/thiết lập, lộ trình quy trình, kiến thức mã số và chỉ thị bước hiện tại vào Sách thế giới phụ của chat; Bạn trò chuyện bình thường bằng preset và API của riêng mình, RUBY chỉ lắng nghe. Khi phát hiện nhãn &lt;ruby新条目&gt;/&lt;ruby更新条目&gt; sẽ lập tức lưu vào kho ghi nhớ, không tự động chuyển bước — mỗi bước đều có thể làm đi làm lại.",
+        "Sau khi bắt đầu phiên, RUBY sẽ chèn quy tắc/thiết lập, lộ trình quy trình, kiến thức mã số và chỉ thị bước hiện tại vào Sách thế giới phụ của chat; Bạn trò chuyện bình thường bằng preset và API của riêng mình, RUBY chỉ lắng nghe. Khi phát hiện nhãn &lt;ruby新条目&gt;/&lt;ruby更新条目&gt; sẽ lập tức lưu vào kho ghi nhớ, không tự động chuyển bước — mỗi bước đều có thể làm việc lặp lại nhiều lần.",
+
+    "开始会话后，RUBY 在聊天附加世界书注入规则/人设、流程路线图、编号知识与当前步骤指令； 你用自己的预设和 API 正常对话，RUBY 只监听。检测到 <ruby新条目>/<ruby更新条目> 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。":
+        "Sau khi bắt đầu phiên, RUBY sẽ chèn quy tắc/thiết lập, lộ trình quy trình, kiến thức mã số và chỉ thị bước hiện tại vào Sách thế giới phụ của chat; Bạn trò chuyện bình thường bằng preset và API của riêng mình, RUBY chỉ lắng nghe. Khi phát hiện nhãn <ruby新条目>/<ruby更新条目> sẽ lập tức lưu vào kho ghi nhớ, không tự động chuyển bước — mỗi bước đều có thể làm việc lặp lại nhiều lần.",
+
+    "开始会话后，RUBY 在聊天附加世界书注入规则/人设、流程路线图、编号知识与当前步骤指令；你用自己的预设和 API 正常对话，RUBY 只监听。检测到 <ruby新条目>/<ruby更新条目> 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。":
+        "Sau khi bắt đầu phiên, RUBY sẽ chèn quy tắc/thiết lập, lộ trình quy trình, kiến thức mã số và chỉ thị bước hiện tại vào Sách thế giới phụ của chat; Bạn trò chuyện bình thường bằng preset và API của riêng mình, RUBY chỉ lắng nghe. Khi phát hiện nhãn <ruby新条目>/<ruby更新条目> sẽ lập tức lưu vào kho ghi nhớ, không tự động chuyển bước — mỗi bước đều có thể làm việc lặp lại nhiều lần.",
 
     "📦 记录制：AI 输出 &lt;ruby新条目&gt; 新入库 / &lt;ruby更新条目 编号=\"X\"&gt; 覆盖更新已有记录（编号知识常驻注入，AI 知道该更新哪条）。<br>🔁 步骤不自动切换：每步可反复产出，做完做透再手动走下一步；Step7（动态任务设计）一次只允许定稿一个任务。<br>🏁 全部完成后手动点「合成角色卡」：Ruby 汇总清单跟你确认，输出 &lt;ruby合成&gt; 后 RUBY 整理聊天世界书为干净条目、自动生成 RubyAnalyzer 分析方案，并下载 v3 角色卡 JSON。":
         "📦 Cơ chế ghi nhận: AI xuất &lt;ruby新条目&gt; để lưu mới / &lt;ruby更新条目 编号=\"X\"&gt; để ghi đè cập nhật bản ghi có sẵn (kiến thức mã số được chèn thường trực, AI biết cần cập nhật mục nào).<br>🔁 Không tự động chuyển bước: Mỗi bước có thể sinh lặp lại nhiều lần, làm kỹ từng bước rồi mới chuyển thủ công sang bước tiếp; Step7 (Thiết kế nhiệm vụ động) mỗi lần chỉ cho phép hoàn thiện một nhiệm vụ.<br>🏁 Sau khi hoàn thành toàn bộ bấm thủ công \"Hợp thành thẻ nhân vật\": Ruby tổng hợp danh sách xác nhận với bạn, sau khi xuất &lt;ruby合成&gt; RUBY sẽ sắp xếp Sách thế giới chat thành các mục sạch sẽ, tự động tạo cấu hình phân tích RubyAnalyzer và tải xuống file JSON thẻ nhân vật v3.",
 
     "① 注入：规则/人设/路线图/编号知识/步骤指令经聊天附加世界书注入，走酒馆原生生成通道（你的预设/API），RUBY 不代发消息。<br>② 监听：每条 AI 回复后检测记录标记——&lt;ruby新条目&gt; 新记录 / &lt;ruby更新条目 编号=\"X\"&gt; 更新记录 X（编号没命中时按人物名相似度兜底合并）。<br>③ 记录：检测到标记 → yaml 提取 → 写入《ruby写卡初稿》：按步骤各有默认位置与顺序，分析提示词放关闭条目；编号知识同步刷新。<br>④ 停留：不自动切换步骤，每步可反复产出；进度存于聊天元数据（换聊天不串进度）。<br>⑤ 合成：合成角色卡阶段输出 &lt;ruby合成&gt; JSON 清单 → 确认 → 聊天世界书整理为干净条目 + RubyAnalyzer 方案自动生成 + 下载 v3 角色 JSON。":
-        "① Chèn: Quy tắc / Thiết lập / Lộ trình / Kiến thức mã số / Chỉ lệnh bước được chèn qua Sách thế giới phụ của chat, đi qua kênh sinh gốc của SillyTavern (preset/API của bạn), RUBY không gửi tin nhắn thay.<br>② Lắng nghe: Sau mỗi phản hồi của AI sẽ kiểm tra nhãn ghi nhớ——&lt;ruby新条目&gt; bản ghi mới / &lt;ruby更新条目 编号=\"X\"&gt; cập nhật bản ghi X (nếu không trúng mã số sẽ gộp dự phòng theo độ tương đồng tên nhân vật).<br>③ Ghi nhận: Phát hiện nhãn → trích xuất yaml → ghi vào 《Bản thảo viết card ruby》: Mỗi bước có vị trí và thứ tự mặc định, prompt phân tích để ở mục tắt; kiến thức mã số được làm mới đồng bộ.<br>④ Dừng lại: Không tự động chuyển bước, mỗi bước có thể tạo lặp đi lặp lại; tiến độ lưu trong metadata chat (đổi chat không bị lẫn tiến độ).<br>⑤ Hợp thành: Giai đoạn hợp thành thẻ xuất danh sách JSON &lt;ruby合成&gt; → Xác nhận → Sách thế giới chat được sắp xếp thành các mục gọn gàng + Tự động tạo phương án RubyAnalyzer + Tải xuống file JSON thẻ nhân vật v3."
+        "① Chèn: Quy tắc / Thiết lập / Lộ trình / Kiến thức mã số / Chỉ lệnh bước được chèn qua Sách thế giới phụ của chat, đi qua kênh sinh gốc của SillyTavern (preset/API của bạn), RUBY không gửi tin nhắn thay.<br>② Lắng nghe: Sau mỗi phản hồi của AI sẽ kiểm tra nhãn ghi nhớ——&lt;ruby新条目&gt; bản ghi mới / &lt;ruby更新条目 编号=\"X\"&gt; cập nhật bản ghi X (nếu không trúng mã số sẽ gộp dự phòng theo độ tương đồng tên nhân vật).<br>③ Ghi nhận: Phát hiện nhãn → trích xuất yaml → ghi vào 《Bản thảo viết card ruby》: Mỗi bước có vị trí và thứ tự mặc định, prompt phân tích để ở mục tắt; kiến thức mã số được làm mới đồng bộ.<br>④ Dừng lại: Không tự động chuyển bước, mỗi bước có thể tạo lặp đi lặp lại; tiến độ lưu trong metadata chat (đổi chat không bị lẫn tiến độ).<br>⑤ Hợp thành: Giai đoạn hợp thành thẻ xuất danh sách JSON &lt;ruby合成&gt; → Xác nhận → Sách thế giới chat được sắp xếp thành các mục gọn gàng + Tự động tạo phương án RubyAnalyzer + Tải xuống file JSON thẻ nhân vật v3.",
+
+    // Các tip đơn lẻ khớp trọn khối HTML
+    "点击按钮可强制执行对应的分析任务，不受楼层限制；手动执行不会打断后台自动周期。":
+        "Bấm nút để thực thi cưỡng bức nhiệm vụ phân tích tương ứng mà không phụ thuộc vào số lầu tin nhắn; thực thi thủ công không làm gián đoạn chu kỳ tự động chạy ngầm.",
+    "⚠️ 楼层仅计算AI回复消息，用户消息不计入":
+        "⚠️ Số lầu tin nhắn chỉ tính các phản hồi của AI, tin nhắn của người dùng không được tính",
+    "💡 生成参数随当前配置层（角色卡内嵌/全局暂存）保存；API凭据只保存在本地。":
+        "💡 Tham số sinh văn bản được lưu theo tầng cấu hình hiện tại (nhúng trong thẻ nhân vật / tạm lưu toàn cục); Thông tin API chỉ lưu trên máy cục bộ.",
+    "💡 自定义标签会优先于默认标签（content、maintext 等）被匹配。添加后需点击\"保存标签\"生效。":
+        "💡 Thẻ tùy chỉnh sẽ được ưu tiên khớp trước các thẻ mặc định (content, maintext,...). Sau khi thêm cần bấm \"Lưu thẻ\" để có hiệu lực.",
+    "导入配置后，点击下方按钮检查所需的世界书条目是否存在。":
+        "Sau khi nhập cấu hình, bấm nút bên dưới để kiểm tra xem các mục Sách thế giới cần thiết đã tồn tại hay chưa.",
+    "点击步骤卡可手动切换（跳转/回退）。✦=当前步骤。可选/工具步骤按需切换。":
+        "Bấm vào thẻ bước để chuyển đổi thủ công (nhảy bước / quay lại). ✦ = Bước hiện tại. Các bước tùy chọn / công cụ chuyển đổi theo nhu cầu.",
+    "这是分析结果写入的聊天世界书条目名称，不要与\"提示词条目\"重复。":
+        "Đây là tên mục Sách thế giới chat mà kết quả phân tích sẽ ghi vào, không được trùng với \"Mục prompt\".",
+    "勾选后会在发送API前扫描正文；未填写关键词时，命中周期就照常分析；填写多个关键词时，命中任意一个才发送。":
+        "Tích chọn sẽ quét chính văn trước khi gửi API; khi không điền từ khóa thì đến chu kỳ vẫn phân tích bình thường; khi điền nhiều từ khóa thì chỉ cần trúng bất kỳ một từ nào mới gửi.",
+    "🔵蓝灯=始终激活 | 🟢绿灯=关键词触发 | ⚫禁用条目=不注入故事 | 🚫不可递归=禁止递归触发":
+        "🔵 Đèn xanh dương = Luôn kích hoạt | 🟢 Đèn xanh lá = Kích hoạt theo từ khóa | ⚫ Mục tắt = Không chèn vào cốt truyện | 🚫 Không đệ quy = Cấm kích hoạt đệ quy",
+    "手动执行会让导演立即重新规划本周期（重读正文生成新调度表），不影响已保存的周期参数。":
+        "Thực thi thủ công sẽ khiến Đạo diễn lập tức tái lập kế hoạch cho chu kỳ này (đọc lại chính văn để tạo lịch trình mới), không ảnh hưởng đến các tham số chu kỳ đã lưu.",
+    "暂无启用的任务——请先在任务配置页添加并启用任务，导演才有可调度的对象。":
+        "Chưa có nhiệm vụ nào được bật — Vui lòng thêm và bật nhiệm vụ ở trang Cấu hình nhiệm vụ trước để Đạo diễn có đối tượng điều phối."
 };
 

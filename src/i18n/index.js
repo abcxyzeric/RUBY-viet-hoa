@@ -129,8 +129,8 @@ export function translateDom(root) {
                 return;
             }
 
-            // Kiểm tra dịch trọn vẹn khối HTML có cấu trúc (ví dụ: các khối tip, status-box chứa thẻ inline)
-            if (node.children.length > 0) {
+            // Kiểm tra dịch trọn vẹn khối HTML có cấu trúc hoặc khối tip/hộp văn bản hoàn chỉnh
+            if (node.innerHTML && /[\u4e00-\u9fff]/.test(node.innerHTML)) {
                 const normHtml = normalizeHtml(node.innerHTML);
                 if (htmlMap.has(normHtml)) {
                     node.innerHTML = htmlMap.get(normHtml);
@@ -237,3 +237,34 @@ export function injectLanguageSwitcher(headerContainer) {
     headerContainer.insertBefore(btn, headerContainer.firstChild);
     updateSwitcherButton();
 }
+
+/**
+ * Tự động chuyển ngữ cho các thông báo popup (toastr) của SillyTavern
+ */
+export function hookToastr() {
+    if (typeof window === 'undefined') return;
+    const tryHook = () => {
+        if (!window.toastr || window.toastr._ruby_i18n_hooked) return;
+        const methods = ['info', 'success', 'warning', 'error'];
+        for (const m of methods) {
+            if (typeof window.toastr[m] === 'function') {
+                const orig = window.toastr[m].bind(window.toastr);
+                window.toastr[m] = function(message, title, options) {
+                    if (currentLang === 'vi') {
+                        if (typeof message === 'string') message = t(message);
+                        if (typeof title === 'string') title = t(title);
+                    }
+                    return orig(message, title, options);
+                };
+            }
+        }
+        window.toastr._ruby_i18n_hooked = true;
+    };
+    tryHook();
+    if (!window.toastr?._ruby_i18n_hooked) {
+        setTimeout(tryHook, 1000);
+        setTimeout(tryHook, 3000);
+    }
+}
+hookToastr();
+
