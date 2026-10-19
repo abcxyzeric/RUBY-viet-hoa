@@ -964,8 +964,9 @@ async function renderStatus(layer, source) {
 
     if (!identity) {
         el.innerHTML = `
-            <span class="status-warn">⚠ 未打开角色对话（或为群聊），引擎待机</span><br>
-            <span class="status-warn">RUBY 配置保存在角色卡内——请打开角色卡后再配置任务，保存时自动绑定到当前卡</span>`;
+            <span class="status-warn">${t('⚠ 未打开角色对话（或为群聊），引擎待机')}</span><br>
+            <span class="status-warn">${t('RUBY 配置保存在角色卡内——请打开角色卡后再配置任务，保存时自动绑定到当前卡')}</span>`;
+        translateDom(el);
         return;
     }
 
@@ -977,23 +978,24 @@ async function renderStatus(layer, source) {
     }
 
     const engineLine = es.armed
-        ? `<span class="status-ok">🟢 后台监听运行中</span>`
+        ? `<span class="status-ok">${t('🟢 后台监听运行中')}</span>`
         : (layer === 'character'
-            ? '<span class="status-warn">🟡 待机：当前配置层没有启用的任务</span>'
-            : '<span class="status-warn">🟡 待机：配置未绑定角色卡——保存修改将自动写入当前卡，或到"角色绑定"页立即绑定</span>');
+            ? `<span class="status-warn">${t('🟡 待机：当前配置层没有启用的任务')}</span>`
+            : `<span class="status-warn">${t('🟡 待机：配置未绑定角色卡——保存修改将自动写入当前卡，或到"角色绑定"页立即绑定')}</span>`);
 
     const bookLine = chatBook
-        ? `<span style="font-size:12px;color:#666;">📚RUBY绑定聊天世界书：</span><a class="status-ok ra-chat-book-link" style="font-size:12px;cursor:pointer;text-decoration:underline;">${h(chatBook)}</a>`
+        ? `<span style="font-size:12px;color:#666;">${t('📚RUBY绑定聊天世界书：')}</span><a class="status-ok ra-chat-book-link" style="font-size:12px;cursor:pointer;text-decoration:underline;">${h(chatBook)}</a>`
         : (runnable
-            ? `<span style="font-size:12px;color:#666;">📚RUBY绑定聊天世界书：</span><span class="status-warn" style="font-size:12px;">未绑定</span>`
-            : `<span style="font-size:12px;color:#999;">📚RUBY绑定聊天世界书：</span><span style="font-size:12px;color:#999;">无启用任务，不会创建</span>`);
+            ? `<span style="font-size:12px;color:#666;">${t('📚RUBY绑定聊天世界书：')}</span><span class="status-warn" style="font-size:12px;">${t('未绑定')}</span>`
+            : `<span style="font-size:12px;color:#999;">${t('📚RUBY绑定聊天世界书：')}</span><span style="font-size:12px;color:#999;">${t('无启用任务，不会创建')}</span>`);
 
     el.innerHTML = `
-        <span class="status-ok">✓ 系统就绪</span>（配置层：${layerText} · ${h(identity.name)}）<br>
-        ${engineLine}${es.running ? ' · <span style="color:#1E4B8E;">⚙️ 正在执行分析…</span>' : ''}<br>
-        <span style="font-size:12px;color:#666;">AI回复：${es.aiCount} 层 · 周期位置：${es.position}/${es.cycleLength || '-'} ${es.lastRunSummary ? `· 上次执行：${h(es.lastRunSummary)}` : ''}</span><br>
+        <span class="status-ok">${t('✓ 系统就绪')}</span>（${t('配置层：')}${t(layerText)} · ${h(identity.name)}）<br>
+        ${engineLine}${es.running ? ` · <span style="color:#1E4B8E;">${t('⚙️ 正在执行分析…')}</span>` : ''}<br>
+        <span style="font-size:12px;color:#666;">${t(`AI回复：${es.aiCount} 层 · 周期位置：${es.position}/${es.cycleLength || '-'}`)} ${es.lastRunSummary ? `· ${t(`上次执行：${es.lastRunSummary}`)}` : ''}</span><br>
         ${bookLine}
-        ${es.lastError ? `<br><span class="status-err">上次错误：${h(es.lastError)}</span>` : ''}`;
+        ${es.lastError ? `<br><span class="status-err">${t(`上次错误：${es.lastError}`)}</span>` : ''}`;
+    translateDom(el);
 
     const bookLink = el.querySelector('.ra-chat-book-link');
     if (bookLink) on(bookLink, 'click', () => openChatBook(chatBook));
@@ -1030,10 +1032,11 @@ function renderPresetDisplay(data, layer) {
     const taskCount = (preset.tasks || []).filter((t) => t.enabled).length;
     el.innerHTML = `
         <div style="flex:1;">
-            <div style="font-weight:700;font-size:16px;color:#1E4B8E;">📌 ${h(preset.name || '默认方案')}</div>
-            <div style="font-size:12px;color:#666;margin-top:4px;">${taskCount > 0 ? `${taskCount}个分析任务` : '暂无任务配置'}${layer !== 'character' ? ' · <span style="color:#8B4513;">⚠️ 未绑定角色卡</span>' : ''}</div>
+            <div style="font-weight:700;font-size:16px;color:#1E4B8E;">📌 ${h(t(preset.name || '默认方案'))}</div>
+            <div style="font-size:12px;color:#666;margin-top:4px;">${taskCount > 0 ? `${taskCount}个分析任务` : t('暂无任务配置')}${layer !== 'character' ? ` · <span style="color:#8B4513;">${t('⚠️ 未绑定角色卡')}</span>` : ''}</div>
         </div>
-        <button class="btn outline small ra-switch-btn">🔄 切换方案</button>`;
+        <button class="btn outline small ra-switch-btn">${t('🔄 切换方案')}</button>`;
+    translateDom(el);
     on(el.querySelector('.ra-switch-btn'), 'click', () => {
         const panelEl = document.querySelector('.panel-content[data-panel="player"]');
         panelEl?.querySelectorAll('.sub-tab').forEach((t) => t.classList.toggle('active', t.dataset.sub === 'presets'));
@@ -1050,11 +1053,13 @@ function renderManualButtons(data, layer) {
     const identity = config.getCharacterIdentity();
 
     if (!identity) {
-        el.innerHTML = '<span style="color:#1a1a1a;font-size:14px;">请先打开角色对话</span>';
+        el.innerHTML = `<span style="color:#1a1a1a;font-size:14px;">${t('请先打开角色对话')}</span>`;
+        translateDom(el);
         return;
     }
     if (layer !== 'character') {
-        el.innerHTML = '<span class="status-warn">⚠ 配置未绑定角色卡——到创作者版面"角色绑定"页绑定后执行（保存修改也会自动绑定到当前卡）</span>';
+        el.innerHTML = `<span class="status-warn">${t('⚠ 配置未绑定角色卡——到创作者版面"角色绑定"页绑定后执行（保存修改也会自动绑定到当前卡）')}</span>`;
+        translateDom(el);
         return;
     }
 
@@ -1068,10 +1073,11 @@ function renderManualButtons(data, layer) {
         }
     }
     if (buttons.length > 1) {
-        buttons.push(`<button class="btn blue" data-run="all">▶ 全部执行</button>`);
+        buttons.push(`<button class="btn blue" data-run="all">${t('▶ 全部执行')}</button>`);
     }
 
-    el.innerHTML = buttons.join('') || '<span style="color:#1a1a1a;font-size:14px;">暂无启用的任务</span>';
+    el.innerHTML = buttons.join('') || `<span style="color:#1a1a1a;font-size:14px;">${t('暂无启用的任务')}</span>`;
+    translateDom(el);
     el.querySelectorAll('[data-run]').forEach((btn) => {
         on(btn, 'click', async () => {
             const kind = btn.dataset.run;
@@ -1094,11 +1100,13 @@ function renderSchedule(data, layer) {
     const lines = [];
 
     if (!identity) {
-        el.innerHTML = '<span style="color:#1a1a1a;">请先打开角色对话</span>';
+        el.innerHTML = `<span style="color:#1a1a1a;">${t('请先打开角色对话')}</span>`;
+        translateDom(el);
         return;
     }
     if (layer !== 'character') {
-        el.innerHTML = '<span class="status-warn">⚠ 配置未绑定角色卡，任务不会自动执行——保存修改将自动绑定到当前角色卡</span>';
+        el.innerHTML = `<span class="status-warn">${t('⚠ 配置未绑定角色卡，任务不会自动执行——保存修改将自动绑定到当前角色卡')}</span>`;
+        translateDom(el);
         return;
     }
 
@@ -1110,6 +1118,7 @@ function renderSchedule(data, layer) {
         el.innerHTML = parts.waiting
             ? `<div style="text-align:center;padding:10px;color:#666;">${h(parts.waitNote)}</div>`
             : `<div style="font-size:12px;font-weight:600;color:#666;margin-bottom:6px;">${h(parts.badge)}｜${h(parts.counter)}</div>${parts.track}${parts.list}`;
+        translateDom(el);
         return;
     }
 
@@ -1122,7 +1131,8 @@ function renderSchedule(data, layer) {
     for (const task of enabled) {
         lines.push(`<div>📌 位置<strong>${activePositionsOf(task).join(',') || '?'}</strong> → ${h(task.displayName || `任务#${task.id}`)}</div>`);
     }
-    el.innerHTML = lines.length ? lines.join('') : '<span style="color:#1a1a1a;">暂无任务配置</span>';
+    el.innerHTML = lines.length ? lines.join('') : `<span style="color:#1a1a1a;">${t('暂无任务配置')}</span>`;
+    translateDom(el);
 }
 
 async function checkEntryStatus(data) {
@@ -1138,26 +1148,30 @@ async function checkEntryStatus(data) {
     }
 
     if (entries.length === 0) {
-        el.innerHTML = '<span style="color:#1a1a1a;">暂无配置条目</span>';
+        el.innerHTML = `<span style="color:#1a1a1a;">${t('暂无配置条目')}</span>`;
+        translateDom(el);
         return;
     }
 
     try {
         const charBook = await worldbook.getCharBookName();
         if (!charBook) {
-            el.innerHTML = '<span class="status-warn">⚠ 未找到角色世界书</span>';
+            el.innerHTML = `<span class="status-warn">${t('⚠ 未找到角色世界书')}</span>`;
+            translateDom(el);
             return;
         }
         const results = [];
         for (const e of entries.slice(0, 12)) {
             const found = await worldbook.entryExists(charBook, e.key);
-            results.push(`<span class="${found ? 'status-ok' : 'status-warn'}">${found ? '✓' : '⚠'} [${e.type}] ${h(e.label)}</span>`);
+            results.push(`<span class="${found ? 'status-ok' : 'status-warn'}">${found ? '✓' : '⚠'} [${t(e.type)}] ${h(e.label)}</span>`);
         }
         el.innerHTML = results.join('<br>')
             + (entries.length > 12 ? `<br><span style="color:#1a1a1a;">...还有${entries.length - 12}个</span>` : '')
-            + '<div style="margin-top:8px;font-size:12px;color:#666;">💡 仅检查参考条目和提示词。输出条目会在分析执行时自动创建到聊天世界书，无需预先存在。</div>';
+            + `<div style="margin-top:8px;font-size:12px;color:#666;">${t('💡 仅检查参考条目和提示词。输出条目会在分析执行时自动创建到聊天世界书，无需预先存在。')}</div>`;
+        translateDom(el);
     } catch (e) {
-        el.innerHTML = `<span class="status-err">检查失败：${h(e.message)}</span>`;
+        el.innerHTML = `<span class="status-err">${t('检查失败')}：${h(e.message)}</span>`;
+        translateDom(el);
     }
 }
 
@@ -1168,7 +1182,8 @@ function renderPresetList(data) {
     const activeId = data.activePresetId;
 
     if (presets.length === 0) {
-        el.innerHTML = '<span style="color:#666;">暂无配置方案</span>';
+        el.innerHTML = `<span style="color:#666;">${t('暂无配置方案')}</span>`;
+        translateDom(el);
         return;
     }
 
@@ -1180,14 +1195,15 @@ function renderPresetList(data) {
             <div style="display:flex;align-items:center;gap:10px;">
                 <span style="font-size:20px;">${isActive ? '✅' : '⭕'}</span>
                 <div style="flex:1;">
-                    <div class="preset-name ${isActive ? 'active' : ''}">${h(preset.name || '未命名方案')}</div>
+                    <div class="preset-name ${isActive ? 'active' : ''}">${h(t(preset.name || '未命名方案'))}</div>
                     <div class="preset-desc">${preset.description ? h(preset.description) : ''}</div>
-                    <div class="preset-meta">${taskCount > 0 ? `📋 ${taskCount}个分析任务` : '⚠️ 暂无任务'}</div>
+                    <div class="preset-meta">${taskCount > 0 ? `📋 ${taskCount}个分析任务` : t('⚠️ 暂无任务')}</div>
                 </div>
-                ${isActive ? '<span style="background:#2C5530;color:#fff;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;">当前使用</span>' : '<span class="preset-switch-hint">点击切换 →</span>'}
+                ${isActive ? `<span style="background:#2C5530;color:#fff;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;">${t('当前使用')}</span>` : `<span class="preset-switch-hint">${t('点击切换 →')}</span>`}
             </div>
         </div>`;
     }).join('');
+    translateDom(el);
 
     el.querySelectorAll('.preset-card').forEach((card) => {
         on(card, 'click', async () => {
@@ -1210,22 +1226,24 @@ function renderPresetDetail(data, presetId) {
     if (!el) return;
     const preset = data.presets.find((p) => p.id === presetId);
     if (!preset) {
-        el.innerHTML = '<span style="color:#666;">未找到方案</span>';
+        el.innerHTML = `<span style="color:#666;">${t('未找到方案')}</span>`;
+        translateDom(el);
         return;
     }
     const enabled = (preset.tasks || []).filter((t) => t.enabled)
         .sort((a, b) => (activePositionsOf(a)[0] || 0) - (activePositionsOf(b)[0] || 0));
-    let html = `<div style="font-weight:700;font-size:15px;margin-bottom:10px;">📋 ${h(preset.name)}</div>`;
+    let html = `<div style="font-weight:700;font-size:15px;margin-bottom:10px;">📋 ${h(t(preset.name || '默认方案'))}</div>`;
     for (const task of enabled) {
         html += `<div style="padding:6px 0;border-bottom:1px dashed #ddd;">📌 位置${activePositionsOf(task).join(',') || '?'} → ${h(task.displayName || `任务#${task.id}`)}</div>`;
     }
-    if (enabled.length === 0) html += '<div style="color:#666;padding:10px 0;">暂无任务配置</div>';
+    if (enabled.length === 0) html += `<div style="color:#666;padding:10px 0;">${t('暂无任务配置')}</div>`;
     el.innerHTML = html;
+    translateDom(el);
 }
 
 /** 模型下拉选项：头部占位项提示可自由填写，正文为拉取到的模型列表 */
 function buildModelOptions(models) {
-    const header = '<option value="">— 从列表选择 / 输入框自由填写 —</option>';
+    const header = `<option value="">— ${t('从列表选择 / 输入框自由填写')} —</option>`;
     return header + models.map((id) => `<option value="${h(id)}">${h(id)}</option>`).join('');
 }
 
@@ -1711,12 +1729,14 @@ function renderTagsList() {
     const el = $('ra_tags_list');
     if (!el) return;
     if (ui.tags.length === 0) {
-        el.innerHTML = '<span style="color:#1a1a1a;font-size:14px;">暂无自定义标签</span>';
+        el.innerHTML = `<span style="color:#1a1a1a;font-size:14px;">${t('暂无自定义标签')}</span>`;
+        translateDom(el);
         return;
     }
     el.innerHTML = ui.tags.map((tag, idx) => `
-        <span class="custom-tag">&lt;${h(tag)}&gt;<button data-idx="${idx}" title="删除">✕</button></span>
+        <span class="custom-tag">&lt;${h(tag)}&gt;<button data-idx="${idx}" title="${t('删除')}">✕</button></span>
     `).join('');
+    translateDom(el);
     el.querySelectorAll('.custom-tag button').forEach((btn) => {
         on(btn, 'click', () => {
             const idx = parseInt(btn.dataset.idx, 10);
@@ -3219,12 +3239,14 @@ function renderBindingTab(layer) {
                 </div>
             </div>`;
     }
+    translateDom(statusEl);
 
     if (listEl) {
         const boundChars = config.getBoundCharacters();
         listEl.innerHTML = boundChars.length > 0
             ? boundChars.map((c) => `<div style="padding:6px 0;border-bottom:1px dashed #ddd;">${c.source === 'card' ? '📇' : '💾'} ${h(c.name)} <span style="color:#999;font-size:12px;">(${c.source === 'card' ? '角色卡内嵌' : '本地旧版'})</span></div>`).join('')
             : '<span style="color:#666;">暂无角色绑定，所有角色使用全局配置</span>';
+        translateDom(listEl);
     }
 }
 

@@ -37,6 +37,26 @@ export function normalizeStr(str) {
     return str.replace(/\s+/g, ' ').trim();
 }
 
+export function normalizeHtml(html) {
+    if (!html || typeof html !== 'string') return '';
+    return html
+        .replace(/<br\s*\/?>/gi, '<br>')
+        .replace(/\s*<br>\s*/gi, '<br>')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+// Khởi tạo bảng tra cứu HTML chuẩn hóa để tăng tốc và đảm bảo khớp tuyệt đối
+const NORMALIZED_VI_HTML = new Map();
+function getNormalizedHtmlMap() {
+    if (NORMALIZED_VI_HTML.size === 0 && VI_HTML && typeof VI_HTML === 'object') {
+        for (const [key, val] of Object.entries(VI_HTML)) {
+            NORMALIZED_VI_HTML.set(normalizeHtml(key), val);
+        }
+    }
+    return NORMALIZED_VI_HTML;
+}
+
 /**
  * Hàm dịch văn bản (cho chuỗi đơn hoặc thông báo toastr/notify)
  * Tuyệt đối KHÔNG dùng thay thế chuỗi con bừa bãi tránh lỗi chắp vá ngôn ngữ.
@@ -58,6 +78,20 @@ export function t(text) {
         return VI_DICT[norm];
     }
 
+    // Nhận diện an toàn tiền tố biểu tượng/icon (ví dụ: "📌 默认方案" -> "📌 " + "Gói cấu hình mặc định")
+    const prefixMatch = trimmed.match(/^([📌💡⚠️⚠📋✓🟢🟡🔴📦🎯■•▶🔄📄🔍💾📤📥➕✕✔️·\s]+)(.+)$/);
+    if (prefixMatch) {
+        const prefix = prefixMatch[1];
+        const body = prefixMatch[2].trim();
+        if (VI_DICT[body]) {
+            return text.replace(trimmed, prefix + VI_DICT[body]);
+        }
+        const normBody = normalizeStr(body);
+        if (VI_DICT[normBody]) {
+            return text.replace(trimmed, prefix + VI_DICT[normBody]);
+        }
+    }
+
     // Kiểm tra các mẫu regex động có cấu trúc
     for (const [pattern, replacement] of VI_PATTERNS) {
         if (pattern.test(text)) {
@@ -73,6 +107,8 @@ export function t(text) {
  */
 export function translateDom(root) {
     if (!root || currentLang === 'zh') return;
+
+    const htmlMap = getNormalizedHtmlMap();
 
     const walk = (node) => {
         if (node.nodeType === Node.ELEMENT_NODE) {
@@ -94,11 +130,15 @@ export function translateDom(root) {
             }
 
             // Kiểm tra dịch trọn vẹn khối HTML có cấu trúc (ví dụ: các khối tip, status-box chứa thẻ inline)
-            if (node.children.length > 0 && VI_HTML) {
-                const normHtml = normalizeStr(node.innerHTML);
-                if (VI_HTML[normHtml]) {
-                    node.innerHTML = VI_HTML[normHtml];
+            if (node.children.length > 0) {
+                const normHtml = normalizeHtml(node.innerHTML);
+                if (htmlMap.has(normHtml)) {
+                    node.innerHTML = htmlMap.get(normHtml);
                     return; // Đã thay thế trọn khối HTML chuẩn xác, không duyệt tiếp vào các con
+                }
+                if (VI_HTML && VI_HTML[normHtml]) {
+                    node.innerHTML = VI_HTML[normHtml];
+                    return;
                 }
             }
 

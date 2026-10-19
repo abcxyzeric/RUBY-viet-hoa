@@ -528,10 +528,37 @@ export const VI_DICT = {
     "方案列表：": "Danh sách gói: ",
     "当前激活": "Đang kích hoạt",
     "未命名": "Chưa đặt tên",
-    "默认方案": "Phương án mặc định",
+    "默认方案": "Gói cấu hình mặc định",
+    "未命名方案": "Gói cấu hình chưa đặt tên",
     "个任务": "nhiệm vụ",
     "个参考条目": "mục tham chiếu",
-    "个": ""
+    "个": "",
+
+    // Bổ sung các chuỗi giao diện hiển thị động
+    "暂无配置条目": "Chưa cấu hình mục nào",
+    "⚠️ 暂无任务": "⚠️ Chưa có nhiệm vụ",
+    "当前使用": "Đang sử dụng",
+    "点击切换 →": "Bấm để chuyển →",
+    "💡 生成参数随当前配置层（角色卡内嵌/全局暂存）保存；API凭据只保存在本地。": "💡 Tham số sinh được lưu theo tầng cấu hình hiện tại (nhúng trong thẻ/tạm thời toàn cục); thông tin API chỉ lưu cục bộ trên máy.",
+    "生成参数随当前配置层（角色卡内嵌/全局暂存）保存；API凭据只保存在本地。": "Tham số sinh được lưu theo tầng cấu hình hiện tại (nhúng trong thẻ/tạm thời toàn cục); thông tin API chỉ lưu cục bộ trên máy.",
+    "💡 仅检查参考条目和提示词。输出条目会在分析执行时自动创建到聊天世界书，无需预先存在。": "💡 Chỉ kiểm tra các mục tham chiếu và prompt. Các mục xuất kết quả sẽ tự động được tạo vào Sách thế giới cuộc trò chuyện khi chạy phân tích, không cần tồn tại trước.",
+    "任务输出变量：{{task_任务ID_Output}}（如 {{task_1_Output}}）": "Biến kết quả nhiệm vụ: {{task_IDNhiệmVụ_Output}} (ví dụ: {{task_1_Output}})",
+    "未找到方案": "Không tìm thấy gói cấu hình",
+    "检查失败": "Kiểm tra thất bại",
+    "参考": "Tham chiếu",
+    "提示词": "Prompt",
+    "▾ 配置": "▾ Cấu hình",
+    "▸ 配置": "▸ Cấu hình",
+    "配置": "Cấu hình",
+    "请选择关键词...": "Vui lòng chọn từ khóa...",
+    "🔍 扫描关键词": "🔍 Quét từ khóa",
+    "扫描中...": "Đang quét...",
+    "从列表选择 / 输入框自由填写": "Chọn từ danh sách / Nhập tự do vào ô",
+    "— 从列表选择 / 输入框自由填写 —": "— Chọn từ danh sách / Nhập tự do vào ô —",
+    "暂无自定义标签": "Chưa có thẻ tùy chỉnh nào",
+    "暂无角色绑定，所有角色使用全局配置": "Chưa có nhân vật nào được liên kết, mọi nhân vật dùng cấu hình toàn cục",
+    "当前角色：": "Nhân vật hiện tại: ",
+    "配置层：": "Tầng cấu hình: "
 };
 
 export const VI_PATTERNS = [
@@ -558,6 +585,7 @@ export const VI_PATTERNS = [
     [/^参考条目总数：(\d+)\s*个$/g, "Tổng mục tham chiếu: $1"],
     [/^Mục tham chiếu总数[：:]\s*(\d+)\s*个$/g, "Tổng mục tham chiếu: $1"],
     [/^段落\s*(\d+)$/g, "Đoạn $1"],
+    [/\.\.\.还有(\d+)个/g, "...còn lại $1 mục"],
 
     // Thông báo phân tích
     [/🔄\s*(.+?)\s*分析中\.\.\.\s*\((\d+)\/(\d+)\)/g, "🔄 Đang phân tích $1... ($2/$3)"],
@@ -590,13 +618,19 @@ export const VI_HTML = {
     "💡 <strong>主API</strong>：通过酒馆原生 <code>generateRaw</code> 走当前连接的模型，仅借用通道——<u>不注入预设的提示词</u>（主提示词/越狱/角色卡/聊天记录一概不进上下文），发送的只有 RUBY 自己组装的破限消息与任务提示词，与酒馆自身静默提示词同一机制；RUBY 生成参数会按官方事件钩子覆写到本次请求。<br> 💡 <strong>自定义端点</strong>：OpenAI 兼容接口（DeepSeek、OpenRouter、GLM 等），通过酒馆官方 <code>ChatCompletionService</code> 请求服务发出。地址填到版本段即可（如 <code>/v1</code>、<code>/beta</code>），由酒馆服务端拼接 <code>/chat/completions</code> 并转发。<br> 🔒 两条通道均为酒馆原生请求形态、异步后台执行；密钥只保存在本机扩展设置中，不进入角色卡、世界书或配置模板。":
         "💡 <strong>API chính</strong>: Thông qua <code>generateRaw</code> gốc của SillyTavern kết nối đến mô hình hiện tại, chỉ mượn kênh truyền——<u>không chèn prompt định sẵn</u> (Prompt chính/Jailbreak/Thẻ nhân vật/Lịch sử trò chuyện hoàn toàn không đưa vào ngữ cảnh), chỉ gửi tin nhắn Jailbreak do RUBY tự lắp ráp cùng prompt nhiệm vụ, cùng cơ chế với prompt im lặng của SillyTavern; tham số sinh văn bản của RUBY sẽ ghi đè vào yêu cầu lần này theo hook sự kiện chính thức.<br> 💡 <strong>Endpoint tùy chỉnh</strong>: Cổng tương thích OpenAI (DeepSeek, OpenRouter, GLM...), gửi qua dịch vụ yêu cầu <code>ChatCompletionService</code> chính thức của SillyTavern. Địa chỉ chỉ cần điền đến đoạn phiên bản (như <code>/v1</code>, <code>/beta</code>), do máy chủ SillyTavern ghép thêm <code>/chat/completions</code> và chuyển tiếp.<br> 🔒 Cả hai kênh đều ở dạng yêu cầu gốc của SillyTavern, thực thi ngầm bất đồng bộ; API Key chỉ lưu trong cài đặt extension máy cục bộ, không đưa vào Thẻ nhân vật, Sách thế giới hay mẫu cấu hình.",
 
-    // Tham số sinh văn bản (Ảnh 1)
-    "💡 <strong>默认不发送任何生成参数</strong>：主API沿用酒馆当前预设的采样设置，自定义端点沿用服务商默认值。有自定义需求时勾选下方开关；留空的参数依然不会发送。":
-        "💡 <strong>Mặc định không gửi bất kỳ tham số sinh văn bản nào</strong>: API chính dùng tiếp các thiết lập lấy mẫu hiện tại của SillyTavern, endpoint tùy chỉnh dùng tiếp giá trị mặc định của nhà cung cấp. Khi có nhu cầu tùy chỉnh hãy tích chọn công tắc bên dưới; các tham số để trống vẫn sẽ không được gửi.",
+    // Tham số sinh văn bản (Ảnh 3)
+    "💡 <strong>默认不发送任何生成参数</strong>：主API沿用酒馆当前预设的采样设置，自定义端点沿用服务商默认值。<br>有自定义需求时勾选下方开关；<u>留空的参数依然不会发送</u>。":
+        "💡 <strong>Mặc định không gửi bất kỳ tham số sinh nào</strong>: API chính dùng tiếp các thiết lập lấy mẫu hiện tại của SillyTavern, endpoint tùy chỉnh dùng tiếp giá trị mặc định của nhà cung cấp.<br>Khi có nhu cầu tùy chỉnh hãy tích chọn công tắc bên dưới; <u>các tham số để trống vẫn sẽ không được gửi</u>.",
 
-    // Tin nhắn Jailbreak tùy chỉnh (Ảnh 2 & 3)
+    "💡 <strong>默认不发送任何生成参数</strong>：主API沿用酒馆当前预设的采样设置，自定义端点沿用服务商默认值。<br> 有自定义需求时勾选下方开关；<u>留空的参数依然不会发送</u>。":
+        "💡 <strong>Mặc định không gửi bất kỳ tham số sinh nào</strong>: API chính dùng tiếp các thiết lập lấy mẫu hiện tại của SillyTavern, endpoint tùy chỉnh dùng tiếp giá trị mặc định của nhà cung cấp.<br>Khi có nhu cầu tùy chỉnh hãy tích chọn công tắc bên dưới; <u>các tham số để trống vẫn sẽ không được gửi</u>.",
+
+    // Tin nhắn Jailbreak tùy chỉnh (Ảnh 4)
+    "💡 任务提示词会固定作为 <code>user</code> 消息发送。这里可以调整它前后的破限消息、消息角色和注入位置；<code>{{taskType}}</code> 会自动替换为当前任务名。<br>🔒 破限设置为<strong>全局保存</strong>，切换预设/角色卡或导入配置模板均不会覆盖。":
+        "💡 Prompt nhiệm vụ sẽ cố định gửi dưới dạng tin nhắn <code>user</code>. Tại đây có thể điều chỉnh tin nhắn Jailbreak trước/sau nó, role tin nhắn và vị trí chèn; <code>{{taskType}}</code> sẽ tự động thay thế bằng tên nhiệm vụ hiện tại.<br>🔒 Cài đặt Jailbreak là <strong>lưu toàn cục</strong>, chuyển đổi preset/thẻ nhân vật hoặc nhập mẫu cấu hình đều không bị ghi đè.",
+
     "💡 任务提示词会固定作为 <code>user</code> 消息发送。这里可以调整它前后的破限消息、消息角色和注入位置；<code>{{taskType}}</code> 会自动替换为当前任务名。<br> 🔒 破限设置为<strong>全局保存</strong>，切换预设/角色卡或导入配置模板均不会覆盖。":
-        "💡 Prompt nhiệm vụ sẽ cố định gửi dưới dạng tin nhắn <code>user</code>. Tại đây có thể điều chỉnh tin nhắn Jailbreak trước/sau nó, role tin nhắn và vị trí chèn; <code>{{taskType}}</code> sẽ tự động thay thế bằng tên nhiệm vụ hiện tại.<br> 🔒 Cài đặt Jailbreak là <strong>lưu toàn cục</strong>, chuyển đổi preset/thẻ nhân vật hoặc nhập mẫu cấu hình đều không bị ghi đè.",
+        "💡 Prompt nhiệm vụ sẽ cố định gửi dưới dạng tin nhắn <code>user</code>. Tại đây có thể điều chỉnh tin nhắn Jailbreak trước/sau nó, role tin nhắn và vị trí chèn; <code>{{taskType}}</code> sẽ tự động thay thế bằng tên nhiệm vụ hiện tại.<br>🔒 Cài đặt Jailbreak là <strong>lưu toàn cục</strong>, chuyển đổi preset/thẻ nhân vật hoặc nhập mẫu cấu hình đều không bị ghi đè.",
 
     // Giao diện tóm tắt (Ảnh 4)
     "启用后，分析时<strong>已被总结工具总结过的楼层</strong>用其总结内容替代原文正文注入；总结边界之后的新楼层仍读取原文。周期位置、楼层计数、各任务的已读书签计算<strong>完全不受影响</strong>。":
@@ -606,11 +640,32 @@ export const VI_HTML = {
     "① 读取总结工具写入聊天元数据的结构化总结（只读，不修改总结数据）<br> ② 书签 → 总结边界之间的楼层 → 替换为总结文本（启用时读取窗口不再限制20楼）<br> ③ 总结边界 → 最新楼层 → 照常读取原文增量<br> ④ 20万字符上限作用于\"总结+新正文\"整体；参考条目与分析输出引用不受影响<br> ⑤ 总结工具未安装或本聊天无总结数据 → 自动回退纯原文模式（控制台提示）":
         "① Đọc tóm tắt có cấu trúc do công cụ tóm tắt ghi vào metadata trò chuyện (chỉ đọc, không sửa đổi dữ liệu tóm tắt)<br> ② Các tầng giữa bookmark → ranh giới tóm tắt → thay bằng văn bản tóm tắt (khi bật, cửa sổ đọc không còn giới hạn 20 tầng)<br> ③ Ranh giới tóm tắt → tầng mới nhất → đọc phần tăng dần của văn bản gốc như bình thường<br> ④ Giới hạn 200.000 ký tự áp dụng cho toàn bộ \"tóm tắt + chính văn mới\"; các mục tham chiếu và trích dẫn kết quả phân tích không bị ảnh hưởng<br> ⑤ Chưa cài đặt công cụ tóm tắt hoặc trò chuyện không có dữ liệu tóm tắt → tự động quay về chế độ văn bản gốc thuần túy (thông báo console)",
 
-    // Nhập / Xuất mẫu cấu hình (Ảnh 5)
+    // Kho mục tham chiếu (Ảnh 5)
+    "点击\"扫描角色世界书\"后会列出所有可用关键词，分两组：<strong>已加入参考</strong>（可折叠）和<strong>未加入</strong>。勾选需要的条目并保存后，参考池仅保留勾选项，变量名将自动生成。<br><br><strong>📖 读取优先级：</strong>优先从<u>聊天世界书</u>读取最新版本，没有时回退到<u>角色世界书</u>读取原始版本。":
+        "Sau khi bấm \"Quét Sách thế giới nhân vật\" sẽ liệt kê tất cả các từ khóa khả dụng, chia làm hai nhóm: <strong>Đã thêm vào tham chiếu</strong> (có thể thu gọn) và <strong>Chưa thêm</strong>. Tích chọn các mục cần thiết rồi Lưu, kho tham chiếu chỉ giữ lại các mục đã tích, tên biến sẽ được tạo tự động.<br><br><strong>📖 Thứ tự ưu tiên đọc:</strong> Ưu tiên đọc phiên bản mới nhất từ <u>Sách thế giới cuộc trò chuyện</u>, nếu không có sẽ quay về <u>Sách thế giới nhân vật</u> để đọc phiên bản gốc.",
+
+    // Biến hệ thống tích hợp sẵn (Ảnh 5)
+    "<div><code>{{recentMessages}}</code> → 每个任务独立记录已读楼层，下次只读未读的新楼层（含被隐藏的正文），每次最多20楼；单次正文上限<strong>20万字符</strong>，超出部分末尾截断抛弃</div><div><code>{{CHAR_NAME}}</code> → 上方配置的角色名称</div><div style=\"margin-top:8px;color:#333;\">任务输出变量：{{task_任务ID_Output}}（如 {{task_1_Output}}）</div>":
+        "<div><code>{{recentMessages}}</code> → Mỗi nhiệm vụ tự ghi nhớ các tầng đã đọc độc lập, lần tới chỉ đọc các tầng mới chưa đọc (bao gồm cả chính văn bị ẩn), mỗi lần tối đa 20 lầu; giới hạn chính văn một lần là <strong>200.000 ký tự</strong>, phần vượt quá ở cuối sẽ bị lược bỏ</div><div><code>{{CHAR_NAME}}</code> → Tên nhân vật được cấu hình ở trên</div><div style=\"margin-top:8px;color:#333;\">Biến kết quả nhiệm vụ: {{task_IDNhiệmVụ_Output}} (ví dụ: {{task_1_Output}})</div>",
+
+    "<code>{{recentMessages}}</code> → 每个任务独立记录已读楼层，下次只读未读的新楼层（含被隐藏的正文），每次最多20楼；单次正文上限<strong>20万字符</strong>，超出部分末尾截断抛弃":
+        "<code>{{recentMessages}}</code> → Mỗi nhiệm vụ tự ghi nhớ các tầng đã đọc độc lập, lần tới chỉ đọc các tầng mới chưa đọc (bao gồm cả chính văn bị ẩn), mỗi lần tối đa 20 lầu; giới hạn chính văn một lần là <strong>200.000 ký tự</strong>, phần vượt quá ở cuối sẽ bị lược bỏ",
+
+    "<code>{{CHAR_NAME}}</code> → 上方配置的角色名称":
+        "<code>{{CHAR_NAME}}</code> → Tên nhân vật được cấu hình ở trên",
+
+    // Cơ chế đọc tăng tiến (Ảnh 5)
+    "💡 <strong>增量阅读机制</strong>：每个分析任务各自维护\"已读书签\"（存于聊天元数据）。<br>每次触发时只读上次之后<u>新楼层</u>（含被酒馆隐藏的正文），读过的不重读，每次最多阅读最近20楼。<br>⚠️ 单次输入正文超过<strong>20万字符</strong>时停止，后续剩余正文直接抛弃（保留靠前部分）；上限只作用于对话正文——参考条目与历史分析输出完整保留，绝不因截断丢失。<br>退出再进会从书签续读；新聊天时读最近20楼。各任务书签互不影响。":
+        "💡 <strong>Cơ chế đọc tăng tiến</strong>: Mỗi nhiệm vụ phân tích tự duy trì riêng \"bookmark đã đọc\" (lưu trong metadata cuộc trò chuyện).<br>Mỗi lần kích hoạt chỉ đọc <u>các tầng mới</u> sau lần trước (bao gồm cả chính văn bị SillyTavern ẩn), tầng đã đọc sẽ không đọc lại, mỗi lần đọc tối đa 20 tầng gần nhất.<br>⚠️ Dừng đọc khi chính văn nhập vào trong một lần vượt quá <strong>200.000 ký tự</strong>, phần chính văn còn lại phía sau sẽ bị hủy bỏ (giữ lại phần phía trước); giới hạn chỉ áp dụng cho chính văn hội thoại——các mục tham chiếu và kết quả phân tích lịch sử được giữ nguyên trọn vẹn, tuyệt đối không bị mất do cắt ngắn.<br>Thoát ra rồi vào lại sẽ tiếp tục đọc từ bookmark; cuộc trò chuyện mới sẽ đọc 20 tầng gần nhất. Bookmark của từng nhiệm vụ hoàn toàn độc lập không ảnh hưởng lẫn nhau.",
+
+    "💡 <strong>增量阅读机制</strong>：每个分析任务各自维护\"已读书签\"（存于聊天元数据）。<br> 每次触发时只读上次之后<u>新楼层</u>（含被酒馆隐藏的正文），读过的不重读，每次最多阅读最近20楼。<br> ⚠️ 单次输入正文超过<strong>20万字符</strong>时停止，后续剩余正文直接抛弃（保留靠前部分）；上限只作用于对话正文——参考条目与历史分析输出完整保留，绝不因截断丢失。<br> 退出再进会从书签续读；新聊天时读最近20楼。各任务书签互不影响。":
+        "💡 <strong>Cơ chế đọc tăng tiến</strong>: Mỗi nhiệm vụ phân tích tự duy trì riêng \"bookmark đã đọc\" (lưu trong metadata cuộc trò chuyện).<br>Mỗi lần kích hoạt chỉ đọc <u>các tầng mới</u> sau lần trước (bao gồm cả chính văn bị SillyTavern ẩn), tầng đã đọc sẽ không đọc lại, mỗi lần đọc tối đa 20 tầng gần nhất.<br>⚠️ Dừng đọc khi chính văn nhập vào trong một lần vượt quá <strong>200.000 ký tự</strong>, phần chính văn còn lại phía sau sẽ bị hủy bỏ (giữ lại phần phía trước); giới hạn chỉ áp dụng cho chính văn hội thoại——các mục tham chiếu và kết quả phân tích lịch sử được giữ nguyên trọn vẹn, tuyệt đối không bị mất do cắt ngắn.<br>Thoát ra rồi vào lại sẽ tiếp tục đọc từ bookmark; cuộc trò chuyện mới sẽ đọc 20 tầng gần nhất. Bookmark của từng nhiệm vụ hoàn toàn độc lập không ảnh hưởng lẫn nhau.",
+
+    // Nhập / Xuất mẫu cấu hình
     "📦 <strong>即插即拔功能</strong>：将<strong>所有配置方案</strong>导出为模板文件，在其他角色或环境中快速导入复用。<br><br> 导出内容包括：所有配置方案（含各自的参考池/开局任务/分析任务）、自定义正文标签、破限设置、当前激活方案标记。<br> <strong>不包含</strong>：API密钥等任何敏感信息。":
         "📦 <strong>Tính năng Plug & Play</strong>: Xuất <strong>toàn bộ các gói cấu hình</strong> thành file mẫu để nhanh chóng nhập và tái sử dụng cho các nhân vật hoặc môi trường khác.<br><br> Nội dung xuất bao gồm: Toàn bộ gói cấu hình (kèm kho tham chiếu/nhiệm vụ mở đầu/nhiệm vụ phân tích tương ứng), thẻ nội dung tùy chỉnh, cài đặt Jailbreak, đánh dấu gói cấu hình đang kích hoạt.<br> <strong>Không bao gồm</strong>: API Key hoặc bất kỳ thông tin nhạy cảm nào.",
 
-    // Cảnh báo nhập mẫu cấu hình (Ảnh 5)
+    // Cảnh báo nhập mẫu cấu hình
     "⚠️ 导入会写入<strong>当前角色卡</strong>并覆盖卡内已有方案（未打开角色卡时无法导入）；世界书条目（提示词、输出条目）需要在角色世界书中存在。":
         "⚠️ Việc nhập sẽ ghi vào <strong>Thẻ nhân vật hiện tại</strong> và ghi đè lên các gói cấu hình đã có trong thẻ (không thể nhập khi chưa mở thẻ nhân vật); các mục Sách thế giới (prompt, mục xuất) cần phải tồn tại trong Sách thế giới của nhân vật.",
 
@@ -618,16 +673,38 @@ export const VI_HTML = {
     "🎯 <strong>配置方案</strong>：创作者可以预设多套不同的任务配置，您可以根据需要切换。<br> 切换方案后，分析任务会按新方案的设定执行。":
         "🎯 <strong>Gói cấu hình</strong>: Tác giả có thể thiết lập sẵn nhiều bộ cấu hình nhiệm vụ khác nhau để bạn chuyển đổi tùy nhu cầu.<br> Sau khi chuyển gói, các nhiệm vụ phân tích sẽ thực thi theo thiết lập của gói mới.",
 
-    // Cơ chế đọc tăng tiến
-    "💡 <strong>增量阅读机制</strong>：每个分析任务各自维护\"已读书签\"（存于聊天元数据）。<br> 每次触发时只读上次之后<u>新楼层</u>（含被酒馆隐藏的正文），读过的不重读，每次最多阅读最近20楼。<br> ⚠️ 单次输入正文超过<strong>20万字符</strong>时停止，后续剩余正文直接抛弃（保留靠前部分）；上限只作用于对话正文——参考条目与历史分析输出完整保留，绝不因截断丢失。<br> 退出再进体会从书签续读；新聊天读最近20楼。各任务书签互不影响。":
-        "💡 <strong>Cơ chế đọc tăng tiến</strong>: Mỗi nhiệm vụ phân tích tự duy trì riêng \"bookmark đã đọc\" (lưu trong metadata cuộc trò chuyện).<br> Mỗi lần kích hoạt chỉ đọc <u>các tầng mới</u> sau lần trước (bao gồm cả chính văn bị SillyTavern ẩn), tầng đã đọc sẽ không đọc lại, mỗi lần đọc tối đa 20 tầng gần nhất.<br> ⚠️ Dừng đọc khi chính văn nhập vào trong một lần vượt quá <strong>200.000 ký tự</strong>, phần chính văn còn lại phía sau sẽ bị hủy bỏ (giữ lại phần phía trước); giới hạn chỉ áp dụng cho chính văn hội thoại——các mục tham chiếu và kết quả phân tích lịch sử được giữ nguyên trọn vẹn, tuyệt đối không bị mất do cắt ngắn.<br> Thoát ra rồi vào lại sẽ tiếp tục đọc từ bookmark; cuộc trò chuyện mới sẽ đọc 20 tầng gần nhất. Bookmark của từng nhiệm vụ hoàn toàn độc lập không ảnh hưởng lẫn nhau.",
-
     // Mô hình lấy thẻ làm trung tâm
     "💡 <strong>卡片中心模型</strong>：RUBY 任务配置只随角色卡存在（写入卡内 <code>data.extensions</code> 字段）。打开角色卡后，导入模板或新建/修改任务会<strong>自动绑定并写入当前角色卡</strong>，导出/分享卡片即携带，其他环境导入即生效。<br> 💡 <strong>任务归属</strong>：配置整体保存在角色卡的 <code>data.extensions</code> 字段，任务只随这张卡生效，无需为任务单独指定角色。<br> ⚠️ 未打开角色卡时配置只能暂存于全局层（不随卡导出），请打开角色卡后再配置；引擎只执行已绑定角色卡的配置。<br>":
         "💡 <strong>Mô hình lấy thẻ nhân vật làm trung tâm</strong>: Cấu hình nhiệm vụ RUBY chỉ tồn tại cùng thẻ nhân vật (được ghi vào trường <code>data.extensions</code> của thẻ). Sau khi mở thẻ nhân vật, việc nhập mẫu hoặc tạo mới/sửa nhiệm vụ sẽ <strong>tự động liên kết và ghi vào thẻ nhân vật hiện tại</strong>, xuất/chia sẻ thẻ sẽ mang theo cấu hình, nhập sang môi trường khác sẽ có hiệu lực ngay.<br> 💡 <strong>Quy thuộc nhiệm vụ</strong>: Toàn bộ cấu hình được lưu trong trường <code>data.extensions</code> của thẻ nhân vật, nhiệm vụ chỉ có hiệu lực cùng thẻ này, không cần chỉ định riêng nhân vật cho nhiệm vụ.<br> ⚠️ Khi chưa mở thẻ nhân vật, cấu hình chỉ có thể lưu tạm ở tầng toàn cục (không xuất theo thẻ), vui lòng mở thẻ nhân vật trước khi cấu hình; engine chỉ thực thi cấu hình đã liên kết với thẻ nhân vật.<br>",
 
     // Vị trí chu kỳ
     "<strong>周期位置</strong>：表示在每个周期的第几次AI回复时触发（支持多个，逗号分隔，如 5,10,15）。周期长度 = 所有任务里最大的那个数。<br> 💡 <strong>额外关键词</strong>：可为输出条目添加额外触发词（如角色名），与输出条目关键词合并。<br> 📄 <strong>任务归属</strong>：整份配置保存在角色卡内，任务只随这张卡生效，无需单独指定角色。":
-        "<strong>Vị trí chu kỳ</strong>: Cho biết nhiệm vụ sẽ kích hoạt ở lượt phản hồi AI thứ mấy trong mỗi chu kỳ (hỗ trợ nhiều lượt, phân cách bằng dấu phẩy, ví dụ: 5,10,15). Độ dài chu kỳ = số lớn nhất trong tất cả các nhiệm vụ.<br> 💡 <strong>Từ khóa bổ sung</strong>: Có thể thêm từ khóa kích hoạt phụ cho mục xuất (ví dụ tên nhân vật), kết hợp với từ khóa của mục xuất.<br> 📄 <strong>Quy thuộc nhiệm vụ</strong>: Toàn bộ cấu hình được lưu trong thẻ nhân vật, nhiệm vụ chỉ có hiệu lực cùng thẻ này, không cần chỉ định riêng nhân vật."
+        "<strong>Vị trí chu kỳ</strong>: Cho biết nhiệm vụ sẽ kích hoạt ở lượt phản hồi AI thứ mấy trong mỗi chu kỳ (hỗ trợ nhiều lượt, phân cách bằng dấu phẩy, ví dụ: 5,10,15). Độ dài chu kỳ = số lớn nhất trong tất cả các nhiệm vụ.<br> 💡 <strong>Từ khóa bổ sung</strong>: Có thể thêm từ khóa kích hoạt phụ cho mục xuất (ví dụ tên nhân vật), kết hợp với từ khóa của mục xuất.<br> 📄 <strong>Quy thuộc nhiệm vụ</strong>: Toàn bộ cấu hình được lưu trong thẻ nhân vật, nhiệm vụ chỉ có hiệu lực cùng thẻ này, không cần chỉ định riêng nhân vật.",
+
+    // Mục Trợ giúp (Help tab)
+    "参考条目池让你注册需要读取的世界书条目。每个条目分配一个变量名，在提示词中用 <code>{{变量名}}</code> 引用。<br><br><strong>示例：</strong><br>• 关键词：角色_core → 变量名：coreContent<br>• 关键词：美学指南 → 变量名：aesthetics<br><br>然后在提示词中写：<br><code style=\"display:block;margin-top:8px;padding:8px;background:#e8e8e0;\">参考人设：{{coreContent}}<br>美学标准：{{aesthetics}}</code>":
+        "Kho mục tham chiếu cho phép bạn đăng ký các mục Sách thế giới cần đọc. Mỗi mục được phân bổ một tên biến, trong prompt dùng <code>{{tên_biến}}</code> để trích dẫn.<br><br><strong>Ví dụ:</strong><br>• Từ khóa: NhânVật_core → Tên biến: coreContent<br>• Từ khóa: HuongDanThamMy → Tên biến: aesthetics<br><br>Sau đó trong prompt viết:<br><code style=\"display:block;margin-top:8px;padding:8px;background:#e8e8e0;\">Thiết lập nhân vật tham chiếu: {{coreContent}}<br>Tiêu chuẩn thẩm mỹ: {{aesthetics}}</code>",
+
+    "任务之间可以相互引用结果。例如：<br><br>• 任务1（思维链分析）在第10楼执行，输出保存到 {{task_1_Output}}<br>• 任务2（SFW更新）在第20楼执行，可以勾选引用\"任务1输出\"<br>• 任务2的提示词中写 {{task_1_Output}} 即可获取任务1的分析结果<br><br><strong>⚠️ 注意：</strong>被引用的任务必须先执行（周期位置更小）。任务也可以勾选引用\"自己\"（上次结果），实现跨周期累积。":
+        "Các nhiệm vụ có thể tham chiếu kết quả của nhau. Ví dụ:<br><br>• Nhiệm vụ 1 (Phân tích CoT) thực thi ở tầng 10, kết quả lưu vào {{task_1_Output}}<br>• Nhiệm vụ 2 (Cập nhật SFW) thực thi ở tầng 20, có thể tích chọn tham chiếu \"Kết quả Nhiệm vụ 1\"<br>• Trong prompt của Nhiệm vụ 2 viết {{task_1_Output}} là có thể nhận kết quả phân tích của Nhiệm vụ 1<br><br><strong>⚠️ Chú ý:</strong> Nhiệm vụ được tham chiếu phải thực thi trước (vị trí chu kỳ nhỏ hơn). Nhiệm vụ cũng có thể tích chọn tham chiếu \"chính nó\" (kết quả lần trước) để tích lũy qua các chu kỳ.",
+
+    "<strong>只计算AI回复消息</strong>，用户消息不计入楼层，被隐藏的AI正文也计入（分析需要完整剧情）。<br><br>例如对话：<br>用户: 你好 → 不计入<br>AI: 你好呀 → 楼层1<br>用户: 今天天气 → 不计入<br>AI: 今天晴朗 → 楼层2<br><br>任务设置周期位置=10，则每周期第10条AI回复时触发。":
+        "<strong>Chỉ tính tin nhắn phản hồi của AI</strong>, tin nhắn của người dùng không tính vào số lầu, chính văn AI bị ẩn vẫn được tính (phân tích cần cốt truyện hoàn chỉnh).<br><br>Ví dụ cuộc trò chuyện:<br>User: Xin chào → Không tính<br>AI: Chào bạn nha → Lầu 1<br>User: Thời tiết hôm nay → Không tính<br>AI: Hôm nay trời nắng đẹp → Lầu 2<br><br>Nhiệm vụ đặt vị trí chu kỳ = 10 thì sẽ kích hoạt ở mỗi tin nhắn AI thứ 10 trong chu kỳ.",
+
+    "任务数量无限制，可以组合出任意调度方案：<br><br>• 任务1：角色A - SFW分析（位置5）<br>• 任务2：角色B - SFW分析（位置5）<br>• 任务3：角色A - NSFW分析（位置10）<br>• 任务4：角色B - NSFW分析（位置10）<br><br><strong>🔄 同位置多任务执行机制：</strong><br>1. 按任务ID顺序<u>分别发送API请求</u>独立执行<br>2. 前面任务的输出会即时更新，后面任务可直接引用<br>3. 所有任务完成后统一保存到聊天世界书":
+        "Số lượng nhiệm vụ không giới hạn, có thể kết hợp mọi phương án điều phối:<br><br>• Nhiệm vụ 1: Nhân vật A - Phân tích SFW (Vị trí 5)<br>• Nhiệm vụ 2: Nhân vật B - Phân tích SFW (Vị trí 5)<br>• Nhiệm vụ 3: Nhân vật A - Phân tích NSFW (Vị trí 10)<br>• Nhiệm vụ 4: Nhân vật B - Phân tích NSFW (Vị trí 10)<br><br><strong>🔄 Cơ chế thực thi nhiều nhiệm vụ cùng vị trí:</strong><br>1. Theo thứ tự ID nhiệm vụ <u>gửi yêu cầu API riêng biệt</u> để thực thi độc lập<br>2. Kết quả của nhiệm vụ trước cập nhật tức thì, nhiệm vụ sau có thể trực tiếp tham chiếu<br>3. Toàn bộ nhiệm vụ hoàn thành sẽ lưu đồng bộ vào Sách thế giới cuộc trò chuyện",
+
+    "🔒 API密钥只保存在本机扩展设置（settings.json），<u>绝不</u>写入角色卡、聊天世界书或导出模板。<br>🔒 所有分析调用走酒馆官方请求通道（generateRaw / ChatCompletionService），由酒馆服务端转发出站，与正常聊天生成同形，无独立客户端特征；全程异步后台执行。<br>🔒 更新通过酒馆扩展管理器的官方通道进行（manifest 已启用自动更新）。":
+        "🔒 API Key chỉ lưu trong cài đặt extension máy cục bộ (settings.json), <u>tuyệt đối không</u> ghi vào Thẻ nhân vật, Sách thế giới cuộc trò chuyện hoặc mẫu xuất cấu hình.<br>🔒 Mọi yêu cầu phân tích đều đi qua kênh chính thức của SillyTavern (generateRaw / ChatCompletionService), được máy chủ SillyTavern chuyển tiếp đi, cùng định dạng với quá trình sinh hội thoại thông thường, không có dấu hiệu client riêng biệt; toàn bộ chạy ngầm bất đồng bộ.<br>🔒 Cập nhật được thực hiện qua kênh chính thức của Trình quản lý Extension SillyTavern (manifest đã bật tự động cập nhật).",
+
+    // Chế độ Viết Card (Writer Mode)
+    "开始会话后，RUBY 在聊天附加世界书注入规则/人设、流程路线图、编号知识与当前步骤指令；你用自己的预设和 API 正常对话，RUBY 只监听。检测到 &lt;ruby新条目&gt;/&lt;ruby更新条目&gt; 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。":
+        "Sau khi bắt đầu phiên, RUBY sẽ chèn quy tắc/thiết lập, lộ trình quy trình, kiến thức mã số và chỉ thị bước hiện tại vào Sách thế giới phụ của chat; Bạn trò chuyện bình thường bằng preset và API của riêng mình, RUBY chỉ lắng nghe. Khi phát hiện nhãn &lt;ruby新条目&gt;/&lt;ruby更新条目&gt; sẽ lập tức lưu vào kho ghi nhớ, không tự động chuyển bước — mỗi bước đều có thể làm đi làm lại.",
+
+    "📦 记录制：AI 输出 &lt;ruby新条目&gt; 新入库 / &lt;ruby更新条目 编号=\"X\"&gt; 覆盖更新已有记录（编号知识常驻注入，AI 知道该更新哪条）。<br>🔁 步骤不自动切换：每步可反复产出，做完做透再手动走下一步；Step7（动态任务设计）一次只允许定稿一个任务。<br>🏁 全部完成后手动点「合成角色卡」：Ruby 汇总清单跟你确认，输出 &lt;ruby合成&gt; 后 RUBY 整理聊天世界书为干净条目、自动生成 RubyAnalyzer 分析方案，并下载 v3 角色卡 JSON。":
+        "📦 Cơ chế ghi nhận: AI xuất &lt;ruby新条目&gt; để lưu mới / &lt;ruby更新条目 编号=\"X\"&gt; để ghi đè cập nhật bản ghi có sẵn (kiến thức mã số được chèn thường trực, AI biết cần cập nhật mục nào).<br>🔁 Không tự động chuyển bước: Mỗi bước có thể sinh lặp lại nhiều lần, làm kỹ từng bước rồi mới chuyển thủ công sang bước tiếp; Step7 (Thiết kế nhiệm vụ động) mỗi lần chỉ cho phép hoàn thiện một nhiệm vụ.<br>🏁 Sau khi hoàn thành toàn bộ bấm thủ công \"Hợp thành thẻ nhân vật\": Ruby tổng hợp danh sách xác nhận với bạn, sau khi xuất &lt;ruby合成&gt; RUBY sẽ sắp xếp Sách thế giới chat thành các mục sạch sẽ, tự động tạo cấu hình phân tích RubyAnalyzer và tải xuống file JSON thẻ nhân vật v3.",
+
+    "① 注入：规则/人设/路线图/编号知识/步骤指令经聊天附加世界书注入，走酒馆原生生成通道（你的预设/API），RUBY 不代发消息。<br>② 监听：每条 AI 回复后检测记录标记——&lt;ruby新条目&gt; 新记录 / &lt;ruby更新条目 编号=\"X\"&gt; 更新记录 X（编号没命中时按人物名相似度兜底合并）。<br>③ 记录：检测到标记 → yaml 提取 → 写入《ruby写卡初稿》：按步骤各有默认位置与顺序，分析提示词放关闭条目；编号知识同步刷新。<br>④ 停留：不自动切换步骤，每步可反复产出；进度存于聊天元数据（换聊天不串进度）。<br>⑤ 合成：合成角色卡阶段输出 &lt;ruby合成&gt; JSON 清单 → 确认 → 聊天世界书整理为干净条目 + RubyAnalyzer 方案自动生成 + 下载 v3 角色 JSON。":
+        "① Chèn: Quy tắc / Thiết lập / Lộ trình / Kiến thức mã số / Chỉ lệnh bước được chèn qua Sách thế giới phụ của chat, đi qua kênh sinh gốc của SillyTavern (preset/API của bạn), RUBY không gửi tin nhắn thay.<br>② Lắng nghe: Sau mỗi phản hồi của AI sẽ kiểm tra nhãn ghi nhớ——&lt;ruby新条目&gt; bản ghi mới / &lt;ruby更新条目 编号=\"X\"&gt; cập nhật bản ghi X (nếu không trúng mã số sẽ gộp dự phòng theo độ tương đồng tên nhân vật).<br>③ Ghi nhận: Phát hiện nhãn → trích xuất yaml → ghi vào 《Bản thảo viết card ruby》: Mỗi bước có vị trí và thứ tự mặc định, prompt phân tích để ở mục tắt; kiến thức mã số được làm mới đồng bộ.<br>④ Dừng lại: Không tự động chuyển bước, mỗi bước có thể tạo lặp đi lặp lại; tiến độ lưu trong metadata chat (đổi chat không bị lẫn tiến độ).<br>⑤ Hợp thành: Giai đoạn hợp thành thẻ xuất danh sách JSON &lt;ruby合成&gt; → Xác nhận → Sách thế giới chat được sắp xếp thành các mục gọn gàng + Tự động tạo phương án RubyAnalyzer + Tải xuống file JSON thẻ nhân vật v3."
 };
 
