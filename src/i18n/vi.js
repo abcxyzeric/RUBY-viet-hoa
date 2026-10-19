@@ -341,32 +341,32 @@ export const VI_DICT = {
 
 export const VI_PATTERNS = [
     // Lầu tin nhắn & Chu kỳ
-    [/AI回复：(\\d+)\\s*层\\s*·\\s*周期位置：(\\d+)\\/((\\d+|\\-))/g, "AI phản hồi: $1 lầu · Vị trí chu kỳ: $2/$3"],
-    [/周期位置：(\\d+)\\/((\\d+|\\-))/g, "Vị trí chu kỳ: $1/$2"],
-    [/AI回复\\s*(\\d+)\\s*·\\s*周期位置\\s*(\\d+)\\/((\\d+|\\-))/g, "AI phản hồi: $1 · Vị trí chu kỳ: $2/$3"],
-    [/周期长度：(\\d+)\\s*次AI回复/g, "Độ dài chu kỳ: $1 lần AI phản hồi"],
-    [/AI回复：(\\d+)/g, "AI phản hồi: $1 lầu"],
-    [/(\\d+)\\s*个分析任务/g, "$1 nhiệm vụ phân tích"],
+    [/AI回复：(\d+)\s*层\s*·\s*周期位置：(\d+)\/((\d+|-))/g, "AI phản hồi: $1 lầu · Vị trí chu kỳ: $2/$3"],
+    [/周期位置：(\d+)\/((\d+|-))/g, "Vị trí chu kỳ: $1/$2"],
+    [/AI回复\s*(\d+)\s*·\s*周期位置\s*(\d+)\/((\d+|-))/g, "AI phản hồi: $1 · Vị trí chu kỳ: $2/$3"],
+    [/周期长度：(\d+)\s*次AI回复/g, "Độ dài chu kỳ: $1 lần AI phản hồi"],
+    [/AI回复：(\d+)/g, "AI phản hồi: $1 lầu"],
+    [/(\d+)\s*个分析任务/g, "$1 nhiệm vụ phân tích"],
     [/上次执行：(.+)/g, "Lần thực hiện trước: $1"],
     [/上次错误：(.+)/g, "Lỗi lần trước: $1"],
 
     // Thông báo phân tích
-    [/🔄\\s*(.+?)\\s*分析中\\.\\.\\.\\s*\\((\\d+)\\/(\\d+)\\)/g, "🔄 Đang phân tích $1... ($2/$3)"],
-    [/✅\\s*全部\\s*(\\d+)\\s*个任务完成/g, "✅ Đã hoàn thành toàn bộ $1 nhiệm vụ"],
-    [/⚠️\\s*(\\d+)\\s*个成功,\\s*(\\d+)\\s*个失败/g, "⚠️ $1 thành công, $2 thất bại"],
-    [/RUBY：未找到提示词条目\\s*(.+)/g, "RUBY: Không tìm thấy mục prompt $1"],
+    [/🔄\s*(.+?)\s*分析中\.\.\.\s*\((\d+)\/(\d+)\)/g, "🔄 Đang phân tích $1... ($2/$3)"],
+    [/✅\s*全部\s*(\d+)\s*个任务完成/g, "✅ Đã hoàn thành toàn bộ $1 nhiệm vụ"],
+    [/⚠️\s*(\d+)\s*个成功,\s*(\d+)\s*个失败/g, "⚠️ $1 thành công, $2 thất bại"],
+    [/RUBY：未找到提示词条目\s*(.+)/g, "RUBY: Không tìm thấy mục prompt $1"],
     [/RUBY：未找到角色世界书，无法执行分析/g, "RUBY: Không tìm thấy Sách thế giới nhân vật, không thể thực hiện phân tích"],
-    [/RUBY分析失败:\\s*(.+)/g, "Phân tích RUBY thất bại: $1"],
-    [/RUBY：(.+?)\\s*正文超过20万字符上限，末尾\\s*(\\d+)\\s*字符已截断抛弃/g, "RUBY: Lời thoại của $1 vượt quá giới hạn 200.000 ký tự, $2 ký tự cuối đã bị lược bỏ"],
-    [/🧹\\s*已自动清理\\s*(\\d+)\\s*个分析输出条目上错误残留的过滤关键词/g, "🧹 Đã tự động dọn dẹp $1 từ khóa lọc bị sót trên các mục xuất kết quả"],
-    [/🎬\\s*导演排期中\\.\\.\\./g, "🎬 Đạo diễn đang lên lịch..."],
-    [/🎬\\s*导演计划已生成（第(\\d+)次执导）：(.+)/g, "🎬 Kế hoạch Đạo diễn đã tạo (Lần $1): $2"],
-    [/🔴\\s*导演模式失败：(.+?)（已重试\\s*(\\d+)\\s*次）。本周期无调度计划，可在导演面板手动重新执行/g, "🔴 Chế độ Đạo diễn thất bại: $1 (Đã thử lại $2 lần). Chu kỳ này không có lịch trình, bạn có thể chạy lại thủ công trong bảng Đạo diễn"],
+    [/RUBY分析失败:\s*(.+)/g, "Phân tích RUBY thất bại: $1"],
+    [/RUBY：(.+?)\s*正文超过20万字符上限，末尾\s*(\d+)\s*字符已截断抛弃/g, "RUBY: Lời thoại của $1 vượt quá giới hạn 200.000 ký tự, $2 ký tự cuối đã bị lược bỏ"],
+    [/🧹\s*已自动清理\s*(\d+)\s*个分析输出条目上错误残留的过滤关键词/g, "🧹 Đã tự động dọn dẹp $1 từ khóa lọc bị sót trên các mục xuất kết quả"],
+    [/🎬\s*导演排期中\.\.\./g, "🎬 Đạo diễn đang lên lịch..."],
+    [/🎬\s*导演计划已生成（第(\d+)次执导）：(.+)/g, "🎬 Kế hoạch Đạo diễn đã tạo (Lần $1): $2"],
+    [/🔴\s*导演模式失败：(.+?)（已重试\s*(\d+)\s*次）。本周期无调度计划，可在导演面板手动重新执行/g, "🔴 Chế độ Đạo diễn thất bại: $1 (Đã thử lại $2 lần). Chu kỳ này không có lịch trình, bạn có thể chạy lại thủ công trong bảng Đạo diễn"],
 
     // Tooltip quả cầu nổi
-    [/RUBY\\s*运行中\\s*·\\s*(.+?)\\s*·\\s*AI回复\\s*(\\d+)\\s*·\\s*周期位置\\s*(.+?)（点击打开面板）/g, "RUBY Đang chạy · $1 · AI phản hồi: $2 · Vị trí chu kỳ: $3 (Bấm để mở bảng điều khiển)"],
-    [/RUBY\\s*分析中…\\s*(.+)/g, "RUBY Đang phân tích… $1"],
-    [/RUBY\\s*错误：(.+)/g, "RUBY Gặp lỗi: $1"],
-    [/RUBY写卡会话\\s*·\\s*当前步骤\\s*(.+?)（点击打开写卡面板）/g, "Phiên viết card RUBY · Bước hiện tại: $1 (Bấm để mở bảng viết card)"],
-    [/RUBY写卡中…\\s*(.+?)（正在处理完成标记\\/切换步骤）/g, "RUBY Đang viết card… $1 (Đang xử lý nhãn hoàn thành / chuyển bước)"]
+    [/RUBY\s*运行中\s*·\s*(.+?)\s*·\s*AI回复\s*(\d+)\s*·\s*周期位置\s*(.+?)（点击打开面板）/g, "RUBY Đang chạy · $1 · AI phản hồi: $2 · Vị trí chu kỳ: $3 (Bấm để mở bảng điều khiển)"],
+    [/RUBY\s*分析中…\s*(.+)/g, "RUBY Đang phân tích… $1"],
+    [/RUBY\s*错误：(.+)/g, "RUBY Gặp lỗi: $1"],
+    [/RUBY写卡会话\s*·\s*当前步骤\s*(.+?)（点击打开写卡面板）/g, "Phiên viết card RUBY · Bước hiện tại: $1 (Bấm để mở bảng viết card)"],
+    [/RUBY写卡中…\s*(.+?)（正在处理完成标记\/切换步骤）/g, "RUBY Đang viết card… $1 (Đang xử lý nhãn hoàn thành / chuyển bước)"]
 ];
