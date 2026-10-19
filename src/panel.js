@@ -768,7 +768,7 @@ function buildShellHtml() {
                                 </div>
                                 <div class="tip" style="margin-top:10px;">
                                     开始会话后，RUBY 在聊天附加世界书注入规则/人设、流程路线图、编号知识与当前步骤指令；
-                                    你用自己的预设和 API 正常对话，RUBY 只监听。检测到 <ruby新条目>/<ruby更新条目> 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。
+                                    你用自己的预设和 API 正常对话，RUBY 只监听。检测到 &lt;ruby新条目&gt;/&lt;ruby更新条目&gt; 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。
                                 </div>
                             </div>
                         </div>
@@ -1911,6 +1911,7 @@ function renderRefPool() {
                 ? `<div style="font-size:12px;color:#1E4B8E;background:#eef3fa;border:1px solid #c5d5ec;border-radius:4px;padding:6px 10px;margin-bottom:8px;">📌 内置参考：${h(activeBuiltinRefs().map((b) => b.label).join('、'))}（无需扫描，所有任务的参考勾选中可用，新建任务默认勾选；若世界书存在同名条目则自动改用你的条目）</div>`
                 : '';
             container.innerHTML = `${builtinHint}<div style="color:#1a1a1a;font-size:14px;padding:12px;background:#f8f8f5;border:1px dashed #999;">暂无参考条目，点击下方"扫描角色世界书"添加</div>`;
+            translateDom(container);
             return;
         }
         container.innerHTML = `
@@ -1926,11 +1927,13 @@ function renderRefPool() {
                 ${ui.refs.map((ref) => `<div class="ref-item"><span style="color:#1a1a1a;font-size:14px;font-weight:600;">${h(ref.entryKey || '')}</span></div>`).join('')}
             </div>
         </div>`;
+        translateDom(container);
         return;
     }
 
     if (!Array.isArray(ui.scannedKeys) || ui.scannedKeys.length === 0) {
         container.innerHTML = '<div style="color:#1a1a1a;font-size:14px;padding:12px;background:#f8f8f5;border:1px dashed #999;">暂无扫描结果，请点击"扫描角色世界书"</div>';
+        translateDom(container);
         return;
     }
 
@@ -1973,6 +1976,7 @@ function renderRefPool() {
                     : '<div class="ref-group-empty">扫描到的条目都已加入参考池</div>'}
             </div>
         </div>`;
+    translateDom(container);
 }
 
 function wireRefPoolControls() {
@@ -2117,6 +2121,7 @@ function renderTaskSlots() {
 
     if (ui.tasks.length === 0) {
         container.innerHTML = '<div class="empty-tasks">暂无任务，点击下方"添加新任务"按钮创建</div>';
+        translateDom(container);
         return;
     }
 
@@ -2353,6 +2358,7 @@ function renderTaskSlots() {
     });
 
     updateRefCheckboxes();
+    translateDom(container);
 }
 
 /**
@@ -2432,12 +2438,13 @@ function renderCycleInfo() {
     });
 
     if (tasksFromUI.length === 0) {
-        lengthBadge.textContent = '周期长度：未配置任务';
-        counterBadge.textContent = `AI回复：${currentCounter}`;
+        lengthBadge.textContent = t('周期长度：未配置任务');
+        counterBadge.textContent = t(`AI回复：${currentCounter}`);
         timeline.innerHTML = `
             <div class="cycle-track"><div class="cycle-axis"></div></div>
-            <div style="text-align:center;padding:16px;color:#666;position:relative;z-index:1;">请添加分析任务</div>`;
+            <div style="text-align:center;padding:16px;color:#666;position:relative;z-index:1;">${t('请添加分析任务')}</div>`;
         taskList.innerHTML = '';
+        translateDom(timeline);
         return;
     }
 
@@ -2514,6 +2521,8 @@ function renderCycleInfo() {
             <span class="output-var" style="color:#888;">周期循环</span>
         </div>`;
     taskList.innerHTML = listHtml;
+    translateDom(timeline);
+    translateDom(taskList);
 }
 
 /** 导演计划图表构建（创作者时间线与玩家任务时间表共用）：🎬起点→任务点位（已触发✅）→▶当前→🎬下次导演 */
@@ -2648,12 +2657,12 @@ function loadSchemeToUI(presetId) {
     if (!preset) return;
 
     ui.editingPresetId = preset.id;
-    $('ra_scheme_name_input').value = preset.name || '未命名';
+    $('ra_scheme_name_input').value = t(preset.name) || t('未命名');
 
     const activateBtn = $('ra_scheme_activate_btn');
     if (activateBtn) {
         const isActive = preset.id === data.activePresetId;
-        activateBtn.textContent = isActive ? '✅ 已激活' : '🎯 激活';
+        activateBtn.textContent = isActive ? t('✅ 已激活') : t('🎯 激活');
         activateBtn.disabled = isActive;
     }
     const deleteBtn = $('ra_scheme_delete_btn');
@@ -2999,12 +3008,13 @@ function renderSchemeTabs() {
         const isActive = preset.id === activeId;
         html += `
             <div class="scheme-tab ${isEditing ? 'active' : ''}" data-id="${h(preset.id)}">
-                <span class="scheme-name">${h(preset.name || '未命名')}</span>
-                ${isActive ? '<span class="scheme-badge">当前</span>' : ''}
+                <span class="scheme-name">${h(t(preset.name) || t('未命名'))}</span>
+                ${isActive ? `<span class="scheme-badge">${t('当前')}</span>` : ''}
             </div>`;
     }
-    html += '<button class="scheme-tab-add" id="ra_add_scheme_tab_btn" title="添加新方案">➕</button>';
+    html += `<button class="scheme-tab-add" id="ra_add_scheme_tab_btn" title="${t('添加新方案')}">➕</button>`;
     container.innerHTML = html;
+    translateDom(container);
 
     container.querySelectorAll('.scheme-tab').forEach((tab) => {
         on(tab, 'click', async () => {
@@ -3446,6 +3456,7 @@ function renderCardWriterTab() {
             <div style="margin-top:6px;font-size:12px;color:#666;">
                 记录数：${s.draftCount} · 最近操作：${h(s.lastAction || '无')}${s.lastError ? `<br><span class="status-err">错误：${h(s.lastError)}</span>` : ''}
             </div>`;
+        translateDom(statusEl);
     }
 
     const stepsEl = $('ra_cw_steps');
@@ -3457,6 +3468,7 @@ function renderCardWriterTab() {
             const tag = st.id === 'Overview' ? '🏁收尾' : (st.tool ? '🔧工具' : (st.optional ? '◇可选' : ''));
             return `<button class="${cls}" data-step="${h(st.id)}" title="切换到 ${h(st.id)} ${h(st.name)}">${isCur ? '✦ ' : ''}${h(st.id === 'Overview' ? '' : st.id + ' ')}${h(st.name)}${tag ? ` <span class="cw-tag">${tag}</span>` : ''}</button>`;
         }).join('');
+        translateDom(stepsEl);
         stepsEl.querySelectorAll('.cw-step').forEach((btn) => {
             btn.addEventListener('click', async () => {
                 if (!cardwriter.getState().active) {

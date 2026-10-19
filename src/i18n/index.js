@@ -32,6 +32,11 @@ export function toggleLang() {
     setLang(currentLang === 'vi' ? 'zh' : 'vi');
 }
 
+// Sắp xếp các cụm từ theo độ dài giảm dần để dịch các cụm dài trước, tránh nuốt từ
+const PHRASE_LIST = Object.entries(VI_DICT)
+    .filter(([k]) => /[\u4e00-\u9fff]/.test(k) && k.length > 1)
+    .sort((a, b) => b[0].length - a[0].length);
+
 /**
  * Hàm dịch văn bản (dùng cho cả text node và thông báo notify)
  */
@@ -53,6 +58,18 @@ export function t(text) {
             matched = true;
         }
     }
+
+    // Nếu vẫn còn chữ Hán, thử thay thế các cụm từ trong từ điển theo thứ tự ưu tiên độ dài
+    if (/[\u4e00-\u9fff]/.test(result)) {
+        for (const [zh, vi] of PHRASE_LIST) {
+            if (result.includes(zh)) {
+                result = result.replaceAll(zh, vi);
+                matched = true;
+                if (!/[\u4e00-\u9fff]/.test(result)) break;
+            }
+        }
+    }
+
     return matched ? result : text;
 }
 
@@ -77,6 +94,14 @@ export function translateDom(root) {
                     if (translated !== original) {
                         node.setAttribute(attr, translated);
                     }
+                }
+            }
+
+            // Dịch value của input nếu là văn bản chữ Hán (ví dụ: '默认方案')
+            if (tag === 'INPUT' && node.value && /[\u4e00-\u9fff]/.test(node.value)) {
+                const translated = t(node.value);
+                if (translated !== node.value) {
+                    node.value = translated;
                 }
             }
         }
