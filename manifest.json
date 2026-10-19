@@ -1,12 +1,12 @@
 {
-  "display_name": "RUBY Analyzer",
+  "display_name": "RUBY Analyzer [Việt Hóa]",
   "loading_order": 20,
   "requires": [],
   "optional": [],
   "js": "index.js",
   "css": "style.css",
-  "author": "RUBY Project",
+  "author": "RUBY Project (Bản Việt Hóa: abcxyzeric)",
   "version": "2.1.0",
-  "homePage": "",
+  "homePage": "https://github.com/abcxyzeric/RUBY-viet-hoa",
   "auto_update": true
 }
