@@ -1,3 +1,4 @@
+import { t } from './i18n/index.js';
 import * as config from './config.js';
 import * as engine from './engine.js';
 import * as cardwriter from './cardwriter.js';
@@ -87,6 +88,7 @@ function setStatus(orb, engineState) {
     } else {
         orb.title = 'RUBY 待机（无角色、未配置任务或未绑定角色卡）— 点击打开面板';
     }
+    if (orb.title) orb.title = t(orb.title);
 }
 
 // ---------- 写卡步骤说明气泡 ----------

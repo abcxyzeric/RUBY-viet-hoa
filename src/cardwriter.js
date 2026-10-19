@@ -1,3 +1,4 @@
+import { t } from './i18n/index.js';
 // RUBY 写卡模式 v2：记录制引擎。
 // 监听原生对话通道，捕捉 <ruby新条目>/<ruby更新条目 编号="X"> 标记入库；
 // <ruby合成> 触发合成角色卡：整理干净条目 + 生成 RubyAnalyzer 方案 + 下载 v3 JSON。
@@ -65,7 +66,7 @@ export function getSteps() {
 function notify(kind, message) {
     if (!config.getUi().notify) return;
     const fn = window.toastr?.[kind];
-    if (typeof fn === 'function') fn(message, '', { timeOut: 4500 });
+    if (typeof fn === 'function') fn(t(message), '', { timeOut: 4500 });
 }
 
 // ---------- 配置（写卡开关存 UI 偏好，随聊天元数据存步骤进度） ----------

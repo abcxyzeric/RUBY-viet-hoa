@@ -10,6 +10,7 @@ import { countAiReplies, getLittleWhiteBoxSummary, getShujukuBoundary, getYuzuki
 import { isDarkMode } from './settings.js';
 import { BUILTIN_REFERENCES, findShadowingKey } from './builtin-refs.js';
 import * as director from './director.js';
+import { t, translateDom, setupObserver, injectLanguageSwitcher } from './i18n/index.js';
 
 const PANEL_ID = 'ra_panel';
 const UI_STATE_KEY = 'ruby_analyzer_ui_state';
@@ -213,6 +214,8 @@ function refreshAll() {
     renderRefPool();
     renderBindingTab(layer);
     renderPresetSummary();
+    const root = $(PANEL_ID);
+    if (root) translateDom(root);
 }
 
 function buildPanel() {
@@ -246,6 +249,10 @@ function buildPanel() {
         updateThemeButton();
     });
     updateThemeButton();
+    const titleControls = root.querySelector('.title-bar div[style*="display:flex"]');
+    if (titleControls) injectLanguageSwitcher(titleControls);
+    translateDom(root);
+    setupObserver(root);
 }
 
 function buildShellHtml() {
@@ -921,7 +928,7 @@ function wireGlobalInteractions() {
     const showTip = (el) => {
         const txt = el.getAttribute('data-tip');
         if (!txt) return;
-        tipEl.textContent = txt;
+        tipEl.textContent = t(txt);
         tipEl.style.display = 'block';
         const r = el.getBoundingClientRect();
         let x = Math.round(r.left + r.width / 2 - tipEl.offsetWidth / 2);
@@ -2958,7 +2965,7 @@ function wireDirectorControls() {
         if (existing) existing.remove();
         const pop = document.createElement('div');
         pop.id = 'ra_director_help_pop';
-        pop.textContent = tip.dataset.help || '';
+        pop.textContent = t(tip.dataset.help || '');
         document.body.appendChild(pop);
         const r = tip.getBoundingClientRect();
         pop.style.left = `${Math.max(8, Math.min(r.left, window.innerWidth - 300))}px`;

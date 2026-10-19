@@ -1,3 +1,4 @@
+import { t } from './i18n/index.js';
 import { ctx, log, warn } from './env.js';
 import * as config from './config.js';
 import * as scheduler from './scheduler.js';
@@ -98,7 +99,7 @@ export function getEngineState() {
 function notify(kind, message, options = {}) {
     if (!config.getUi().notify) return;
     const fn = window.toastr?.[kind];
-    if (typeof fn === 'function') fn(message, '', { timeOut: 4000, ...options });
+    if (typeof fn === 'function') fn(t(message), '', { timeOut: 4000, ...options });
 }
 
 export function initEngine() {

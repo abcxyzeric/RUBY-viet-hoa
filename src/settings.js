@@ -1,3 +1,4 @@
+import { translateDom } from './i18n/index.js';
 import * as config from './config.js';
 import { refreshVisibility } from './orb.js';
 import { openPanel } from './panel.js';
@@ -88,6 +89,7 @@ export function initSettingsDrawer() {
         </div>`;
 
     host.appendChild(drawer);
+    translateDom(drawer);
 
     const toggle = drawer.querySelector('#ruby_ext_orb_toggle');
     toggle.checked = !config.getUi().orbHidden;
