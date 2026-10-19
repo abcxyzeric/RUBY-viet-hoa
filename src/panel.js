@@ -750,66 +750,59 @@ function buildShellHtml() {
 
             <div class="panel-content" data-panel="cardwriter">
                     <div class="sub-tabs">
-                        <div class="sub-tab active" data-sub="cw-main">🖊️ 写卡控制台</div>
+                        <div class="sub-tab active" data-sub="cw-main">${t('🖊️ 写卡控制台')}</div>
                     </div>
                     <div class="sub-content active" data-subcontent="cw-main" style="padding:16px;">
                         <div class="form-section">
-                            <div class="form-header blue">■ 写卡模式状态</div>
-                            <div class="form-body"><div id="ra_cw_status" class="status-box">加载中...</div></div>
+                            <div class="form-header blue">${t('■ 写卡模式状态')}</div>
+                            <div class="form-body"><div id="ra_cw_status" class="status-box">${t('加载中...')}</div></div>
                         </div>
                         <div class="form-section">
-                            <div class="form-header blue">■ 会话控制</div>
+                            <div class="form-header blue">${t('■ 会话控制')}</div>
                             <div class="form-body">
                                 <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                                    <button id="ra_cw_start" class="btn green">▶️ 开始写卡会话（StepW）</button>
-                                    <button id="ra_cw_end" class="btn red">⏹️ 结束会话</button>
-                                    <button id="ra_cw_end_clear" class="btn red">🧹 结束并清空写卡条目</button>
-                                    <button id="ra_cw_open_book" class="btn outline">📖 打开《ruby写卡初稿》</button>
+                                    <button id="ra_cw_start" class="btn green">${t('▶️ 开始写卡会话（StepW）')}</button>
+                                    <button id="ra_cw_end" class="btn red">${t('⏹️ 结束会话')}</button>
+                                    <button id="ra_cw_end_clear" class="btn red">${t('🧹 结束并清空写卡条目')}</button>
+                                    <button id="ra_cw_open_book" class="btn outline">${t('📖 打开《ruby写卡初稿》')}</button>
                                 </div>
                                 <div class="tip" style="margin-top:10px;">
-                                    开始会话后，RUBY 在聊天附加世界书注入规则/人设、流程路线图、编号知识与当前步骤指令；
-                                    你用自己的预设和 API 正常对话，RUBY 只监听。检测到 &lt;ruby新条目&gt;/&lt;ruby更新条目&gt; 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。
+                                    ${t('开始会话后，RUBY 在聊天附加世界书注入规则/人设、流程路线图、编号知识与当前步骤指令；你用自己的预设和 API 正常对话，RUBY 只监听。检测到 <ruby新条目>/<ruby更新条目> 标记即入库记录，不自动切换步骤——每个步骤都可以反复工作。')}
                                 </div>
                             </div>
                         </div>
                         <div class="form-section">
-                            <div class="form-header blue">■ 步骤管理</div>
+                            <div class="form-header blue">${t('■ 步骤管理')}</div>
                             <div class="form-body">
                                 <div id="ra_cw_steps" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
                                 <div class="tip" style="margin-top:8px;">
-                                    点击步骤卡可手动切换（跳转/回退）。✦=当前步骤。可选/工具步骤按需切换。
+                                    ${t('点击步骤卡可手动切换（跳转/回退）。✦=当前步骤。可选/工具步骤按需切换。')}
                                 </div>
                             </div>
                         </div>
                         <div class="form-section">
-                            <div class="form-header blue">■ 写卡选项</div>
+                            <div class="form-header blue">${t('■ 写卡选项')}</div>
                             <div class="form-body">
                                 <div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:10px;">
                                 </div>
-                                <label class="checkbox_label"><input id="ra_cw_draft" type="checkbox" checked> 记录自动写入《ruby写卡初稿》世界书</label>
-                                <label class="checkbox_label"><input id="ra_cw_guide" type="checkbox" checked> 注入步骤说明（对应气泡文本）</label>
+                                <label class="checkbox_label"><input id="ra_cw_draft" type="checkbox" checked> ${t('记录自动写入《ruby写卡初稿》世界书')}</label>
+                                <label class="checkbox_label"><input id="ra_cw_guide" type="checkbox" checked> ${t('注入步骤说明（对应气泡文本）')}</label>
                                 <div class="tip" style="margin-top:8px;">
-                                    📦 记录制：AI 输出 &lt;ruby新条目&gt; 新入库 / &lt;ruby更新条目 编号="X"&gt; 覆盖更新已有记录（编号知识常驻注入，AI 知道该更新哪条）。<br>
-                                    🔁 步骤不自动切换：每步可反复产出，做完做透再手动走下一步；Step7（动态任务设计）一次只允许定稿一个任务。<br>
-                                    🏁 全部完成后手动点「合成角色卡」：Ruby 汇总清单跟你确认，输出 &lt;ruby合成&gt; 后 RUBY 整理聊天世界书为干净条目、自动生成 RubyAnalyzer 分析方案，并下载 v3 角色卡 JSON。
+                                    ${t('📦 记录制：AI 输出 <ruby新条目> 新入库 / <ruby更新条目 编号="X"> 覆盖更新已有记录（编号知识常驻注入，AI 知道该更新哪条）。<br>🔁 步骤不自动切换：每步可反复产出，做完做透再手动走下一步；Step7（动态任务设计）一次只允许定稿一个任务。<br>🏁 全部完成后手动点「合成角色卡」：Ruby 汇总清单跟你确认，输出 <ruby合成> 后 RUBY 整理聊天世界书为干净条目、自动生成 RubyAnalyzer 分析方案，并下载 v3 角色卡 JSON。')}
                                 </div>
                             </div>
                         </div>
                         <div class="form-section">
-                            <div class="form-header blue">■ 活动日志</div>
+                            <div class="form-header blue">${t('■ 活动日志')}</div>
                             <div class="form-body">
                                 <div id="ra_cw_log" class="status-box" style="max-height:180px;overflow-y:auto;font-size:12px;"></div>
                             </div>
                         </div>
                         <div class="form-section">
-                            <div class="form-header blue">■ 工作原理</div>
+                            <div class="form-header blue">${t('■ 工作原理')}</div>
                             <div class="form-body">
                                 <div class="status-box">
-                                    ① 注入：规则/人设/路线图/编号知识/步骤指令经聊天附加世界书注入，走酒馆原生生成通道（你的预设/API），RUBY 不代发消息。<br>
-                                    ② 监听：每条 AI 回复后检测记录标记——&lt;ruby新条目&gt; 新记录 / &lt;ruby更新条目 编号="X"&gt; 更新记录 X（编号没命中时按人物名相似度兜底合并）。<br>
-                                    ③ 记录：检测到标记 → yaml 提取 → 写入《ruby写卡初稿》：按步骤各有默认位置与顺序，分析提示词放关闭条目；编号知识同步刷新。<br>
-                                    ④ 停留：不自动切换步骤，每步可反复产出；进度存于聊天元数据（换聊天不串进度）。<br>
-                                    ⑤ 合成：合成角色卡阶段输出 &lt;ruby合成&gt; JSON 清单 → 确认 → 聊天世界书整理为干净条目 + RubyAnalyzer 方案自动生成 + 下载 v3 角色 JSON。
+                                    ${t('① 注入：规则/人设/路线图/编号知识/步骤指令经聊天附加世界书注入，走酒馆原生生成通道（你的预设/API），RUBY 不代发消息。<br>② 监听：每条 AI 回复后检测记录标记——<ruby新条目> 新记录 / <ruby更新条目 编号="X"> 更新记录 X（编号没命中时按人物名相似度兜底合并）。<br>③ 记录：检测到标记 → yaml 提取 → 写入《ruby写卡初稿》：按步骤各有默认位置与顺序，分析提示词放关闭条目；编号知识同步刷新。<br>④ 停留：不自动切换步骤，每步可反复产出；进度存于聊天元数据（换聊天不串进度）。<br>⑤ 合成：合成角色卡阶段输出 <ruby合成> JSON 清单 → 确认 → 聊天世界书整理为干净条目 + RubyAnalyzer 方案自动生成 + 下载 v3 角色 JSON。')}
                                 </div>
                             </div>
                         </div>
@@ -2822,6 +2815,7 @@ function renderDirectorView() {
         </div>`;
     updateDirectorStatus();
     wireDirectorViewInputs(container);
+    translateDom(container);
 }
 
 function collectDirectorFromUI() {

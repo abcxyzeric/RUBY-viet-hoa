@@ -97,6 +97,16 @@ export function t(text) {
         }
     }
 
+    // Kiểm tra trong bảng dịch khối HTML và đoạn văn hoàn chỉnh
+    const htmlMap = getNormalizedHtmlMap();
+    const normHtml = normalizeHtml(text);
+    if (htmlMap.has(normHtml)) {
+        return htmlMap.get(normHtml);
+    }
+    if (VI_HTML && VI_HTML[normHtml]) {
+        return VI_HTML[normHtml];
+    }
+
     // Kiểm tra các mẫu regex động có cấu trúc
     for (const [pattern, replacement] of VI_PATTERNS) {
         if (pattern.test(text)) {
