@@ -42,6 +42,11 @@ export function normalizeHtml(html) {
     return html
         .replace(/<br\s*\/?>/gi, '<br>')
         .replace(/\s*<br>\s*/gi, '<br>')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
         .replace(/\s+/g, ' ')
         .trim();
 }

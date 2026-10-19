@@ -2127,12 +2127,12 @@ function collectTasksFromUI() {
 function renderKeywordScanRows(task) {
     const keywords = Array.isArray(task.keywordScanKeywords) ? task.keywordScanKeywords.map(String) : [];
     if (keywords.length === 0) {
-        return '<div style="font-size:12px;color:#666;padding:6px 0;">未填写关键词：命中周期时默认发送分析</div>';
+        return `<div style="font-size:12px;color:#666;padding:6px 0;">${t('未填写关键词：命中周期时默认发送分析')}</div>`;
     }
     return keywords.map((keyword, idx) => `
         <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">
-            <input class="task-keyword-scan-input w250" data-id="${task.id}" value="${h(keyword)}" placeholder="输入正文关键词">
-            <button type="button" class="btn outline small task-keyword-remove" data-id="${task.id}" data-index="${idx}">删除</button>
+            <input class="task-keyword-scan-input w250" data-id="${task.id}" value="${h(keyword)}" placeholder="${t('输入正文关键词')}">
+            <button type="button" class="btn outline small task-keyword-remove" data-id="${task.id}" data-index="${idx}">${t('删除')}</button>
         </div>
     `).join('');
 }
@@ -2142,7 +2142,7 @@ function renderTaskSlots() {
     if (!container) return;
 
     if (ui.tasks.length === 0) {
-        container.innerHTML = '<div class="empty-tasks">暂无任务，点击下方"添加新任务"按钮创建</div>';
+        container.innerHTML = `<div class="empty-tasks">${t('暂无任务，点击下方"添加新任务"按钮创建')}</div>`;
         translateDom(container);
         return;
     }
@@ -2156,101 +2156,101 @@ function renderTaskSlots() {
         const positionsStr = positions.join(',') || '';
         const currentPrompt = String(task.promptKey || '').trim();
         const currentAllowed = !!currentPrompt && !refNormSet.has(normalizeKeyword(currentPrompt));
-        let promptOptionsHtml = '<option value="">请选择关键词（先扫描）</option>';
+        let promptOptionsHtml = `<option value="">${t('请选择关键词（先扫描）')}</option>`;
         if (currentAllowed && !promptOptionSet.has(currentPrompt)) {
-            promptOptionsHtml += `<option value="${h(currentPrompt)}" selected>${h(currentPrompt)}（当前）</option>`;
+            promptOptionsHtml += `<option value="${h(currentPrompt)}" selected>${h(currentPrompt)}${t('（当前）')}</option>`;
         }
         promptOptionsHtml += promptOptions.map((k) => `<option value="${h(k)}" ${currentPrompt === k ? 'selected' : ''}>${h(k)}</option>`).join('');
 
         return `
         <div class="task-card ${task.enabled ? '' : 'disabled'} ${ui.expandedTasks.has(task.id) ? '' : 'collapsed'}" data-id="${task.id}">
             <div class="task-card-header">
-                <button type="button" class="task-toggle-btn" data-id="${task.id}" title="展开/收起此任务的详细配置">${ui.expandedTasks.has(task.id) ? '▾' : '▸'} 配置</button>
-                <label class="inline"><input type="checkbox" class="task-enabled" data-id="${task.id}" ${task.enabled ? 'checked' : ''}> 启用</label>
+                <button type="button" class="task-toggle-btn" data-id="${task.id}" title="${t('展开/收起此任务的详细配置')}">${ui.expandedTasks.has(task.id) ? '▾' : '▸'} ${t('配置')}</button>
+                <label class="inline"><input type="checkbox" class="task-enabled" data-id="${task.id}" ${task.enabled ? 'checked' : ''}> ${t('启用')}</label>
                 <span class="task-card-title">#${task.id}</span>
-                <input class="task-name w120" data-id="${task.id}" value="${h(task.displayName || '')}" placeholder="任务名称">
-                <label class="inline" title="在周期的第几次AI回复时触发（支持多个，逗号分隔，如 5,10,15）">周期位置<input class="task-floor w120" data-id="${task.id}" value="${h(positionsStr)}" placeholder="5,10,15"></label>
-                <button type="button" class="task-delete-btn" data-id="${task.id}">✕ 删除</button>
+                <input class="task-name w120" data-id="${task.id}" value="${h(task.displayName || '')}" placeholder="${t('任务名称')}">
+                <label class="inline" title="${t('在周期的第几次AI回复时触发（支持多个，逗号分隔，如 5,10,15）')}">${t('周期位置')}<input class="task-floor w120" data-id="${task.id}" value="${h(positionsStr)}" placeholder="5,10,15"></label>
+                <button type="button" class="task-delete-btn" data-id="${task.id}">✕ ${t('删除')}</button>
             </div>
             <div class="task-card-body">
                 <div class="form-row">
-                    <span class="form-label">提示词条目</span>
+                    <span class="form-label">${t('提示词条目')}</span>
                     <span class="form-value" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
                         <select class="task-prompt-select w250" data-id="${task.id}">${promptOptionsHtml}</select>
-                        <button type="button" class="btn outline small task-scan-prompt" data-id="${task.id}">🔍 扫描关键词</button>
+                        <button type="button" class="btn outline small task-scan-prompt" data-id="${task.id}">${t('🔍 扫描关键词')}</button>
                     </span>
                 </div>
                 <div class="form-row">
-                    <span class="form-label">输出条目</span>
-                    <input class="task-output w250" data-id="${task.id}" value="${h(task.outputKey || '')}" placeholder="世界书关键词">
+                    <span class="form-label">${t('输出条目')}</span>
+                    <input class="task-output w250" data-id="${task.id}" value="${h(task.outputKey || '')}" placeholder="${t('世界书关键词')}">
                 </div>
                 <div class="tip" style="margin-top:0;padding:6px 8px;font-size:11px;">
-                    这是分析结果写入的聊天世界书条目名称，不要与"提示词条目"重复。
+                    ${t('这是分析结果写入的聊天世界书条目名称，不要与"提示词条目"重复。')}
                 </div>
                 <div class="form-row" style="background:#e8f4e8;padding:8px 10px;border-radius:3px;">
-                    <span class="form-label">📤 输出变量</span>
+                    <span class="form-label">${t('📤 输出变量')}</span>
                     <code style="font-size:14px;font-weight:700;color:#1E4B8E;">{{task_${task.id}_Output}}</code>
-                    <span style="font-size:12px;color:#666;margin-left:8px;">← 其他任务可用此变量引用本任务输出</span>
+                    <span style="font-size:12px;color:#666;margin-left:8px;">${t('← 其他任务可用此变量引用本任务输出')}</span>
                 </div>
                 <div class="form-row">
-                    <span class="form-label">额外关键词</span>
-                    <input class="task-extrakeys w250" data-id="${task.id}" value="${h(task.extraKeys || '')}" placeholder="角色名等，逗号分隔">
+                    <span class="form-label">${t('额外关键词')}</span>
+                    <input class="task-extrakeys w250" data-id="${task.id}" value="${h(task.extraKeys || '')}" placeholder="${t('角色名等，逗号分隔')}">
                 </div>
                 <div class="form-row">
-                    <span class="form-label">正文扫描</span>
+                    <span class="form-label">${t('正文扫描')}</span>
                     <span class="form-value" style="display:flex;flex-direction:column;gap:8px;align-items:flex-start;">
-                        <label class="inline"><input type="checkbox" class="task-keyword-scan-enabled" data-id="${task.id}" ${task.keywordScanEnabled ? 'checked' : ''}> 使用关键词扫描机制</label>
+                        <label class="inline"><input type="checkbox" class="task-keyword-scan-enabled" data-id="${task.id}" ${task.keywordScanEnabled ? 'checked' : ''}> ${t('使用关键词扫描机制')}</label>
                         <div class="task-keyword-scan-wrap ${task.keywordScanEnabled ? '' : 'hidden'}" data-id="${task.id}" style="width:100%;">
                             <div class="task-keyword-scan-list" data-id="${task.id}">${renderKeywordScanRows(task)}</div>
-                            <button type="button" class="btn outline small task-keyword-add" data-id="${task.id}">添加关键词</button>
+                            <button type="button" class="btn outline small task-keyword-add" data-id="${task.id}">${t('添加关键词')}</button>
                             <div class="tip" style="margin-top:6px;padding:6px 8px;font-size:11px;">
-                                勾选后会在发送API前扫描正文；未填写关键词时，命中周期就照常分析；填写多个关键词时，命中任意一个才发送。
+                                ${t('勾选后会在发送API前扫描正文；未填写关键词时，命中周期就照常分析；填写多个关键词时，命中任意一个才发送。')}
                             </div>
                         </div>
                     </span>
                 </div>
                 <div class="form-row">
-                    <span class="form-label">输出属性</span>
+                    <span class="form-label">${t('输出属性')}</span>
                     <span class="form-value" style="display:flex;gap:12px;flex-wrap:wrap;">
-                        <label class="inline"><input type="checkbox" class="task-const output-mode-radio" data-id="${task.id}" data-group="task_${task.id}" ${task.outputConstant ? 'checked' : ''}> 🔵 蓝灯</label>
-                        <label class="inline"><input type="checkbox" class="task-sel output-mode-radio" data-id="${task.id}" data-group="task_${task.id}" ${task.selective ? 'checked' : ''}> 🟢 绿灯</label>
-                        <label class="inline"><input type="checkbox" class="task-hide output-mode-radio" data-id="${task.id}" data-group="task_${task.id}" ${task.outputDisable ? 'checked' : ''}> ⚫ 禁用条目</label>
+                        <label class="inline"><input type="checkbox" class="task-const output-mode-radio" data-id="${task.id}" data-group="task_${task.id}" ${task.outputConstant ? 'checked' : ''}> ${t('🔵 蓝灯')}</label>
+                        <label class="inline"><input type="checkbox" class="task-sel output-mode-radio" data-id="${task.id}" data-group="task_${task.id}" ${task.selective ? 'checked' : ''}> ${t('🟢 绿灯')}</label>
+                        <label class="inline"><input type="checkbox" class="task-hide output-mode-radio" data-id="${task.id}" data-group="task_${task.id}" ${task.outputDisable ? 'checked' : ''}> ${t('⚫ 禁用条目')}</label>
                         <span style="border-left:1px solid #999;padding-left:12px;margin-left:4px;">
-                            <label class="inline"><input type="checkbox" class="task-no-recursion" data-id="${task.id}" ${task.noRecursion ? 'checked' : ''}> 🚫 不可递归</label>
+                            <label class="inline"><input type="checkbox" class="task-no-recursion" data-id="${task.id}" ${task.noRecursion ? 'checked' : ''}> ${t('🚫 不可递归')}</label>
                         </span>
                     </span>
                 </div>
                 <div class="tip" style="margin-top:4px;margin-bottom:8px;padding:6px 8px;font-size:11px;">
-                    🔵蓝灯=始终激活 | 🟢绿灯=关键词触发 | ⚫禁用条目=不注入故事 | 🚫不可递归=禁止递归触发
+                    ${t('🔵蓝灯=始终激活 | 🟢绿灯=关键词触发 | ⚫禁用条目=不注入故事 | 🚫不可递归=禁止递归触发')}
                 </div>
                 <div class="form-row">
-                    <span class="form-label">过滤关键词</span>
+                    <span class="form-label">${t('过滤关键词')}</span>
                     <span class="form-value" style="display:flex;flex-direction:column;gap:6px;align-items:flex-start;">
-                        <label class="inline"><input type="checkbox" class="task-selkeys-enabled" data-id="${task.id}" ${task.selectiveKeysEnabled ? 'checked' : ''}> 使用可选过滤关键词</label>
-                        <input class="task-selkeys-input w250" data-id="${task.id}" value="${h((Array.isArray(task.selectiveKeys) ? task.selectiveKeys : []).join(', '))}" placeholder="逗号分隔，如：nsfw" ${task.selectiveKeysEnabled ? '' : 'hidden'}>
-                        <span class="tip" style="padding:4px 8px;font-size:11px;">仅 🟢绿灯 输出条目生效：勾选并填入内容后，条目需「主关键词＋过滤关键词」同时命中才激活；不勾选时输出条目绝不携带任何过滤关键词（历史残留会被自动清理）。</span>
+                        <label class="inline"><input type="checkbox" class="task-selkeys-enabled" data-id="${task.id}" ${task.selectiveKeysEnabled ? 'checked' : ''}> ${t('使用可选过滤关键词')}</label>
+                        <input class="task-selkeys-input w250" data-id="${task.id}" value="${h((Array.isArray(task.selectiveKeys) ? task.selectiveKeys : []).join(', '))}" placeholder="${t('逗号分隔，如：nsfw')}" ${task.selectiveKeysEnabled ? '' : 'hidden'}>
+                        <span class="tip" style="padding:4px 8px;font-size:11px;">${t('仅 🟢绿灯 输出条目生效：勾选并填入内容后，条目需「主关键词＋过滤关键词」同时命中才激活；不勾选时输出条目绝不携带任何过滤关键词（历史残留会被自动清理）。')}</span>
                     </span>
                 </div>
                 <div class="form-row">
-                    <span class="form-label">📍 插入位置</span>
+                    <span class="form-label">${t('📍 插入位置')}</span>
                     <span class="form-value" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
                         <select class="task-position w150" data-id="${task.id}">
-                            <option value="0" ${(task.position ?? 0) === 0 ? 'selected' : ''}>角色设定之前</option>
-                            <option value="1" ${task.position === 1 ? 'selected' : ''}>角色设定之后</option>
-                            <option value="4" ${task.position === 4 ? 'selected' : ''}>深度定位 @D</option>
+                            <option value="0" ${(task.position ?? 0) === 0 ? 'selected' : ''}>${t('角色设定之前')}</option>
+                            <option value="1" ${task.position === 1 ? 'selected' : ''}>${t('角色设定之后')}</option>
+                            <option value="4" ${task.position === 4 ? 'selected' : ''}>${t('深度定位 @D')}</option>
                         </select>
                         <span class="task-depth-wrap ${task.position === 4 ? '' : 'hidden'}" data-id="${task.id}">
-                            <label class="inline">深度<input class="task-depth w100" data-id="${task.id}" type="number" min="0" max="999" value="${task.depth ?? 4}" placeholder="4"></label>
+                            <label class="inline">${t('深度')}<input class="task-depth w100" data-id="${task.id}" type="number" min="0" max="999" value="${task.depth ?? 4}" placeholder="4"></label>
                         </span>
-                        <label class="inline">顺序<input class="task-order w100" data-id="${task.id}" type="number" min="0" max="9999" value="${task.order ?? 100}" placeholder="100"></label>
+                        <label class="inline">${t('顺序')}<input class="task-order w100" data-id="${task.id}" type="number" min="0" max="9999" value="${task.order ?? 100}" placeholder="100"></label>
                     </span>
                 </div>
                 <div class="form-row">
-                    <span class="form-label">引用参考池</span>
+                    <span class="form-label">${t('引用参考池')}</span>
                     <div class="checkbox-group task-refs" data-id="${task.id}"></div>
                 </div>
                 <div class="form-row">
-                    <span class="form-label">引用任务输出</span>
+                    <span class="form-label">${t('引用任务输出')}</span>
                     <div class="checkbox-group task-outputs" data-id="${task.id}"></div>
                 </div>
             </div>
@@ -2408,13 +2408,13 @@ function updateRefCheckboxes() {
             }),
             ...activeBuiltins.map((b) => {
                 const checked = used.includes(b.varName) ? 'checked' : '';
-                return `<label title="插件内置的约束库内容（反八股检查标准）。若世界书存在同名条目则本项自动隐藏，分析时改用你的条目。"><input type="checkbox" class="ref-cb" data-id="${id}" data-var="${h(b.varName)}" ${checked}> ${h(b.label)}（内置）</label>`;
+                return `<label title="${t('插件内置的约束库内容（反八股检查标准）。若世界书存在同名条目则本项自动隐藏，分析时改用你的条目。')}"><input type="checkbox" class="ref-cb" data-id="${id}" data-var="${h(b.varName)}" ${checked}> ${h(t(b.label))}${t('（内置）')}</label>`;
             }),
         ];
-        el.innerHTML = items.join('') || '<span style="color:#555;font-size:13px;">无</span>';
+        el.innerHTML = items.join('') || `<span style="color:#555;font-size:13px;">${t('无')}</span>`;
     });
 
-    const outputVars = ui.tasks.map((t) => ({ varName: t.outputVarName || `task_${t.id}_Output`, label: t.displayName || `任务#${t.id}`, id: t.id }));
+    const outputVars = ui.tasks.map((t) => ({ varName: t.outputVarName || `task_${t.id}_Output`, label: t.displayName || `${t('任务')}#${t.id}`, id: t.id }));
     document.querySelectorAll('.task-outputs').forEach((el) => {
         const currentId = parseInt(el.dataset.id, 10);
         const task = ui.tasks.find((t) => t.id === currentId);
@@ -2422,10 +2422,10 @@ function updateRefCheckboxes() {
         el.innerHTML = outputVars.map((o) => {
             const isSelf = o.id === currentId;
             const checked = used.includes(o.varName) ? 'checked' : '';
-            const label = isSelf ? `${h(o.label)} (上次结果)` : h(o.label);
+            const label = isSelf ? `${h(o.label)}${t('（上次结果）')}` : h(o.label);
             const style = isSelf ? 'background:#e8f5e9;border-color:#4caf50;' : '';
             return `<label style="${style}"><input type="checkbox" class="output-cb" data-id="${currentId}" data-var="${h(o.varName)}" ${checked}> ${label}</label>`;
-        }).join('') || '<span style="color:#555;font-size:13px;">无</span>';
+        }).join('') || `<span style="color:#555;font-size:13px;">${t('无')}</span>`;
     });
 }
 
@@ -2553,14 +2553,14 @@ function buildDirectorCycleParts(ds, currentCounter) {
     const nextFloor = ds.nextDirectorFloor || (anchor + ds.cycleLength);
     const span = Math.max(1, nextFloor - anchor);
     const nameOf = (taskId) => {
-        const t = ui.tasks.find((x) => x.id === taskId);
-        return t ? (t.displayName || `任务#${t.id}`) : `任务#${taskId}`;
+        const item = ui.tasks.find((x) => x.id === taskId);
+        return item ? (item.displayName || `${t('任务')}#${item.id}`) : `${t('任务')}#${taskId}`;
     };
-    const badge = ds.aggressive ? `导演间隔：由导演自决（下次第${nextFloor}楼）` : `周期长度：${ds.cycleLength} 次AI回复`;
-    const counter = `AI回复：${currentCounter}（偏移${ds.offset}）`;
+    const badge = ds.aggressive ? `${t('导演间隔：由导演自决')}（${t('下次第')}${nextFloor}${t('楼')}）` : `${t('周期长度：')}${ds.cycleLength} ${t('次AI回复')}`;
+    const counter = `${t('AI回复：')}${currentCounter}（${t('偏移')}${ds.offset}）`;
 
     if (!ds.planReady) {
-        return { waiting: true, waitNote: `等待导演排期（下次导演：第${nextFloor}楼）`, badge, counter };
+        return { waiting: true, waitNote: `${t('等待导演排期')}（${t('下次导演：第')}${nextFloor}${t('楼')}）`, badge, counter };
     }
 
     const events = (ds.planAssignments || [])
@@ -2584,8 +2584,8 @@ function buildDirectorCycleParts(ds, currentCounter) {
         <div class="cycle-marker l1" style="left:10%;">
             <span class="marker-line" style="background:#C41E3A;"></span>
             <span class="marker-dot director"></span>
-            <span class="marker-floor">第${anchor}楼</span>
-            <span class="marker-label" style="color:#C41E3A;font-weight:600;">🎬 导演</span>
+            <span class="marker-floor">${t('第')}${anchor}${t('楼')}</span>
+            <span class="marker-label" style="color:#C41E3A;font-weight:600;">${t('🎬 导演')}</span>
         </div>`;
     events.forEach((ev) => {
         const left = 10 + ((ev.floor - anchor) / span) * 80;
@@ -2594,7 +2594,7 @@ function buildDirectorCycleParts(ds, currentCounter) {
             <div class="cycle-marker ${ev._level}" style="left:${left}%;${done ? 'opacity:0.75;' : ''}">
                 <span class="marker-line task"></span>
                 <span class="marker-dot task"></span>
-                <span class="marker-floor">第${ev.floor}楼${done ? ' ✅' : ''}</span>
+                <span class="marker-floor">${t('第')}${ev.floor}${t('楼')}${done ? ' ✅' : ''}</span>
                 <span class="marker-label">${h(ev.name)}</span>
             </div>`;
     });
@@ -2604,34 +2604,34 @@ function buildDirectorCycleParts(ds, currentCounter) {
         <div class="cycle-marker l1" style="left:${left}%;">
             <span class="marker-line" style="background:#2196f3;"></span>
             <span class="marker-dot" style="background:#2196f3;"></span>
-            <span class="marker-floor" style="color:#2196f3;">当前</span>
-            <span class="marker-label" style="font-size:10px;color:#2196f3;">▶ 第${currentCounter}楼</span>
+            <span class="marker-floor" style="color:#2196f3;">${t('当前')}</span>
+            <span class="marker-label" style="font-size:10px;color:#2196f3;">▶ ${t('第')}${currentCounter}${t('楼')}</span>
         </div>`;
     }
     trackHtml += `
         <div class="cycle-marker l1" style="left:96%;opacity:0.85;">
             <span class="marker-line" style="background:#C41E3A;box-shadow:none;"></span>
             <span class="marker-dot director"></span>
-            <span class="marker-floor">第${nextFloor}楼</span>
-            <span class="marker-label" style="font-size:10px;color:#C41E3A;">🎬 下次导演${ds.aggressive ? '（导演自决）' : ''}</span>
+            <span class="marker-floor">${t('第')}${nextFloor}${t('楼')}</span>
+            <span class="marker-label" style="font-size:10px;color:#C41E3A;">🎬 ${t('下次导演')}${ds.aggressive ? t('（导演自决）') : ''}</span>
         </div>`;
     trackHtml += '</div>';
 
-    let listHtml = `<div style="font-size:12px;font-weight:600;color:#666;margin-bottom:8px;">📋 导演计划（第${ds.runSeq}次执导${ds.aggressive ? '·激进' : ''}，按楼层）：</div>`;
+    let listHtml = `<div style="font-size:12px;font-weight:600;color:#666;margin-bottom:8px;">${t('📋 导演计划')}（${t('第')}${ds.runSeq}${t('次执导')}${ds.aggressive ? `·${t('激进')}` : ''}，${t('按楼层')}）：</div>`;
     events.forEach((ev, i) => {
         const done = ev.floor <= currentCounter;
         listHtml += `
             <div class="cycle-task-item" style="${done ? 'background:#e8f5e9;' : ''}">
-                <span class="floor-badge" style="${done ? 'background:#2C5530;' : ''}">第${ev.floor}楼</span>
-                <span class="task-name">${i + 1}. ${h(ev.name)}${done ? ' ✅ 已触发' : ''}</span>
+                <span class="floor-badge" style="${done ? 'background:#2C5530;' : ''}">${t('第')}${ev.floor}${t('楼')}</span>
+                <span class="task-name">${i + 1}. ${h(ev.name)}${done ? ` ✅ ${t('已触发')}` : ''}</span>
                 <span class="output-var">{{task_${ev.taskId}_Output}}</span>
             </div>`;
     });
     listHtml += `
         <div class="cycle-task-item" style="background:#fdf3f4;border-style:dashed;">
-            <span class="floor-badge" style="background:#C41E3A;">第${nextFloor}楼</span>
-            <span class="task-name" style="color:#C41E3A;">🎬 下次导演${ds.aggressive ? '（间隔由导演自决）' : `（周期${ds.cycleLength}）`}</span>
-            <span class="output-var" style="color:#888;">导演排期</span>
+            <span class="floor-badge" style="background:#C41E3A;">${t('第')}${nextFloor}${t('楼')}</span>
+            <span class="task-name" style="color:#C41E3A;">🎬 ${t('下次导演')}${ds.aggressive ? t('（间隔由导演自决）') : `（${t('周期')}${ds.cycleLength}）`}</span>
+            <span class="output-var" style="color:#888;">${t('导演排期')}</span>
         </div>`;
 
     return { waiting: false, badge, counter, track: trackHtml, list: listHtml };
@@ -2641,18 +2641,22 @@ function buildDirectorCycleParts(ds, currentCounter) {
 function renderDirectorCycle(ds, els) {
     const { lengthBadge, counterBadge, timeline, taskList, currentCounter } = els;
     const parts = buildDirectorCycleParts(ds, currentCounter);
-    lengthBadge.textContent = parts.badge;
-    counterBadge.textContent = parts.counter;
-    counterBadge.title = '当前AI回复楼层数；导演模式下以“自上次导演起的偏移”显示';
+    lengthBadge.textContent = t(parts.badge);
+    counterBadge.textContent = t(parts.counter);
+    counterBadge.title = t('当前AI回复楼层数；导演模式下以“自上次导演起的偏移”显示');
     if (parts.waiting) {
         timeline.innerHTML = `
             <div class="cycle-track"><div class="cycle-axis"></div></div>
-            <div style="text-align:center;padding:16px;color:#666;position:relative;z-index:1;">${parts.waitNote}</div>`;
-        taskList.innerHTML = '<div style="font-size:12px;color:#666;padding:8px;">导演尚未生成本次计划——可在导演页手动执行一次排期</div>';
+            <div style="text-align:center;padding:16px;color:#666;position:relative;z-index:1;">${t(parts.waitNote)}</div>`;
+        taskList.innerHTML = `<div style="font-size:12px;color:#666;padding:8px;">${t('导演尚未生成本次计划——可在导演页手动执行一次排期')}</div>`;
+        translateDom(timeline);
+        translateDom(taskList);
         return;
     }
     timeline.innerHTML = parts.track;
     taskList.innerHTML = parts.list;
+    translateDom(timeline);
+    translateDom(taskList);
 }
 
 async function saveCurrentSchemeFromUI() {
@@ -3110,7 +3114,7 @@ function wireTaskControls() {
         const newTask = config.normalizeTask({
             id: ui.nextTaskId++,
             enabled: true,
-            displayName: `任务${ui.tasks.length + 1}`,
+            displayName: `${t('任务')}${ui.tasks.length + 1}`,
             cyclePositions: [10],
             outputVarName: `task_${ui.nextTaskId - 1}_Output`,
             useReferences: defaultRefVars,
@@ -3123,7 +3127,7 @@ function wireTaskControls() {
             const card = $('ra_task_slots')?.querySelector(`.task-card[data-id="${newTask.id}"]`);
             if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         });
-        window.toastr?.success?.(`已添加任务 #${newTask.id}（已填写的其他任务内容已保留）`);
+        window.toastr?.success?.(t(`已添加任务 #${newTask.id}（已填写的其他任务内容已保留）`));
     });
 
     on($('ra_tasks_save'), 'click', async () => {
