@@ -1516,37 +1516,37 @@ function renderJailbreakItems() {
     if (!container) return;
     if (ui.jailbreakItems.length === 0) ui.jailbreakItems = jailbreak.cloneDefaultItems();
 
-    const positionLabel = (pos) => (pos === 'beforeUser' ? '任务提示词前' : pos === 'afterUser' ? '任务提示词后' : '尾部追加');
+    const positionLabel = (pos) => (pos === 'beforeUser' ? t('任务提示词前') : pos === 'afterUser' ? t('任务提示词后') : t('尾部追加'));
     container.innerHTML = ui.jailbreakItems.map((item, idx) => {
         const collapsed = ui.collapsedJb.has(item.id);
         const summary = item.content.trim()
             ? item.content.trim().replace(/\s+/g, ' ').slice(0, 36)
-            : '空文本';
+            : t('空文本');
         return `
         <div class="jailbreak-item ${collapsed ? 'collapsed' : ''}" data-id="${h(item.id)}">
-            <div class="jailbreak-head" title="点击展开或折叠">
-                <button type="button" class="btn outline small jb-toggle">${collapsed ? '展开' : '折叠'}</button>
-                <label class="inline"><input type="checkbox" class="jb-enabled" ${item.enabled ? 'checked' : ''}> 启用</label>
-                <span class="jb-title">段落 ${idx + 1}</span>
+            <div class="jailbreak-head" title="${t('点击展开或折叠')}">
+                <button type="button" class="btn outline small jb-toggle">${collapsed ? t('展开') : t('折叠')}</button>
+                <label class="inline"><input type="checkbox" class="jb-enabled" ${item.enabled ? 'checked' : ''}> ${t('启用')}</label>
+                <span class="jb-title">${t('段落')} ${idx + 1}</span>
                 <select class="jb-position w150">
-                    <option value="beforeUser" ${item.position === 'beforeUser' ? 'selected' : ''}>任务提示词前</option>
-                    <option value="afterUser" ${item.position === 'afterUser' ? 'selected' : ''}>任务提示词后</option>
-                    <option value="tail" ${item.position === 'tail' ? 'selected' : ''}>尾部追加</option>
+                    <option value="beforeUser" ${item.position === 'beforeUser' ? 'selected' : ''}>${t('任务提示词前')}</option>
+                    <option value="afterUser" ${item.position === 'afterUser' ? 'selected' : ''}>${t('任务提示词后')}</option>
+                    <option value="tail" ${item.position === 'tail' ? 'selected' : ''}>${t('尾部追加')}</option>
                 </select>
                 <select class="jb-role w120">
                     <option value="system" ${item.role === 'system' ? 'selected' : ''}>system</option>
                     <option value="assistant" ${item.role === 'assistant' ? 'selected' : ''}>assistant</option>
                     <option value="user" ${item.role === 'user' ? 'selected' : ''}>user</option>
                 </select>
-                <span class="jailbreak-summary">${positionLabel(item.position)} / ${h(item.role)} / ${h(summary)}</span>
+                <span class="jailbreak-summary">${positionLabel(item.position)} / ${h(item.role)} / <span class="jb-summary-text">${h(summary)}</span></span>
                 <span class="jailbreak-actions">
-                    <button type="button" class="btn outline small jb-up" ${idx === 0 ? 'disabled' : ''}>上移</button>
-                    <button type="button" class="btn outline small jb-down" ${idx === ui.jailbreakItems.length - 1 ? 'disabled' : ''}>下移</button>
-                    <button type="button" class="btn red small jb-delete">删除</button>
+                    <button type="button" class="btn outline small jb-up" ${idx === 0 ? 'disabled' : ''}>${t('上移')}</button>
+                    <button type="button" class="btn outline small jb-down" ${idx === ui.jailbreakItems.length - 1 ? 'disabled' : ''}>${t('下移')}</button>
+                    <button type="button" class="btn red small jb-delete">${t('删除')}</button>
                 </span>
             </div>
             <div class="jailbreak-body">
-                <textarea class="jb-content" placeholder="填写破限文本；可用 {{taskType}} 表示当前任务名">${h(item.content)}</textarea>
+                <textarea class="jb-content" placeholder="${t('填写破限文本；可用 {{taskType}} 表示当前任务名')}">${h(item.content)}</textarea>
             </div>
         </div>`;
     }).join('');
@@ -1563,7 +1563,7 @@ function renderJailbreakItems() {
         card.classList.toggle('collapsed', willCollapse);
         if (willCollapse) ui.collapsedJb.add(id);
         else ui.collapsedJb.delete(id);
-        card.querySelector('.jb-toggle').textContent = willCollapse ? '展开' : '折叠';
+        card.querySelector('.jb-toggle').textContent = willCollapse ? t('展开') : t('折叠');
     };
 
     container.querySelectorAll('.jailbreak-head').forEach((head) => {
@@ -1608,6 +1608,7 @@ function renderJailbreakItems() {
             }
         });
     });
+    translateDom(container);
 }
 
 function wireJailbreakControls() {
@@ -1792,11 +1793,11 @@ function renderSummaryProviders(data) {
                 const boundaryOrdinal = ordinalForIndex(c?.chat || [], lwb.boundary);
                 const totalFloors = countAiReplies(c?.chat || []);
                 statusHtml = `<div style="font-size:12px;color:#666;margin-top:8px;">
-                    ✅ 检测到总结数据：已总结至第 <strong>${boundaryOrdinal}</strong> 楼（共${totalFloors}楼）· ${lwb.facts.length} 条人物事实 · ${lwb.events.length} 个事件 · ${lwb.characters.length} 位主要人物
+                    ${t('✅ 检测到总结数据：已总结至第')} <strong>${boundaryOrdinal}</strong> ${t('楼（共')}${totalFloors}${t('楼）·')} ${lwb.facts.length} ${t('条人物事实 ·')} ${lwb.events.length} ${t('个事件 ·')} ${lwb.characters.length} ${t('位主要人物')}
                 </div>`;
             } else {
                 statusHtml = `<div style="font-size:12px;color:#8B4513;margin-top:8px;">
-                    ⚠️ 当前聊天未检测到小白x总结数据（未安装小白x、或本聊天还没运行过总结）。启用后分析会先回退纯原文模式，检测到总结数据后自动生效。
+                    ${t('⚠️ 当前聊天未检测到小白x总结数据（未安装小白x、或本聊天还没运行过总结）。启用后分析会先回退纯原文模式，检测到总结数据后自动生效。')}
                 </div>`;
             }
         } else if (p.id === 'shujuku') {
@@ -1806,11 +1807,11 @@ function renderSummaryProviders(data) {
                 const boundaryOrdinal = ordinalForIndex(c?.chat || [], boundaryIdx);
                 const totalFloors = countAiReplies(c?.chat || []);
                 statusHtml = `<div style="font-size:12px;color:#666;margin-top:8px;">
-                    ✅ 检测到数据库活动：表格已更新至第 <strong>${boundaryOrdinal}</strong> 楼（共${totalFloors}楼）。总结表/人物/大纲条目将在分析时从角色与聊天世界书读取。
+                    ${t('✅ 检测到数据库活动：表格已更新至第')} <strong>${boundaryOrdinal}</strong> ${t('楼（共')}${totalFloors}${t('楼）。总结表/人物/大纲条目将在分析时从角色与聊天世界书读取。')}
                 </div>`;
             } else {
                 statusHtml = `<div style="font-size:12px;color:#8B4513;margin-top:8px;">
-                    ⚠️ 当前聊天未检测到 SP·数据库 的表格更新记录（未安装、或本聊天还没运行过填表）。启用后分析会先回退纯原文模式，检测到数据后自动生效。
+                    ${t('⚠️ 当前聊天未检测到 SP·数据库 的表格更新记录（未安装、或本聊天还没运行过填表）。启用后分析会先回退纯原文模式，检测到数据后自动生效。')}
                 </div>`;
             }
         } else if (p.id === 'yuzuki') {
@@ -1820,11 +1821,11 @@ function renderSummaryProviders(data) {
                 const boundaryOrdinal = ordinalForIndex(c?.chat || [], yz.boundary);
                 const totalFloors = countAiReplies(c?.chat || []);
                 statusHtml = `<div style="font-size:12px;color:#666;margin-top:8px;">
-                    ✅ 检测到记忆总结：${yz.records} 条总结记录，覆盖至第 <strong>${boundaryOrdinal}</strong> 楼（共${totalFloors}楼）。总结内容将在分析时从聊天元数据读取。
+                    ${t('✅ 检测到记忆总结：')}${yz.records} ${t('条总结记录，覆盖至第')} <strong>${boundaryOrdinal}</strong> ${t('楼（共')}${totalFloors}${t('楼）。总结内容将在分析时从聊天元数据读取。')}
                 </div>`;
             } else {
                 statusHtml = `<div style="font-size:12px;color:#8B4513;margin-top:8px;">
-                    ⚠️ 当前聊天未检测到柚月记忆表数据（未安装 yuzuki-Memory、或本聊天还没生成记忆总结）。启用后分析会先回退纯原文模式，检测到数据后自动生效。
+                    ${t('⚠️ 当前聊天未检测到柚月记忆表数据（未安装 yuzuki-Memory，或本聊天还没生成记忆总结）。启用后分析会先回退纯原文模式，检测到数据后自动生效。')}
                 </div>`;
             }
         } else if (p.id === 'baibaibook') {
@@ -1834,11 +1835,11 @@ function renderSummaryProviders(data) {
                 const boundaryOrdinal = ordinalForIndex(c?.chat || [], bbb.boundary);
                 const totalFloors = countAiReplies(c?.chat || []);
                 statusHtml = `<div style="font-size:12px;color:#666;margin-top:8px;">
-                    ✅ 检测到记忆快照：修订版本 ${bbb.revision}，覆盖至第 <strong>${boundaryOrdinal}</strong> 楼（共${totalFloors}楼）。快照内容将在分析时从柏宝书全局API读取。
+                    ${t('✅ 检测到记忆快照：修订版本')} ${bbb.revision}，${t('覆盖至第')} <strong>${boundaryOrdinal}</strong> ${t('楼（共')}${totalFloors}${t('楼）。快照内容将在分析时从柏宝书全局API读取。')}
                 </div>`;
             } else {
                 statusHtml = `<div style="font-size:12px;color:#8B4513;margin-top:8px;">
-                    ⚠️ 当前聊天未检测到柏宝书记忆数据（未安装柏宝书、或本聊天还没生成记忆摘要）。启用后分析会先回退纯原文模式，检测到数据后自动生效。
+                    ${t('⚠️ 当前聊天未检测到柏宝书记忆数据（未安装柏宝书、或本聊天还没生成记忆摘要）。启用后分析会先回退纯原文模式，检测到数据后自动生效。')}
                 </div>`;
             }
         }
@@ -1846,22 +1847,23 @@ function renderSummaryProviders(data) {
         if (p.id === 'yuzuki' && isOn) {
             extraHtml = `<label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#666;margin-top:8px;cursor:pointer;">
                 <input type="checkbox" id="ra_yuzuki_plot" ${data.yuzukiIncludePlot !== false ? 'checked' : ''}>
-                剧情摘要时间线一并注入（关闭后总结素材仅使用记忆总结表）
+                ${t('剧情摘要时间线一并注入（关闭后总结素材仅使用记忆总结表）')}
             </label>`;
         }
         return `
         <div class="summary-provider-card ${isOn ? 'on' : ''}">
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                 <div style="flex:1;min-width:200px;">
-                    <div style="font-weight:700;font-size:14px;">${isOn ? '🟢' : '⚪'} ${h(p.name)}</div>
-                    <div style="font-size:12px;color:#666;margin-top:4px;">${h(p.description)}</div>
+                    <div style="font-weight:700;font-size:14px;">${isOn ? '🟢' : '⚪'} ${h(t(p.name))}</div>
+                    <div style="font-size:12px;color:#666;margin-top:4px;">${h(t(p.description))}</div>
                     ${statusHtml}
                     ${extraHtml}
                 </div>
-                <button class="btn ${isOn ? 'red' : 'green'}" id="ra_summary_toggle_${h(p.id)}">${isOn ? '✕ 停用' : '✓ 启用接口'}</button>
+                <button class="btn ${isOn ? 'red' : 'green'}" id="ra_summary_toggle_${h(p.id)}">${isOn ? t('✕ 停用') : t('✓ 启用接口')}</button>
             </div>
         </div>`;
     }).join('');
+    translateDom(el);
 
     const yuzukiPlotToggle = $('ra_yuzuki_plot');
     if (yuzukiPlotToggle) {
@@ -3256,13 +3258,13 @@ function renderPresetSummary() {
 
     let html = `
         <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;">
-            <div>📦 配置方案：<strong>${presets.length}</strong> 个</div>
-            <div>🏷️ 自定义标签：<strong>${tagCount}</strong> 个</div>
-            <div>📋 任务总数：<strong>${totalTasks}</strong> 个</div>
-            <div>📚 参考条目总数：<strong>${totalRefs}</strong> 个</div>
+            <div>📦 ${t('配置方案：')}<strong>${presets.length}</strong> ${t('个')}</div>
+            <div>🏷️ ${t('自定义标签：')}<strong>${tagCount}</strong> ${t('个')}</div>
+            <div>📋 ${t('任务总数：')}<strong>${totalTasks}</strong> ${t('个')}</div>
+            <div>📚 ${t('参考条目总数：')}<strong>${totalRefs}</strong> ${t('个')}</div>
         </div>
         <div style="border-top:1px dashed #999;padding-top:12px;">
-        <div style="font-weight:700;margin-bottom:8px;">📋 方案列表：</div>`;
+        <div style="font-weight:700;margin-bottom:8px;">📋 ${t('方案列表：')}</div>`;
 
     for (const preset of presets) {
         const isActive = preset.id === data.activePresetId;
@@ -3272,14 +3274,15 @@ function renderPresetSummary() {
         html += `
             <div class="preset-summary-card ${isActive ? 'active' : ''}">
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-                    <span style="font-weight:700;font-size:14px;">${h(preset.name || '未命名')}</span>
-                    ${isActive ? '<span style="background:#2C5530;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;">当前激活</span>' : ''}
+                    <span style="font-weight:700;font-size:14px;">${h(t(preset.name) || t('未命名'))}</span>
+                    ${isActive ? `<span style="background:#2C5530;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;">${t('当前激活')}</span>` : ''}
                 </div>
-                <div class="preset-summary-meta">📋 ${taskCount}个任务（${enabledTasks}启用）· 📚 ${refCount}个参考条目</div>
+                <div class="preset-summary-meta">📋 ${taskCount} ${t('个任务')} (${enabledTasks} ${t('启用')}) · 📚 ${refCount} ${t('个参考条目')}</div>
             </div>`;
     }
     html += '</div>';
     el.innerHTML = html;
+    translateDom(el);
 }
 
 /** 导出前密钥擦除（纵深防御）：递归剔除一切密钥类字段，即使未来配置误含密钥也绝不随模板导出 */

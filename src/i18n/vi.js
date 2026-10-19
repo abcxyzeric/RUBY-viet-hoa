@@ -467,8 +467,71 @@ export const VI_DICT = {
     "（含被酒馆隐藏的正文），读过的不重复读，每次最多阅读最近20楼。": " sau lần trước (bao gồm văn bản bị SillyTavern ẩn), không đọc lặp lại các tầng đã đọc, mỗi lần đọc tối đa 20 tầng gần nhất.",
     "⚠️ 单次输入正文超过": "⚠️ Khi văn bản đối thoại một lần vượt quá ",
     "时停止，后续剩余正文直接抛弃（保留靠前部分）；上限只作用于对话正文——参考条目与历史分析输出完整保留，绝不因截断丢失。": " sẽ dừng lại, phần văn bản còn lại phía sau bị bỏ qua (giữ lại phần đầu); giới hạn chỉ áp dụng cho nội dung đối thoại — các mục tham chiếu và kết quả phân tích lịch sử luôn được giữ trọn vẹn, tuyệt đối không bị mất do cắt ngắn.",
-    "退出再进会从书签续读；新聊天时读最近20楼。各任务书签互不影响。": "Thoát ra rồi vào lại sẽ tiếp tục đọc từ dấu trang; cuộc trò chuyện mới sẽ đọc 20 tầng gần nhất. Dấu trang của từng nhiệm vụ hoàn toàn độc lập không ảnh hưởng lẫn nhau.",
-    "退出再进体会从书签续读；新聊天读最近20楼。各任务书签互不影响。": "Thoát ra rồi vào lại sẽ tiếp tục đọc từ dấu trang; cuộc trò chuyện mới sẽ đọc 20 tầng gần nhất. Dấu trang của từng nhiệm vụ hoàn toàn độc lập không ảnh hưởng lẫn nhau."
+    // Cài đặt API & Tham số sinh văn bản (Ảnh 1)
+    "选择API通道": "Chọn kênh API",
+    "酒馆主API（使用当前连接）": "API chính SillyTavern (Dùng kết nối hiện tại)",
+    "独立导演端点（OpenAI兼容）": "Endpoint Đạo diễn độc lập (Tương thích OpenAI)",
+    "模型名称": "Tên Model",
+    "选项": "Tùy chọn",
+    "分析进度通知": "Thông báo tiến độ phân tích",
+    "显示悬浮球": "Hiển thị quả cầu nổi",
+    "🎬 独立导演API": "🎬 API Đạo diễn độc lập",
+    "生成参数": "Tham số sinh văn bản",
+    "启用参数": "Bật/Tắt tham số",
+    "启用自定义生成参数": "Bật tham số sinh tùy chỉnh",
+
+    // Tin nhắn Jailbreak tùy chỉnh (Ảnh 2 & 3)
+    "任务提示词前": "Trước prompt nhiệm vụ",
+    "任务提示词后": "Sau prompt nhiệm vụ",
+    "尾部追加": "Thêm vào cuối",
+    "折叠": "Thu gọn",
+    "展开": "Mở rộng",
+    "段落": "Đoạn",
+    "上移": "Lên",
+    "下移": "Xuống",
+    "删除": "Xóa",
+    "启用": "Bật",
+    "点击展开或折叠": "Nhấp để mở rộng hoặc thu gọn",
+    "填写破限文本；可用 {{taskType}} 表示当前任务名": "Nhập văn bản Jailbreak; có thể dùng {{taskType}} để chỉ tên nhiệm vụ hiện tại",
+    "空文本": "Văn bản trống",
+    "➕ 添加消息": "➕ Thêm tin nhắn",
+    "恢复默认": "Khôi phục mặc định",
+    "📤 导出破限": "📤 Xuất Jailbreak",
+    "📥 导入破限": "📥 Nhập Jailbreak",
+    "💾 保存破限设置": "💾 Lưu cài đặt Jailbreak",
+    "确定恢复默认破限配置吗？当前未保存的修改会被覆盖。": "Bạn có chắc chắn muốn khôi phục cấu hình Jailbreak mặc định không? Các thay đổi chưa lưu sẽ bị ghi đè.",
+    "已恢复默认破限配置，请点击保存生效": "Đã khôi phục cấu hình Jailbreak mặc định, vui lòng bấm Lưu để có hiệu lực",
+    "破限设置已保存（全局生效）": "Đã lưu cài đặt Jailbreak (Hiệu lực toàn cục)",
+
+    // Giao diện tóm tắt (Ảnh 4)
+    "小白x（LittleWhiteBox）剧情总结": "Tóm tắt cốt truyện Tiểu Bạch x (LittleWhiteBox)",
+    "读取小白x故事总结模块写入聊天元数据的结构化总结（事件/人物/事实/剧情阶段），已总结楼层用总结替代原文。": "Đọc tóm tắt có cấu trúc do module tóm tắt cốt truyện Tiểu Bạch x ghi vào metadata cuộc trò chuyện (sự kiện/nhân vật/sự thật/giai đoạn cốt truyện), các tầng đã tóm tắt sẽ dùng bản tóm tắt thay thế cho văn bản gốc.",
+    "SP·数据库 表格总结": "Tóm tắt dạng bảng · Cơ sở dữ liệu SP",
+    "读取SP·数据库写入世界书的可读条目（总结表/重要人物/剧情大纲），表格已处理的楼层用数据库内容替代原文。": "Đọc các mục có thể đọc do SP · Cơ sở dữ liệu ghi vào Sách thế giới (bảng tóm tắt/nhân vật quan trọng/đại cương cốt truyện), các tầng đã xử lý dạng bảng sẽ dùng nội dung cơ sở dữ liệu thay thế cho văn bản gốc.",
+    "柚月记忆表（yuzuki-Memory）总结": "Tóm tắt bảng ký ức Yuzuki (yuzuki-Memory)",
+    "读取yuzuki-Memory写入聊天元数据的记忆总结表（总结标题/核心角色/楼层/总结内容/未解决问题），已总结楼层用总结替代原文；剧情摘要时间线可一并注入。": "Đọc bảng tóm tắt ký ức do yuzuki-Memory ghi vào metadata cuộc trò chuyện (tiêu đề tóm tắt/nhân vật cốt lõi/số tầng/nội dung tóm tắt/vấn đề chưa giải quyết), các tầng đã tóm tắt sẽ dùng tóm tắt thay thế cho văn bản gốc; dòng thời gian tóm tắt cốt truyện có thể được chèn cùng lúc.",
+    "柏宝书（BaiBaiBook）记忆快照": "Snapshot ký ức Bách Bảo Thư (BaiBaiBook)",
+    "读取柏宝书记忆引擎的结构化快照（状态/主角/NPC含好感/物品/计划/场景/生活档案等），已总结楼层用快照内容替代原文。": "Đọc snapshot có cấu trúc từ công cụ ký ức Bách Bảo Thư (trạng thái/nhân vật chính/NPC gồm hảo cảm/vật phẩm/kế hoạch/bối cảnh/hồ sơ sinh hoạt...), các tầng đã tóm tắt sẽ dùng nội dung snapshot thay thế cho văn bản gốc.",
+    "⚠️ 当前聊天未检测到小白x总结数据（未安装小白x、或本聊天还没运行过总结）。启用后分析会先回退纯原文模式，检测到总结数据后自动生效。": "⚠️ Chưa phát hiện dữ liệu tóm tắt Tiểu Bạch x trong cuộc trò chuyện hiện tại (chưa cài đặt Tiểu Bạch x, hoặc cuộc trò chuyện này chưa từng chạy tóm tắt). Sau khi bật, phân tích sẽ tạm thời quay về chế độ văn bản gốc thuần túy, và sẽ tự động có hiệu lực sau khi phát hiện dữ liệu tóm tắt.",
+    "⚠️ 当前聊天未检测到 SP·数据库 的表格更新记录（未安装、或本聊天还没运行过填表）。启用后分析会先回退纯原文模式，检测到数据后自动生效。": "⚠️ Chưa phát hiện bản ghi cập nhật dạng bảng của SP · Cơ sở dữ liệu trong cuộc trò chuyện hiện tại (chưa cài đặt, hoặc cuộc trò chuyện này chưa từng chạy điền bảng). Sau khi bật, phân tích sẽ tạm thời quay về chế độ văn bản gốc thuần túy, và sẽ tự động có hiệu lực sau khi phát hiện dữ liệu.",
+    "⚠️ 当前聊天未检测到柚月记忆表数据（未安装 yuzuki-Memory，或本聊天还没生成记忆总结）。启用后分析会先回退纯原文模式，检测到数据后自动生效。": "⚠️ Chưa phát hiện dữ liệu bảng ký ức Yuzuki trong cuộc trò chuyện hiện tại (chưa cài đặt yuzuki-Memory, hoặc cuộc trò chuyện này chưa tạo tóm tắt ký ức). Sau khi bật, phân tích sẽ tạm thời quay về chế độ văn bản gốc thuần túy, và sẽ tự động có hiệu lực sau khi phát hiện dữ liệu.",
+    "⚠️ 当前聊天未检测到柏宝书记忆数据（未安装柏宝书、或本聊天还没生成记忆摘要）。启用后分析会先回退纯原文模式，检测到数据后自动生效。": "⚠️ Chưa phát hiện dữ liệu ký ức Bách Bảo Thư trong cuộc trò chuyện hiện tại (chưa cài đặt Bách Bảo Thư, hoặc cuộc trò chuyện này chưa tạo tóm tắt ký ức). Sau khi bật, phân tích sẽ tạm thời quay về chế độ văn bản gốc thuần túy, và sẽ tự động có hiệu lực sau khi phát hiện dữ liệu.",
+    "剧情摘要时间线一并注入（关闭后总结素材仅使用记忆总结表）": "Chèn cùng dòng thời gian tóm tắt cốt truyện (sau khi tắt, tư liệu tóm tắt chỉ sử dụng bảng tóm tắt ký ức)",
+    "✕ 停用": "✕ Tắt",
+    "✓ 启用接口": "✓ Bật cổng kết nối",
+
+    // Thống kê & Mẫu cấu hình (Ảnh 5)
+    "配置方案：": "Gói cấu hình: ",
+    "自定义标签：": "Thẻ tùy chỉnh: ",
+    "任务总数：": "Tổng số nhiệm vụ: ",
+    "参考条目总数：": "Tổng mục tham chiếu: ",
+    "方案列表：": "Danh sách gói: ",
+    "当前激活": "Đang kích hoạt",
+    "未命名": "Chưa đặt tên",
+    "默认方案": "Phương án mặc định",
+    "个任务": "nhiệm vụ",
+    "个参考条目": "mục tham chiếu",
+    "个": ""
 };
 
 export const VI_PATTERNS = [
@@ -485,6 +548,16 @@ export const VI_PATTERNS = [
     [/上次错误：(.+)/g, "Lỗi lần trước: $1"],
     [/记录数：(\d+)\s*·\s*最近操作：(.+)/g, "Số bản ghi: $1 · Thao tác gần nhất: $2"],
     [/当前步骤：/g, "Bước hiện tại: "],
+
+    // Mẫu thống kê và số đếm (Ảnh 5 & Trình quản lý)
+    [/^(\d+)\s*个任务[（(](\d+)启用[)）]\s*·\s*(\d+)\s*个参考条目$/g, "$1 nhiệm vụ ($2 bật) · $3 mục tham chiếu"],
+    [/^(\d+)\s*个任务[（(](\d+)启用[)）]\s*·\s*(\d+)\s*个Mục tham chiếu$/g, "$1 nhiệm vụ ($2 bật) · $3 mục tham chiếu"],
+    [/^配置方案：(\d+)\s*个$/g, "Gói cấu hình: $1"],
+    [/^自定义标签：(\d+)\s*个$/g, "Thẻ tùy chỉnh: $1"],
+    [/^任务总数：(\d+)\s*个$/g, "Tổng số nhiệm vụ: $1"],
+    [/^参考条目总数：(\d+)\s*个$/g, "Tổng mục tham chiếu: $1"],
+    [/^Mục tham chiếu总数[：:]\s*(\d+)\s*个$/g, "Tổng mục tham chiếu: $1"],
+    [/^段落\s*(\d+)$/g, "Đoạn $1"],
 
     // Thông báo phân tích
     [/🔄\s*(.+?)\s*分析中\.\.\.\s*\((\d+)\/(\d+)\)/g, "🔄 Đang phân tích $1... ($2/$3)"],
@@ -507,3 +580,54 @@ export const VI_PATTERNS = [
     [/RUBY写卡会话\s*·\s*当前步骤\s*(.+?)（点击打开写卡面板）/g, "Phiên viết card RUBY · Bước hiện tại: $1 (Bấm để mở bảng viết card)"],
     [/RUBY写卡中…\s*(.+?)（正在处理完成标记\/切换步骤）/g, "RUBY Đang viết card… $1 (Đang xử lý nhãn hoàn thành / chuyển bước)"]
 ];
+
+/**
+ * Khối HTML hoàn chỉnh dành cho các thẻ tip và status-box chứa các thẻ con format (strong, code, u, br)
+ * Giúp dịch trọn vẹn từng câu, không bao giờ bị cắt vụn thành từng text node gây lai tạp ngôn ngữ.
+ */
+export const VI_HTML = {
+    // Kênh API (Ảnh 1)
+    "💡 <strong>主API</strong>：通过酒馆原生 <code>generateRaw</code> 走当前连接的模型，仅借用通道——<u>不注入预设的提示词</u>（主提示词/越狱/角色卡/聊天记录一概不进上下文），发送的只有 RUBY 自己组装的破限消息与任务提示词，与酒馆自身静默提示词同一机制；RUBY 生成参数会按官方事件钩子覆写到本次请求。<br> 💡 <strong>自定义端点</strong>：OpenAI 兼容接口（DeepSeek、OpenRouter、GLM 等），通过酒馆官方 <code>ChatCompletionService</code> 请求服务发出。地址填到版本段即可（如 <code>/v1</code>、<code>/beta</code>），由酒馆服务端拼接 <code>/chat/completions</code> 并转发。<br> 🔒 两条通道均为酒馆原生请求形态、异步后台执行；密钥只保存在本机扩展设置中，不进入角色卡、世界书或配置模板。":
+        "💡 <strong>API chính</strong>: Thông qua <code>generateRaw</code> gốc của SillyTavern kết nối đến mô hình hiện tại, chỉ mượn kênh truyền——<u>không chèn prompt định sẵn</u> (Prompt chính/Jailbreak/Thẻ nhân vật/Lịch sử trò chuyện hoàn toàn không đưa vào ngữ cảnh), chỉ gửi tin nhắn Jailbreak do RUBY tự lắp ráp cùng prompt nhiệm vụ, cùng cơ chế với prompt im lặng của SillyTavern; tham số sinh văn bản của RUBY sẽ ghi đè vào yêu cầu lần này theo hook sự kiện chính thức.<br> 💡 <strong>Endpoint tùy chỉnh</strong>: Cổng tương thích OpenAI (DeepSeek, OpenRouter, GLM...), gửi qua dịch vụ yêu cầu <code>ChatCompletionService</code> chính thức của SillyTavern. Địa chỉ chỉ cần điền đến đoạn phiên bản (như <code>/v1</code>, <code>/beta</code>), do máy chủ SillyTavern ghép thêm <code>/chat/completions</code> và chuyển tiếp.<br> 🔒 Cả hai kênh đều ở dạng yêu cầu gốc của SillyTavern, thực thi ngầm bất đồng bộ; API Key chỉ lưu trong cài đặt extension máy cục bộ, không đưa vào Thẻ nhân vật, Sách thế giới hay mẫu cấu hình.",
+
+    // Tham số sinh văn bản (Ảnh 1)
+    "💡 <strong>默认不发送任何生成参数</strong>：主API沿用酒馆当前预设的采样设置，自定义端点沿用服务商默认值。有自定义需求时勾选下方开关；留空的参数依然不会发送。":
+        "💡 <strong>Mặc định không gửi bất kỳ tham số sinh văn bản nào</strong>: API chính dùng tiếp các thiết lập lấy mẫu hiện tại của SillyTavern, endpoint tùy chỉnh dùng tiếp giá trị mặc định của nhà cung cấp. Khi có nhu cầu tùy chỉnh hãy tích chọn công tắc bên dưới; các tham số để trống vẫn sẽ không được gửi.",
+
+    // Tin nhắn Jailbreak tùy chỉnh (Ảnh 2 & 3)
+    "💡 任务提示词会固定作为 <code>user</code> 消息发送。这里可以调整它前后的破限消息、消息角色和注入位置；<code>{{taskType}}</code> 会自动替换为当前任务名。<br> 🔒 破限设置为<strong>全局保存</strong>，切换预设/角色卡或导入配置模板均不会覆盖。":
+        "💡 Prompt nhiệm vụ sẽ cố định gửi dưới dạng tin nhắn <code>user</code>. Tại đây có thể điều chỉnh tin nhắn Jailbreak trước/sau nó, role tin nhắn và vị trí chèn; <code>{{taskType}}</code> sẽ tự động thay thế bằng tên nhiệm vụ hiện tại.<br> 🔒 Cài đặt Jailbreak là <strong>lưu toàn cục</strong>, chuyển đổi preset/thẻ nhân vật hoặc nhập mẫu cấu hình đều không bị ghi đè.",
+
+    // Giao diện tóm tắt (Ảnh 4)
+    "启用后，分析时<strong>已被总结工具总结过的楼层</strong>用其总结内容替代原文正文注入；总结边界之后的新楼层仍读取原文。周期位置、楼层计数、各任务的已读书签计算<strong>完全不受影响</strong>。":
+        "Sau khi bật, trong quá trình phân tích <strong>các tầng đã được công cụ tóm tắt xử lý</strong> sẽ dùng nội dung tóm tắt thay thế cho chính văn gốc để đưa vào; các tầng mới sau ranh giới tóm tắt vẫn đọc văn bản gốc. Vị trí chu kỳ, số đếm tầng và tính toán bookmark đã đọc của các nhiệm vụ <strong>hoàn toàn không bị ảnh hưởng</strong>.",
+
+    // Nguyên lý hoạt động của Giao diện tóm tắt (Ảnh 4)
+    "① 读取总结工具写入聊天元数据的结构化总结（只读，不修改总结数据）<br> ② 书签 → 总结边界之间的楼层 → 替换为总结文本（启用时读取窗口不再限制20楼）<br> ③ 总结边界 → 最新楼层 → 照常读取原文增量<br> ④ 20万字符上限作用于\"总结+新正文\"整体；参考条目与分析输出引用不受影响<br> ⑤ 总结工具未安装或本聊天无总结数据 → 自动回退纯原文模式（控制台提示）":
+        "① Đọc tóm tắt có cấu trúc do công cụ tóm tắt ghi vào metadata trò chuyện (chỉ đọc, không sửa đổi dữ liệu tóm tắt)<br> ② Các tầng giữa bookmark → ranh giới tóm tắt → thay bằng văn bản tóm tắt (khi bật, cửa sổ đọc không còn giới hạn 20 tầng)<br> ③ Ranh giới tóm tắt → tầng mới nhất → đọc phần tăng dần của văn bản gốc như bình thường<br> ④ Giới hạn 200.000 ký tự áp dụng cho toàn bộ \"tóm tắt + chính văn mới\"; các mục tham chiếu và trích dẫn kết quả phân tích không bị ảnh hưởng<br> ⑤ Chưa cài đặt công cụ tóm tắt hoặc trò chuyện không có dữ liệu tóm tắt → tự động quay về chế độ văn bản gốc thuần túy (thông báo console)",
+
+    // Nhập / Xuất mẫu cấu hình (Ảnh 5)
+    "📦 <strong>即插即拔功能</strong>：将<strong>所有配置方案</strong>导出为模板文件，在其他角色或环境中快速导入复用。<br><br> 导出内容包括：所有配置方案（含各自的参考池/开局任务/分析任务）、自定义正文标签、破限设置、当前激活方案标记。<br> <strong>不包含</strong>：API密钥等任何敏感信息。":
+        "📦 <strong>Tính năng Plug & Play</strong>: Xuất <strong>toàn bộ các gói cấu hình</strong> thành file mẫu để nhanh chóng nhập và tái sử dụng cho các nhân vật hoặc môi trường khác.<br><br> Nội dung xuất bao gồm: Toàn bộ gói cấu hình (kèm kho tham chiếu/nhiệm vụ mở đầu/nhiệm vụ phân tích tương ứng), thẻ nội dung tùy chỉnh, cài đặt Jailbreak, đánh dấu gói cấu hình đang kích hoạt.<br> <strong>Không bao gồm</strong>: API Key hoặc bất kỳ thông tin nhạy cảm nào.",
+
+    // Cảnh báo nhập mẫu cấu hình (Ảnh 5)
+    "⚠️ 导入会写入<strong>当前角色卡</strong>并覆盖卡内已有方案（未打开角色卡时无法导入）；世界书条目（提示词、输出条目）需要在角色世界书中存在。":
+        "⚠️ Việc nhập sẽ ghi vào <strong>Thẻ nhân vật hiện tại</strong> và ghi đè lên các gói cấu hình đã có trong thẻ (không thể nhập khi chưa mở thẻ nhân vật); các mục Sách thế giới (prompt, mục xuất) cần phải tồn tại trong Sách thế giới của nhân vật.",
+
+    // Gói cấu hình khả dụng
+    "🎯 <strong>配置方案</strong>：创作者可以预设多套不同的任务配置，您可以根据需要切换。<br> 切换方案后，分析任务会按新方案的设定执行。":
+        "🎯 <strong>Gói cấu hình</strong>: Tác giả có thể thiết lập sẵn nhiều bộ cấu hình nhiệm vụ khác nhau để bạn chuyển đổi tùy nhu cầu.<br> Sau khi chuyển gói, các nhiệm vụ phân tích sẽ thực thi theo thiết lập của gói mới.",
+
+    // Cơ chế đọc tăng tiến
+    "💡 <strong>增量阅读机制</strong>：每个分析任务各自维护\"已读书签\"（存于聊天元数据）。<br> 每次触发时只读上次之后<u>新楼层</u>（含被酒馆隐藏的正文），读过的不重读，每次最多阅读最近20楼。<br> ⚠️ 单次输入正文超过<strong>20万字符</strong>时停止，后续剩余正文直接抛弃（保留靠前部分）；上限只作用于对话正文——参考条目与历史分析输出完整保留，绝不因截断丢失。<br> 退出再进体会从书签续读；新聊天读最近20楼。各任务书签互不影响。":
+        "💡 <strong>Cơ chế đọc tăng tiến</strong>: Mỗi nhiệm vụ phân tích tự duy trì riêng \"bookmark đã đọc\" (lưu trong metadata cuộc trò chuyện).<br> Mỗi lần kích hoạt chỉ đọc <u>các tầng mới</u> sau lần trước (bao gồm cả chính văn bị SillyTavern ẩn), tầng đã đọc sẽ không đọc lại, mỗi lần đọc tối đa 20 tầng gần nhất.<br> ⚠️ Dừng đọc khi chính văn nhập vào trong một lần vượt quá <strong>200.000 ký tự</strong>, phần chính văn còn lại phía sau sẽ bị hủy bỏ (giữ lại phần phía trước); giới hạn chỉ áp dụng cho chính văn hội thoại——các mục tham chiếu và kết quả phân tích lịch sử được giữ nguyên trọn vẹn, tuyệt đối không bị mất do cắt ngắn.<br> Thoát ra rồi vào lại sẽ tiếp tục đọc từ bookmark; cuộc trò chuyện mới sẽ đọc 20 tầng gần nhất. Bookmark của từng nhiệm vụ hoàn toàn độc lập không ảnh hưởng lẫn nhau.",
+
+    // Mô hình lấy thẻ làm trung tâm
+    "💡 <strong>卡片中心模型</strong>：RUBY 任务配置只随角色卡存在（写入卡内 <code>data.extensions</code> 字段）。打开角色卡后，导入模板或新建/修改任务会<strong>自动绑定并写入当前角色卡</strong>，导出/分享卡片即携带，其他环境导入即生效。<br> 💡 <strong>任务归属</strong>：配置整体保存在角色卡的 <code>data.extensions</code> 字段，任务只随这张卡生效，无需为任务单独指定角色。<br> ⚠️ 未打开角色卡时配置只能暂存于全局层（不随卡导出），请打开角色卡后再配置；引擎只执行已绑定角色卡的配置。<br>":
+        "💡 <strong>Mô hình lấy thẻ nhân vật làm trung tâm</strong>: Cấu hình nhiệm vụ RUBY chỉ tồn tại cùng thẻ nhân vật (được ghi vào trường <code>data.extensions</code> của thẻ). Sau khi mở thẻ nhân vật, việc nhập mẫu hoặc tạo mới/sửa nhiệm vụ sẽ <strong>tự động liên kết và ghi vào thẻ nhân vật hiện tại</strong>, xuất/chia sẻ thẻ sẽ mang theo cấu hình, nhập sang môi trường khác sẽ có hiệu lực ngay.<br> 💡 <strong>Quy thuộc nhiệm vụ</strong>: Toàn bộ cấu hình được lưu trong trường <code>data.extensions</code> của thẻ nhân vật, nhiệm vụ chỉ có hiệu lực cùng thẻ này, không cần chỉ định riêng nhân vật cho nhiệm vụ.<br> ⚠️ Khi chưa mở thẻ nhân vật, cấu hình chỉ có thể lưu tạm ở tầng toàn cục (không xuất theo thẻ), vui lòng mở thẻ nhân vật trước khi cấu hình; engine chỉ thực thi cấu hình đã liên kết với thẻ nhân vật.<br>",
+
+    // Vị trí chu kỳ
+    "<strong>周期位置</strong>：表示在每个周期的第几次AI回复时触发（支持多个，逗号分隔，如 5,10,15）。周期长度 = 所有任务里最大的那个数。<br> 💡 <strong>额外关键词</strong>：可为输出条目添加额外触发词（如角色名），与输出条目关键词合并。<br> 📄 <strong>任务归属</strong>：整份配置保存在角色卡内，任务只随这张卡生效，无需单独指定角色。":
+        "<strong>Vị trí chu kỳ</strong>: Cho biết nhiệm vụ sẽ kích hoạt ở lượt phản hồi AI thứ mấy trong mỗi chu kỳ (hỗ trợ nhiều lượt, phân cách bằng dấu phẩy, ví dụ: 5,10,15). Độ dài chu kỳ = số lớn nhất trong tất cả các nhiệm vụ.<br> 💡 <strong>Từ khóa bổ sung</strong>: Có thể thêm từ khóa kích hoạt phụ cho mục xuất (ví dụ tên nhân vật), kết hợp với từ khóa của mục xuất.<br> 📄 <strong>Quy thuộc nhiệm vụ</strong>: Toàn bộ cấu hình được lưu trong thẻ nhân vật, nhiệm vụ chỉ có hiệu lực cùng thẻ này, không cần chỉ định riêng nhân vật."
+};
+

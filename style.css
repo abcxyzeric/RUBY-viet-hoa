@@ -389,10 +389,10 @@
 }
 
 #ra_panel input::placeholder { color: #666; }
-#ra_panel select option { background: #fff !important; color: #1a1a1a !important; padding: 8px; }
 #ra_panel .w50 { width: 50px; } #ra_panel .w70 { width: 70px; } #ra_panel .w100 { width: 100px; }
 #ra_panel .w120 { width: 120px; } #ra_panel .w150 { width: 150px; } #ra_panel .w200 { width: 200px; }
 #ra_panel .w250 { width: 250px; } #ra_panel .w320 { width: 320px; }
+#ra_panel #ra_api_channel { min-width: 300px; max-width: 100%; }
 
 #ra_panel input[type="checkbox"] {
     appearance: none;

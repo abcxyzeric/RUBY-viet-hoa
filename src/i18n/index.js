@@ -1,5 +1,5 @@
 // src/i18n/index.js - Trình quản lý i18n cho Extension RUBY
-import { VI_DICT, VI_PATTERNS } from './vi.js';
+import { VI_DICT, VI_PATTERNS, VI_HTML } from './vi.js';
 
 const STORAGE_KEY = 'ruby_analyzer_lang';
 let currentLang = 'vi';
@@ -22,7 +22,7 @@ export function setLang(lang) {
     
     // Cập nhật lại nút ngôn ngữ và quét dịch lại toàn bộ giao diện
     updateSwitcherButton();
-    const panel = document.getElementById('ruby_analyzer_panel');
+    const panel = document.getElementById('ra_panel');
     if (panel) translateDom(panel);
     const settings = document.getElementById('ruby_analyzer_ext_settings');
     if (settings) translateDom(settings);
@@ -32,13 +32,14 @@ export function toggleLang() {
     setLang(currentLang === 'vi' ? 'zh' : 'vi');
 }
 
-// Sắp xếp các cụm từ theo độ dài giảm dần để dịch các cụm dài trước, tránh nuốt từ
-const PHRASE_LIST = Object.entries(VI_DICT)
-    .filter(([k]) => /[\u4e00-\u9fff]/.test(k) && k.length > 1)
-    .sort((a, b) => b[0].length - a[0].length);
+export function normalizeStr(str) {
+    if (!str || typeof str !== 'string') return '';
+    return str.replace(/\s+/g, ' ').trim();
+}
 
 /**
- * Hàm dịch văn bản (dùng cho cả text node và thông báo notify)
+ * Hàm dịch văn bản (cho chuỗi đơn hoặc thông báo toastr/notify)
+ * Tuyệt đối KHÔNG dùng thay thế chuỗi con bừa bãi tránh lỗi chắp vá ngôn ngữ.
  */
 export function t(text) {
     if (!text || typeof text !== 'string') return text;
@@ -48,44 +49,60 @@ export function t(text) {
     if (VI_DICT[trimmed]) {
         return text.replace(trimmed, VI_DICT[trimmed]);
     }
+    if (VI_DICT[text]) {
+        return VI_DICT[text];
+    }
 
-    // Kiểm tra các mẫu regex động
-    let result = text;
-    let matched = false;
+    const norm = normalizeStr(text);
+    if (VI_DICT[norm]) {
+        return VI_DICT[norm];
+    }
+
+    // Kiểm tra các mẫu regex động có cấu trúc
     for (const [pattern, replacement] of VI_PATTERNS) {
-        if (pattern.test(result)) {
-            result = result.replace(pattern, replacement);
-            matched = true;
+        if (pattern.test(text)) {
+            return text.replace(pattern, replacement);
         }
     }
 
-    // Nếu vẫn còn chữ Hán, thử thay thế các cụm từ trong từ điển theo thứ tự ưu tiên độ dài
-    if (/[\u4e00-\u9fff]/.test(result)) {
-        for (const [zh, vi] of PHRASE_LIST) {
-            if (result.includes(zh)) {
-                result = result.replaceAll(zh, vi);
-                matched = true;
-                if (!/[\u4e00-\u9fff]/.test(result)) break;
-            }
-        }
-    }
-
-    return matched ? result : text;
+    return text;
 }
 
 /**
- * Quét và dịch toàn bộ phần tử DOM
+ * Quét và dịch toàn bộ phần tử DOM một cách an toàn và tự nhiên
  */
 export function translateDom(root) {
     if (!root || currentLang === 'zh') return;
 
     const walk = (node) => {
-        // Bỏ qua thẻ script, style, code editor
         if (node.nodeType === Node.ELEMENT_NODE) {
             const tag = node.tagName.toUpperCase();
-            if (tag === 'SCRIPT' || tag === 'STYLE') return;
 
-            // Dịch các thuộc tính
+            // TUYỆT ĐỐI BỎ QUA các thành phần code, script, style và đặc biệt là prompt / textarea
+            if (
+                tag === 'SCRIPT' ||
+                tag === 'STYLE' ||
+                tag === 'TEXTAREA' ||
+                tag === 'PRE' ||
+                tag === 'CODE' ||
+                node.classList?.contains('jb-content') ||
+                node.classList?.contains('jb-summary-text') ||
+                node.classList?.contains('prompt-content') ||
+                node.closest?.('.jailbreak-body')
+            ) {
+                return;
+            }
+
+            // Kiểm tra dịch trọn vẹn khối HTML có cấu trúc (ví dụ: các khối tip, status-box chứa thẻ inline)
+            if (node.children.length > 0 && VI_HTML) {
+                const normHtml = normalizeStr(node.innerHTML);
+                if (VI_HTML[normHtml]) {
+                    node.innerHTML = VI_HTML[normHtml];
+                    return; // Đã thay thế trọn khối HTML chuẩn xác, không duyệt tiếp vào các con
+                }
+            }
+
+            // Dịch các thuộc tính hiển thị
             const attrs = ['placeholder', 'title', 'data-tip', 'data-help', 'aria-label'];
             for (const attr of attrs) {
                 if (node.hasAttribute(attr)) {
@@ -97,8 +114,8 @@ export function translateDom(root) {
                 }
             }
 
-            // Dịch value của input nếu là văn bản chữ Hán (ví dụ: '默认方案')
-            if (tag === 'INPUT' && node.value && /[\u4e00-\u9fff]/.test(node.value)) {
+            // Dịch giá trị mặc định của input nếu là văn bản giao diện chữ Hán (ví dụ: '默认方案')
+            if (tag === 'INPUT' && node.value && /[\u4e00-\u9fff]/.test(node.value) && node.type !== 'file' && node.type !== 'checkbox' && node.type !== 'radio') {
                 const translated = t(node.value);
                 if (translated !== node.value) {
                     node.value = translated;
