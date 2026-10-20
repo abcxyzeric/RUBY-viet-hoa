@@ -1369,7 +1369,7 @@ function wirePlayerSections() {
         });
         syncDirectorApiUi();
         updateDirectorApiHighlight();
-        window.toastr?.success?.(enabled ? '已启用独立导演API（默认沿用当前RUBY API，可重选模型）' : '已停用独立导演API，导演跟随RUBY分析API');
+        window.toastr?.success?.(t(enabled ? '已启用独立导演API（默认沿用当前RUBY API，可重选模型）' : '已停用独立导演API，导演跟随RUBY分析API'));
     });
     on($('ra_dir_api_url'), 'change', () => {
         config.saveDirectorApiConfig({ url: $('ra_dir_api_url').value.trim() });
@@ -1711,7 +1711,7 @@ function wireJailbreakControls() {
             });
             window.toastr?.success?.(`破限配置已导入（${count} 条，全局生效）`);
         } catch (err) {
-            window.toastr?.error?.('导入失败: ' + err.message);
+            window.toastr?.error?.((t('导入失败: ') || '导入失败: ') + err.message);
         } finally {
             e.target.value = '';
         }
@@ -3412,16 +3412,17 @@ function wirePresetIoControls() {
             const preset = config.getActivePreset(data);
             const entries = [];
             for (const ref of preset.referencePool || []) {
-                if (ref.entryKey) entries.push({ key: ref.entryKey, label: ref.label || ref.varName, type: '参考' });
+                if (ref.entryKey) entries.push({ key: ref.entryKey, label: ref.label || ref.varName, type: t('参考') });
             }
             for (const task of preset.tasks || []) {
-                if (task.promptKey) entries.push({ key: task.promptKey, label: `${task.displayName || `任务#${task.id}`}提示词`, type: '提示词' });
-                if (task.outputKey) entries.push({ key: task.outputKey, label: `${task.displayName || `任务#${task.id}`}输出`, type: '输出' });
+                const taskName = task.displayName || `${t('任务')}#${task.id}`;
+                if (task.promptKey) entries.push({ key: task.promptKey, label: taskName, type: t('提示词') });
+                if (task.outputKey) entries.push({ key: task.outputKey, label: taskName, type: t('输出'), isOutput: true });
             }
 
             if (entries.length === 0) {
                 resultEl.style.display = 'block';
-                resultEl.innerHTML = '<span class="status-warn">当前方案没有配置任何条目依赖</span>';
+                resultEl.innerHTML = `<span class="status-warn">${h(t('当前方案没有配置任何条目依赖'))}</span>`;
                 return;
             }
 
@@ -3429,7 +3430,7 @@ function wirePresetIoControls() {
             const chatBook = await worldbook.getChatBookName();
             if (!charBook) {
                 resultEl.style.display = 'block';
-                resultEl.innerHTML = '<span class="status-err">未找到角色世界书</span>';
+                resultEl.innerHTML = `<span class="status-err">${h(t('未找到角色世界书'))}</span>`;
                 return;
             }
 
@@ -3440,16 +3441,16 @@ function wirePresetIoControls() {
                     found = await worldbook.entryExists(charBook, e.key);
                     if (!found && chatBook) found = await worldbook.entryExists(chatBook, e.key);
                 } catch { /* treat as missing */ }
-                const isOutput = e.type === '输出';
+                const isOutput = !!e.isOutput;
                 const cls = found ? 'status-ok' : (isOutput ? 'status-warn' : 'status-err');
-                const mark = found ? '✓' : (isOutput ? '⚠（将在分析时自动创建）' : '✕ 缺失');
+                const mark = found ? '✓' : (isOutput ? `⚠ (${t('将在分析时自动创建')})` : `✕ ${t('缺失')}`);
                 lines.push(`<span class="${cls}">${mark} [${e.type}] ${h(e.label)}</span>`);
             }
             resultEl.style.display = 'block';
             resultEl.innerHTML = lines.join('<br>');
         } catch (err) {
             resultEl.style.display = 'block';
-            resultEl.innerHTML = `<span class="status-err">校验失败：${h(err.message)}</span>`;
+            resultEl.innerHTML = `<span class="status-err">${h(t('校验失败：'))}${h(err.message)}</span>`;
         }
     });
 }
