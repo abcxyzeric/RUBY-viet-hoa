@@ -1057,16 +1057,17 @@ function renderManualButtons(data, layer) {
     }
 
     const buttons = [];
+    const isVi = getLang() === 'vi';
     if (preset.startupTask?.enabled && scheduler.taskMatchesCharacter(preset.startupTask, identity)) {
-        buttons.push(`<button class="btn green" data-run="startup">${h(preset.startupTask.displayName || '开局分析')}</button>`);
+        buttons.push(`<button class="btn green" data-run="startup">${h(preset.startupTask.displayName || (isVi ? 'Phân tích mở đầu' : '开局分析'))}</button>`);
     }
     for (const task of preset.tasks || []) {
         if (task.enabled && scheduler.taskMatchesCharacter(task, identity)) {
-            buttons.push(`<button class="btn green" data-run="task" data-id="${task.id}">${h(task.displayName || `任务#${task.id}`)}</button>`);
+            buttons.push(`<button class="btn green" data-run="task" data-id="${task.id}">${h(task.displayName || (isVi ? `Nhiệm vụ #${task.id}` : `任务#${task.id}`))}</button>`);
         }
     }
     if (buttons.length > 1) {
-        buttons.push(`<button class="btn blue" data-run="all">${t('▶ 全部执行')}</button>`);
+        buttons.push(`<button class="btn blue" data-run="all">${isVi ? '▶ Thực thi toàn bộ' : '▶ 全部执行'}</button>`);
     }
 
     el.innerHTML = buttons.join('') || `<span style="color:#1a1a1a;font-size:14px;">${t('暂无启用的任务')}</span>`;
@@ -1115,14 +1116,15 @@ function renderSchedule(data, layer) {
         return;
     }
 
+    const isVi = getLang() === 'vi';
     if (preset.startupTask?.enabled && scheduler.taskMatchesCharacter(preset.startupTask, identity)) {
         const positions = scheduler.startupPositions(preset.startupTask).join(',');
-        lines.push(`<div>📌 位置<strong>${positions}</strong> → ${h(preset.startupTask.displayName || '开局分析')}</div>`);
+        lines.push(`<div>📌 ${isVi ? 'Vị trí ' : '位置'}<strong>${positions}</strong> → ${h(preset.startupTask.displayName || (isVi ? 'Phân tích mở đầu' : '开局分析'))}</div>`);
     }
     const enabled = (preset.tasks || []).filter((t) => t.enabled && scheduler.taskMatchesCharacter(t, identity));
     enabled.sort((a, b) => (activePositionsOf(a)[0] || 0) - (activePositionsOf(b)[0] || 0));
     for (const task of enabled) {
-        lines.push(`<div>📌 位置<strong>${activePositionsOf(task).join(',') || '?'}</strong> → ${h(task.displayName || `任务#${task.id}`)}</div>`);
+        lines.push(`<div>📌 ${isVi ? 'Vị trí ' : '位置'}<strong>${activePositionsOf(task).join(',') || '?'}</strong> → ${h(task.displayName || (isVi ? `Nhiệm vụ #${task.id}` : `任务#${task.id}`))}</div>`);
     }
     el.innerHTML = lines.length ? lines.join('') : `<span style="color:#1a1a1a;">${t('暂无任务配置')}</span>`;
     translateDom(el);
@@ -1227,7 +1229,8 @@ function renderPresetDetail(data, presetId) {
         .sort((a, b) => (activePositionsOf(a)[0] || 0) - (activePositionsOf(b)[0] || 0));
     let html = `<div style="font-weight:700;font-size:15px;margin-bottom:10px;">📋 ${h(t(preset.name || '默认方案'))}</div>`;
     for (const task of enabled) {
-        html += `<div style="padding:6px 0;border-bottom:1px dashed #ddd;">📌 位置${activePositionsOf(task).join(',') || '?'} → ${h(task.displayName || `任务#${task.id}`)}</div>`;
+        const isVi = getLang() === 'vi';
+        html += `<div style="padding:6px 0;border-bottom:1px dashed #ddd;">📌 ${isVi ? 'Vị trí ' : '位置'}${activePositionsOf(task).join(',') || '?'} → ${h(task.displayName || (isVi ? `Nhiệm vụ #${task.id}` : `任务#${task.id}`))}</div>`;
     }
     if (enabled.length === 0) html += `<div style="color:#666;padding:10px 0;">${t('暂无任务配置')}</div>`;
     el.innerHTML = html;
@@ -1799,14 +1802,17 @@ function renderSummaryProviders(data) {
     el.innerHTML = SUMMARY_PROVIDERS.map((p) => {
         const isOn = enabled === p.id;
         let statusHtml = '';
+        const isVi = getLang() === 'vi';
         if (p.id === 'littlewhitebox') {
             const lwb = getLittleWhiteBoxSummary();
             if (lwb) {
                 const c = ctx();
                 const boundaryOrdinal = ordinalForIndex(c?.chat || [], lwb.boundary);
                 const totalFloors = countAiReplies(c?.chat || []);
-                statusHtml = `<div style="font-size:12px;color:#666;margin-top:8px;">
-                    ${t('✅ 检测到总结数据：已总结至第')} <strong>${boundaryOrdinal}</strong> ${t('楼（共')}${totalFloors}${t('楼）·')} ${lwb.facts.length} ${t('条人物事实 ·')} ${lwb.events.length} ${t('个事件 ·')} ${lwb.characters.length} ${t('位主要人物')}
+                statusHtml = isVi ? `<div style="font-size:12px;color:#666;margin-top:8px;">
+                    ✅ Phát hiện dữ liệu tóm tắt: Đã tóm tắt đến lầu <strong>${boundaryOrdinal}</strong> (tổng ${totalFloors} lầu) · ${lwb.facts.length} sự thật nhân vật · ${lwb.events.length} sự kiện · ${lwb.characters.length} nhân vật chính
+                </div>` : `<div style="font-size:12px;color:#666;margin-top:8px;">
+                    ✅ 检测到总结数据：已总结至第 <strong>${boundaryOrdinal}</strong> 楼（共${totalFloors}楼）· ${lwb.facts.length} 条人物事实 · ${lwb.events.length} 个事件 · ${lwb.characters.length} 位主要人物
                 </div>`;
             } else {
                 statusHtml = `<div style="font-size:12px;color:#8B4513;margin-top:8px;">
@@ -1819,8 +1825,10 @@ function renderSummaryProviders(data) {
                 const c = ctx();
                 const boundaryOrdinal = ordinalForIndex(c?.chat || [], boundaryIdx);
                 const totalFloors = countAiReplies(c?.chat || []);
-                statusHtml = `<div style="font-size:12px;color:#666;margin-top:8px;">
-                    ${t('✅ 检测到数据库活动：表格已更新至第')} <strong>${boundaryOrdinal}</strong> ${t('楼（共')}${totalFloors}${t('楼）。总结表/人物/大纲条目将在分析时从角色与聊天世界书读取。')}
+                statusHtml = isVi ? `<div style="font-size:12px;color:#666;margin-top:8px;">
+                    ✅ Phát hiện hoạt động cơ sở dữ liệu: Bảng đã cập nhật đến lầu <strong>${boundaryOrdinal}</strong> (tổng ${totalFloors} lầu). Các mục bảng tóm tắt/nhân vật/đại cương sẽ được đọc từ Sách thế giới của nhân vật và cuộc trò chuyện khi phân tích.
+                </div>` : `<div style="font-size:12px;color:#666;margin-top:8px;">
+                    ✅ 检测到数据库活动：表格已更新至第 <strong>${boundaryOrdinal}</strong> 楼（共${totalFloors}楼）。总结表/人物/大纲条目将在分析时从角色与聊天世界书读取。
                 </div>`;
             } else {
                 statusHtml = `<div style="font-size:12px;color:#8B4513;margin-top:8px;">
@@ -1833,8 +1841,10 @@ function renderSummaryProviders(data) {
                 const c = ctx();
                 const boundaryOrdinal = ordinalForIndex(c?.chat || [], yz.boundary);
                 const totalFloors = countAiReplies(c?.chat || []);
-                statusHtml = `<div style="font-size:12px;color:#666;margin-top:8px;">
-                    ${t('✅ 检测到记忆总结：')}${yz.records} ${t('条总结记录，覆盖至第')} <strong>${boundaryOrdinal}</strong> ${t('楼（共')}${totalFloors}${t('楼）。总结内容将在分析时从聊天元数据读取。')}
+                statusHtml = isVi ? `<div style="font-size:12px;color:#666;margin-top:8px;">
+                    ✅ Phát hiện tóm tắt ký ức: ${yz.records} bản ghi tóm tắt, bao phủ đến lầu <strong>${boundaryOrdinal}</strong> (tổng ${totalFloors} lầu). Nội dung tóm tắt sẽ được đọc từ metadata cuộc trò chuyện khi phân tích.
+                </div>` : `<div style="font-size:12px;color:#666;margin-top:8px;">
+                    ✅ 检测到记忆总结：${yz.records} 条总结记录，覆盖至第 <strong>${boundaryOrdinal}</strong> 楼（共${totalFloors}楼）。总结内容将在分析时从聊天元数据读取。
                 </div>`;
             } else {
                 statusHtml = `<div style="font-size:12px;color:#8B4513;margin-top:8px;">
@@ -1847,8 +1857,10 @@ function renderSummaryProviders(data) {
                 const c = ctx();
                 const boundaryOrdinal = ordinalForIndex(c?.chat || [], bbb.boundary);
                 const totalFloors = countAiReplies(c?.chat || []);
-                statusHtml = `<div style="font-size:12px;color:#666;margin-top:8px;">
-                    ${t('✅ 检测到记忆快照：修订版本')} ${bbb.revision}，${t('覆盖至第')} <strong>${boundaryOrdinal}</strong> ${t('楼（共')}${totalFloors}${t('楼）。快照内容将在分析时从柏宝书全局API读取。')}
+                statusHtml = isVi ? `<div style="font-size:12px;color:#666;margin-top:8px;">
+                    ✅ Phát hiện snapshot ký ức: Bản sửa đổi ${bbb.revision}, bao phủ đến lầu <strong>${boundaryOrdinal}</strong> (tổng ${totalFloors} lầu). Nội dung snapshot sẽ được đọc từ API toàn cục của Bách Bảo Thư khi phân tích.
+                </div>` : `<div style="font-size:12px;color:#666;margin-top:8px;">
+                    ✅ 检测到记忆快照：修订版本 ${bbb.revision}，覆盖至第 <strong>${boundaryOrdinal}</strong> 楼（共${totalFloors}楼）。快照内容将在分析时从柏宝书全局API读取。
                 </div>`;
             } else {
                 statusHtml = `<div style="font-size:12px;color:#8B4513;margin-top:8px;">
@@ -2503,42 +2515,52 @@ function renderCycleInfo() {
         }
     }
 
+    const isVi = getLang() === 'vi';
     let trackHtml = '<div class="cycle-track"><div class="cycle-axis"></div>';
     allEvents.forEach((event) => {
         const leftPercent = 10 + (event.position / maxPosition) * 80;
+        const posText = isVi ? `Vị trí ${event.positionsDisplay}` : `位置${event.positionsDisplay}`;
         trackHtml += `
             <div class="cycle-marker ${event._level || 'l1'}" style="left:${leftPercent}%;">
                 <span class="marker-line task"></span>
                 <span class="marker-dot task"></span>
-                <span class="marker-floor">位置${event.positionsDisplay}</span>
+                <span class="marker-floor">${posText}</span>
                 <span class="marker-label">${h(event.name)}</span>
             </div>`;
     });
+    const endFloorText = isVi ? 'Kết thúc chu kỳ' : '周期结束';
+    const endLabelText = isVi ? '🔁 Quay về vị trí 1' : '🔁 回到位置1';
     trackHtml += `
         <div class="cycle-marker l1" style="left:96%;opacity:0.65;">
             <span class="marker-line" style="background:#8a8a8a;box-shadow:none;"></span>
             <span class="marker-dot end"></span>
-            <span class="marker-floor">周期结束</span>
-            <span class="marker-label" style="font-size:10px;color:#666;">🔁 回到位置1</span>
+            <span class="marker-floor">${endFloorText}</span>
+            <span class="marker-label" style="font-size:10px;color:#666;">${endLabelText}</span>
         </div>`;
     trackHtml += '</div>';
     timeline.innerHTML = trackHtml;
 
-    let listHtml = '<div style="font-size:12px;font-weight:600;color:#666;margin-bottom:8px;">📋 任务执行顺序（按周期位置）：</div>';
+    const listHeader = isVi ? '📋 Thứ tự thực thi nhiệm vụ (theo vị trí chu kỳ):' : '📋 任务执行顺序（按周期位置）：';
+    let listHtml = `<div style="font-size:12px;font-weight:600;color:#666;margin-bottom:8px;">${listHeader}</div>`;
     allEvents.forEach((event, i) => {
         const isCurrent = event.allPositions.includes(currentPosition);
+        const posBadge = isVi ? `Vị trí ${event.positionsDisplay}` : `位置${event.positionsDisplay}`;
+        const curMarker = isCurrent ? (isVi ? ' 👈 Hiện tại' : ' 👈 当前') : '';
         listHtml += `
             <div class="cycle-task-item" style="${isCurrent ? 'background:#e3f2fd;border-color:#2196f3;' : ''}">
-                <span class="floor-badge" style="${isCurrent ? 'box-shadow:0 0 0 2px #2196f3;' : ''}">位置${event.positionsDisplay}</span>
-                <span class="task-name">${i + 1}. ${h(event.name)}${isCurrent ? ' 👈 当前' : ''}</span>
+                <span class="floor-badge" style="${isCurrent ? 'box-shadow:0 0 0 2px #2196f3;' : ''}">${posBadge}</span>
+                <span class="task-name">${i + 1}. ${h(event.name)}${curMarker}</span>
                 <span class="output-var">{{task_${event.id}_Output}}</span>
             </div>`;
     });
+    const afterPosBadge = isVi ? `Sau vị trí ${maxPosition}` : `位置${maxPosition}后`;
+    const newCycleText = isVi ? '🔄 Chu kỳ mới bắt đầu, quay về vị trí 1' : '🔄 新周期开始，回到位置1';
+    const loopText = isVi ? 'Vòng lặp chu kỳ' : '周期循环';
     listHtml += `
         <div class="cycle-task-item" style="background:#f0f0e8;border-style:dashed;">
-            <span class="floor-badge" style="background:#666;">位置${maxPosition}后</span>
-            <span class="task-name" style="color:#666;">🔄 新周期开始，回到位置1</span>
-            <span class="output-var" style="color:#888;">周期循环</span>
+            <span class="floor-badge" style="background:#666;">${afterPosBadge}</span>
+            <span class="task-name" style="color:#666;">${newCycleText}</span>
+            <span class="output-var" style="color:#888;">${loopText}</span>
         </div>`;
     taskList.innerHTML = listHtml;
     translateDom(timeline);
@@ -2547,18 +2569,28 @@ function renderCycleInfo() {
 
 /** 导演计划图表构建（创作者时间线与玩家任务时间表共用）：🎬起点→任务点位（已触发✅）→▶当前→🎬下次导演 */
 function buildDirectorCycleParts(ds, currentCounter) {
+    const isVi = getLang() === 'vi';
     const anchor = ds.anchor || 0;
     const nextFloor = ds.nextDirectorFloor || (anchor + ds.cycleLength);
     const span = Math.max(1, nextFloor - anchor);
     const nameOf = (taskId) => {
         const item = ui.tasks.find((x) => x.id === taskId);
-        return item ? (item.displayName || `${t('任务')}#${item.id}`) : `${t('任务')}#${taskId}`;
+        return item ? (item.displayName || (isVi ? `Nhiệm vụ #${item.id}` : `任务#${item.id}`)) : (isVi ? `Nhiệm vụ #${taskId}` : `任务#${taskId}`);
     };
-    const badge = ds.aggressive ? `${t('导演间隔：由导演自决')}（${t('下次第')}${nextFloor}${t('楼')}）` : `${t('周期长度：')}${ds.cycleLength} ${t('次AI回复')}`;
-    const counter = `${t('AI回复：')}${currentCounter}（${t('偏移')}${ds.offset}）`;
+    const badge = ds.aggressive
+        ? (isVi ? `Khoảng cách Đạo diễn: Do Đạo diễn tự quyết (Lần tới lầu ${nextFloor})` : `导演间隔：由导演自决（下次第${nextFloor}楼）`)
+        : (isVi ? `Độ dài chu kỳ: ${ds.cycleLength} lần AI phản hồi` : `周期长度：${ds.cycleLength} 次AI回复`);
+    const counter = isVi
+        ? `AI phản hồi: ${currentCounter} (Độ lệch ${ds.offset})`
+        : `AI回复：${currentCounter}（偏移${ds.offset}）`;
 
     if (!ds.planReady) {
-        return { waiting: true, waitNote: `${t('等待导演排期')}（${t('下次导演：第')}${nextFloor}${t('楼')}）`, badge, counter };
+        return {
+            waiting: true,
+            waitNote: isVi ? `Đang chờ Đạo diễn lên lịch (Lần Đạo diễn tới: Lầu ${nextFloor})` : `等待导演排期（下次导演：第${nextFloor}楼）`,
+            badge,
+            counter
+        };
     }
 
     const events = (ds.planAssignments || [])
@@ -2578,58 +2610,75 @@ function buildDirectorCycleParts(ds, currentCounter) {
     }
 
     let trackHtml = '<div class="cycle-track"><div class="cycle-axis"></div>';
+    const anchorFloorText = isVi ? `Lầu ${anchor}` : `第${anchor}楼`;
+    const directorLabel = isVi ? '🎬 Đạo diễn' : '🎬 导演';
     trackHtml += `
         <div class="cycle-marker l1" style="left:10%;">
             <span class="marker-line" style="background:#C41E3A;"></span>
             <span class="marker-dot director"></span>
-            <span class="marker-floor">${t('第')}${anchor}${t('楼')}</span>
-            <span class="marker-label" style="color:#C41E3A;font-weight:600;">${t('🎬 导演')}</span>
+            <span class="marker-floor">${anchorFloorText}</span>
+            <span class="marker-label" style="color:#C41E3A;font-weight:600;">${directorLabel}</span>
         </div>`;
     events.forEach((ev) => {
         const left = 10 + ((ev.floor - anchor) / span) * 80;
         const done = ev.floor <= currentCounter;
+        const evFloorText = isVi ? `Lầu ${ev.floor}${done ? ' ✅' : ''}` : `第${ev.floor}楼${done ? ' ✅' : ''}`;
         trackHtml += `
             <div class="cycle-marker ${ev._level}" style="left:${left}%;${done ? 'opacity:0.75;' : ''}">
                 <span class="marker-line task"></span>
                 <span class="marker-dot task"></span>
-                <span class="marker-floor">${t('第')}${ev.floor}${t('楼')}${done ? ' ✅' : ''}</span>
+                <span class="marker-floor">${evFloorText}</span>
                 <span class="marker-label">${h(ev.name)}</span>
             </div>`;
     });
     if (currentCounter > anchor && currentCounter < nextFloor) {
         const left = 10 + ((currentCounter - anchor) / span) * 80;
+        const curFloorText = isVi ? `▶ Lầu ${currentCounter}` : `▶ 第${currentCounter}楼`;
         trackHtml += `
         <div class="cycle-marker l1" style="left:${left}%;">
             <span class="marker-line" style="background:#2196f3;"></span>
             <span class="marker-dot" style="background:#2196f3;"></span>
-            <span class="marker-floor" style="color:#2196f3;">${t('当前')}</span>
-            <span class="marker-label" style="font-size:10px;color:#2196f3;">▶ ${t('第')}${currentCounter}${t('楼')}</span>
+            <span class="marker-floor" style="color:#2196f3;">${isVi ? 'Hiện tại' : '当前'}</span>
+            <span class="marker-label" style="font-size:10px;color:#2196f3;">${curFloorText}</span>
         </div>`;
     }
+    const nextFloorText = isVi ? `Lầu ${nextFloor}` : `第${nextFloor}楼`;
+    const nextDirLabel = isVi
+        ? `🎬 Lần Đạo diễn tới${ds.aggressive ? ' (Tự quyết)' : ''}`
+        : `🎬 下次导演${ds.aggressive ? '（导演自决）' : ''}`;
     trackHtml += `
         <div class="cycle-marker l1" style="left:96%;opacity:0.85;">
             <span class="marker-line" style="background:#C41E3A;box-shadow:none;"></span>
             <span class="marker-dot director"></span>
-            <span class="marker-floor">${t('第')}${nextFloor}${t('楼')}</span>
-            <span class="marker-label" style="font-size:10px;color:#C41E3A;">🎬 ${t('下次导演')}${ds.aggressive ? t('（导演自决）') : ''}</span>
+            <span class="marker-floor">${nextFloorText}</span>
+            <span class="marker-label" style="font-size:10px;color:#C41E3A;">${nextDirLabel}</span>
         </div>`;
     trackHtml += '</div>';
 
-    let listHtml = `<div style="font-size:12px;font-weight:600;color:#666;margin-bottom:8px;">${t('📋 导演计划')}（${t('第')}${ds.runSeq}${t('次执导')}${ds.aggressive ? `·${t('激进')}` : ''}，${t('按楼层')}）：</div>`;
+    let listHtml = isVi
+        ? `<div style="font-size:12px;font-weight:600;color:#666;margin-bottom:8px;">📋 Kế hoạch Đạo diễn (Chỉ đạo lần thứ ${ds.runSeq}${ds.aggressive ? ' · Tích cực' : ''}, theo số lầu):</div>`
+        : `<div style="font-size:12px;font-weight:600;color:#666;margin-bottom:8px;">📋 导演计划（第${ds.runSeq}次执导${ds.aggressive ? '·激进' : ''}，按楼层）：</div>`;
     events.forEach((ev, i) => {
         const done = ev.floor <= currentCounter;
+        const floorBadge = isVi ? `Lầu ${ev.floor}` : `第${ev.floor}楼`;
+        const trig = isVi ? ' ✅ Đã kích hoạt' : ' ✅ 已触发';
         listHtml += `
             <div class="cycle-task-item" style="${done ? 'background:#e8f5e9;' : ''}">
-                <span class="floor-badge" style="${done ? 'background:#2C5530;' : ''}">${t('第')}${ev.floor}${t('楼')}</span>
-                <span class="task-name">${i + 1}. ${h(ev.name)}${done ? ` ✅ ${t('已触发')}` : ''}</span>
+                <span class="floor-badge" style="${done ? 'background:#2C5530;' : ''}">${floorBadge}</span>
+                <span class="task-name">${i + 1}. ${h(ev.name)}${done ? trig : ''}</span>
                 <span class="output-var">{{task_${ev.taskId}_Output}}</span>
             </div>`;
     });
+    const nextBadge = isVi ? `Lầu ${nextFloor}` : `第${nextFloor}楼`;
+    const nextTaskName = isVi
+        ? `🎬 Lần Đạo diễn tới${ds.aggressive ? ' (Khoảng cách do Đạo diễn tự quyết)' : ` (Chu kỳ ${ds.cycleLength})`}`
+        : `🎬 下次导演${ds.aggressive ? '（间隔由导演自决）' : `（周期${ds.cycleLength}）`}`;
+    const nextOutputVar = isVi ? 'Lên lịch Đạo diễn' : '导演排期';
     listHtml += `
         <div class="cycle-task-item" style="background:#fdf3f4;border-style:dashed;">
-            <span class="floor-badge" style="background:#C41E3A;">${t('第')}${nextFloor}${t('楼')}</span>
-            <span class="task-name" style="color:#C41E3A;">🎬 ${t('下次导演')}${ds.aggressive ? t('（间隔由导演自决）') : `（${t('周期')}${ds.cycleLength}）`}</span>
-            <span class="output-var" style="color:#888;">${t('导演排期')}</span>
+            <span class="floor-badge" style="background:#C41E3A;">${nextBadge}</span>
+            <span class="task-name" style="color:#C41E3A;">${nextTaskName}</span>
+            <span class="output-var" style="color:#888;">${nextOutputVar}</span>
         </div>`;
 
     return { waiting: false, badge, counter, track: trackHtml, list: listHtml };

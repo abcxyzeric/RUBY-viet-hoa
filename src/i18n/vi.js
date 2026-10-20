@@ -776,6 +776,16 @@ export const VI_DICT = {
     "已启用总结接口：": "Đã bật cổng tóm tắt: ",
     "（周期与书签计算不受影响）": " (Không ảnh hưởng đến tính toán chu kỳ và bookmark)",
     "已停用总结接口，恢复纯原文模式": "Đã tắt cổng tóm tắt, quay về chế độ văn bản gốc thuần túy",
+        "全部执行": "Thực thi toàn bộ",
+    "▶ 全部执行": "▶ Thực thi toàn bộ",
+    "开局分析": "Phân tích mở đầu",
+    "周期结束": "Kết thúc chu kỳ",
+    "回到位置1": "Quay về vị trí 1",
+    "新周期开始，回到位置1": "Chu kỳ mới bắt đầu, quay về vị trí 1",
+    "周期循环": "Vòng lặp chu kỳ",
+    "导演排期": "Lên lịch Đạo diễn",
+    "按周期位置": "theo vị trí chu kỳ",
+    "📋 任务执行顺序（按周期位置）：": "📋 Thứ tự thực thi nhiệm vụ (theo vị trí chu kỳ):",
     "新周期": "Chu kỳ mới"
 };
 
@@ -861,6 +871,13 @@ export const VI_PATTERNS = [
  * Giúp dịch trọn vẹn từng câu, không bao giờ bị cắt vụn thành từng text node gây lai tạp ngôn ngữ.
  */
 export const VI_HTML = {
+    // Khối thông tin chu kỳ & cơ chế kích hoạt (Ảnh 4)
+    "💡 <strong>触发机制（事件驱动）</strong>：扩展在对话加载后自动进入后台监听，每条AI回复完成后由酒馆原生事件触发。<br>周期位置 = ((AI回复楼层 - 1) % 周期长度) + 1，纯函数现算，无需计数器变量。漏触发会自动累积补齐。":
+        "💡 <strong>Cơ chế kích hoạt (Hướng sự kiện)</strong>: Extension tự động chuyển sang chế độ lắng nghe chạy ngầm sau khi tải cuộc trò chuyện, mỗi phản hồi của AI hoàn thành sẽ kích hoạt sự kiện gốc của SillyTavern.<br>Vị trí chu kỳ = ((Lầu phản hồi AI - 1) % Độ dài chu kỳ) + 1, tính toán trực tiếp bằng hàm thuần túy, không cần biến đếm. Các lượt kích hoạt bị lỡ sẽ tự động tích lũy và bù đắp.",
+
+    "💡 <strong>周期说明</strong>：周期长度 = 最后一个任务的周期位置。周期结束后，计数继续增长但位置回到1。<br>📊 每个任务的输出变量可被后续任务引用（周期性分析）。<br>⚠️ 任务的\"周期位置\"表示在每个周期的第几次AI回复时触发（1-based）。<br>🔄 <strong>同位置多任务</strong>：多个任务在同一周期位置时，按顺序<u>分别发送API请求</u>独立执行，前面任务的输出可被后面任务引用。":
+        "💡 <strong>Giải thích chu kỳ</strong>: Độ dài chu kỳ = Vị trí chu kỳ của nhiệm vụ cuối cùng. Sau khi chu kỳ kết thúc, bộ đếm tiếp tục tăng nhưng vị trí quay lại 1.<br>📊 Biến kết quả của mỗi nhiệm vụ có thể được nhiệm vụ phía sau tham chiếu (phân tích định kỳ).<br>⚠️ \"Vị trí chu kỳ\" của nhiệm vụ biểu thị thời điểm kích hoạt ở lượt phản hồi AI thứ mấy trong mỗi chu kỳ (bắt đầu từ 1).<br>🔄 <strong>Nhiều nhiệm vụ cùng vị trí</strong>: Khi nhiều nhiệm vụ ở cùng một vị trí chu kỳ, chúng sẽ <u>lần lượt gửi yêu cầu API độc lập</u> theo thứ tự, kết quả của nhiệm vụ trước có thể được nhiệm vụ phía sau tham chiếu.",
+
     // Kênh API (Ảnh 1)
     "💡 <strong>主API</strong>：通过酒馆原生 <code>generateRaw</code> 走当前连接的模型，仅借用通道——<u>不注入预设的提示词</u>（主提示词/越狱/角色卡/聊天记录一概不进上下文），发送的只有 RUBY 自己组装的破限消息与任务提示词，与酒馆自身静默提示词同一机制；RUBY 生成参数会按官方事件钩子覆写到本次请求。<br> 💡 <strong>自定义端点</strong>：OpenAI 兼容接口（DeepSeek、OpenRouter、GLM 等），通过酒馆官方 <code>ChatCompletionService</code> 请求服务发出。地址填到版本段即可（如 <code>/v1</code>、<code>/beta</code>），由酒馆服务端拼接 <code>/chat/completions</code> 并转发。<br> 🔒 两条通道均为酒馆原生请求形态、异步后台执行；密钥只保存在本机扩展设置中，不进入角色卡、世界书或配置模板。":
         "💡 <strong>API chính</strong>: Thông qua <code>generateRaw</code> gốc của SillyTavern kết nối đến mô hình hiện tại, chỉ mượn kênh truyền——<u>không chèn prompt định sẵn</u> (Prompt chính/Jailbreak/Thẻ nhân vật/Lịch sử trò chuyện hoàn toàn không đưa vào ngữ cảnh), chỉ gửi tin nhắn Jailbreak do RUBY tự lắp ráp cùng prompt nhiệm vụ, cùng cơ chế với prompt im lặng của SillyTavern; tham số sinh văn bản của RUBY sẽ ghi đè vào yêu cầu lần này theo hook sự kiện chính thức.<br> 💡 <strong>Endpoint tùy chỉnh</strong>: Cổng tương thích OpenAI (DeepSeek, OpenRouter, GLM...), gửi qua dịch vụ yêu cầu <code>ChatCompletionService</code> chính thức của SillyTavern. Địa chỉ chỉ cần điền đến đoạn phiên bản (như <code>/v1</code>, <code>/beta</code>), do máy chủ SillyTavern ghép thêm <code>/chat/completions</code> và chuyển tiếp.<br> 🔒 Cả hai kênh đều ở dạng yêu cầu gốc của SillyTavern, thực thi ngầm bất đồng bộ; API Key chỉ lưu trong cài đặt extension máy cục bộ, không đưa vào Thẻ nhân vật, Sách thế giới hay mẫu cấu hình.",
