@@ -760,6 +760,22 @@ export const VI_DICT = {
     "⚠️ 未打开角色卡：导演配置保存在全局层，不会随角色卡导出": "⚠️ Chưa mở thẻ nhân vật: Cấu hình Đạo diễn được lưu ở tầng toàn cục, sẽ không xuất kèm theo thẻ nhân vật",
     "⚠️ 未打开角色卡：任务将暂存于全局层，不会随角色卡导出。建议打开角色卡后再配置": "⚠️ Chưa mở thẻ nhân vật: Nhiệm vụ sẽ tạm lưu ở tầng toàn cục, không xuất kèm theo thẻ nhân vật. Khuyến nghị mở thẻ nhân vật trước khi cấu hình",
     "⚠️ 未打开角色卡：配置保存在全局层，不会随角色卡导出": "⚠️ Chưa mở thẻ nhân vật: Cấu hình được lưu ở tầng toàn cục, sẽ không xuất kèm theo thẻ nhân vật",
+        "任务简介（留空自动从提示词条目提取）": "Mô tả ngắn nhiệm vụ (để trống tự động trích xuất từ mục prompt)",
+    "预览导演将收到的任务简介": "Xem trước mô tả ngắn mà Đạo diễn sẽ nhận được",
+    "👁 预览简介": "👁 Xem trước mô tả",
+    "预览简介": "Xem trước mô tả",
+    "立即执行导演排期": "Thực thi lên lịch Đạo diễn ngay",
+    "🎬 立即执行导演排期": "🎬 Thực thi lên lịch Đạo diễn ngay",
+    "简介预览": "Xem trước mô tả",
+    "✍️ 手动简介（优先使用）": "✍️ Mô tả thủ công (ưu tiên sử dụng)",
+    "🔍 自动提取简介": "🔍 Tự động trích xuất mô tả",
+    "⚠️ 未捕捉到简介": "⚠️ Không bắt được mô tả",
+    "提示词条目内容为空，或不含「该任务是为了/任务说明」等标记——导演将只收到任务名称。": "Nội dung mục prompt trống hoặc không chứa các dấu hiệu như \"nhiệm vụ này nhằm/mô tả nhiệm vụ\" — Đạo diễn sẽ chỉ nhận được tên nhiệm vụ.",
+    "该任务未配置提示词条目——导演将只收到任务名称。": "Nhiệm vụ này chưa cấu hình mục prompt — Đạo diễn sẽ chỉ nhận được tên nhiệm vụ.",
+    "⚠️ 提取失败": "⚠️ Trích xuất thất bại",
+    "已启用总结接口：": "Đã bật cổng tóm tắt: ",
+    "（周期与书签计算不受影响）": " (Không ảnh hưởng đến tính toán chu kỳ và bookmark)",
+    "已停用总结接口，恢复纯原文模式": "Đã tắt cổng tóm tắt, quay về chế độ văn bản gốc thuần túy",
     "新周期": "Chu kỳ mới"
 };
 

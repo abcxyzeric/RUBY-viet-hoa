@@ -10,7 +10,7 @@ import { countAiReplies, getLittleWhiteBoxSummary, getShujukuBoundary, getYuzuki
 import { isDarkMode } from './settings.js';
 import { BUILTIN_REFERENCES, findShadowingKey } from './builtin-refs.js';
 import * as director from './director.js';
-import { t, translateDom, setupObserver, injectLanguageSwitcher } from './i18n/index.js';
+import { t, getLang, translateDom, setupObserver, injectLanguageSwitcher } from './i18n/index.js';
 
 const PANEL_ID = 'ra_panel';
 const UI_STATE_KEY = 'ruby_analyzer_ui_state';
@@ -1882,7 +1882,7 @@ function renderSummaryProviders(data) {
     if (yuzukiPlotToggle) {
         on(yuzukiPlotToggle, 'change', (e) => {
             withConfigData((d) => { d.yuzukiIncludePlot = e.target.checked; });
-            window.toastr?.success?.(e.target.checked ? '剧情摘要时间线已并入总结素材' : '总结素材仅使用记忆总结表');
+            window.toastr?.success?.(e.target.checked ? t('剧情摘要时间线已并入总结素材') : t('总结素材仅使用记忆总结表'));
         });
     }
 
@@ -1893,7 +1893,12 @@ function renderSummaryProviders(data) {
             withConfigData((d) => { d.summaryProvider = next; });
             reinitEngineIfNeeded();
             refreshAll();
-            window.toastr?.success?.(next ? `已启用总结接口：${p.name}（周期与书签计算不受影响）` : '已停用总结接口，恢复纯原文模式');
+            const provName = t(p.name);
+            const isVi = getLang() === 'vi';
+            const msg = next
+                ? (isVi ? `Đã bật cổng tóm tắt: ${provName} (Không ảnh hưởng đến tính toán chu kỳ và bookmark)` : `已启用总结接口：${p.name}（周期与书签计算不受影响）`)
+                : (isVi ? 'Đã tắt cổng tóm tắt, quay về chế độ văn bản gốc thuần túy' : '已停用总结接口，恢复纯原文模式');
+            window.toastr?.success?.(msg);
         });
     }
 }
@@ -2712,14 +2717,14 @@ function renderDirectorRefs(dir) {
 }
 
 function renderDirectorTasks(tasks) {
-    return tasks.map((t) => `
+    return tasks.map((task) => `
         <div class="director-task-row" style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;">
-            <span style="min-width:110px;font-weight:600;font-size:13px;">#${t.id} ${h(t.displayName || '')}</span>
-            <label style="font-size:12px;color:#666;display:flex;align-items:center;gap:4px;">优先级
-                <input type="number" class="director-priority w80" data-id="${t.id}" value="${Number(t.directorPriority) || 0}" min="0" max="99">
+            <span style="min-width:110px;font-weight:600;font-size:13px;">#${task.id} ${h(task.displayName || '')}</span>
+            <label style="font-size:12px;color:#666;display:flex;align-items:center;gap:4px;">${t('优先级')}
+                <input type="number" class="director-priority w80" data-id="${task.id}" value="${Number(task.directorPriority) || 0}" min="0" max="99">
             </label>
-            <input type="text" class="director-summary w250" data-id="${t.id}" value="${h(t.directorSummary || '')}" placeholder="任务简介（留空自动从提示词条目提取）">
-            <button type="button" class="btn outline small director-brief-preview" data-id="${t.id}" title="预览导演将收到的任务简介">👁 预览简介</button>
+            <input type="text" class="director-summary w250" data-id="${task.id}" value="${h(task.directorSummary || '')}" placeholder="${t('任务简介（留空自动从提示词条目提取）')}">
+            <button type="button" class="btn outline small director-brief-preview" data-id="${task.id}" title="${t('预览导演将收到的任务简介')}">${t('👁 预览简介')}</button>
         </div>
     `).join('');
 }
@@ -2728,22 +2733,39 @@ function updateDirectorStatus() {
     const el = $('ra_director_status');
     if (!el) return;
     const ds = engine.getEngineState()?.director;
+    const isVi = getLang() === 'vi';
     if (!ds?.enabled) {
-        el.innerHTML = '⚪ 导演周期未启用。勾选"启用导演周期"并保存后，导演将在下一条AI回复（周期位置1）自动排期。';
+        el.innerHTML = isVi
+            ? '⚪ Chưa bật chu kỳ Đạo diễn. Sau khi tích "Bật chu kỳ Đạo diễn" và lưu lại, Đạo diễn sẽ tự động lên lịch ở phản hồi AI tiếp theo (vị trí chu kỳ 1).'
+            : '⚪ 导演周期未启用。勾选"启用导演周期"并保存后，导演将在下一条AI回复（周期位置1）自动排期。';
         return;
     }
     const lines = [];
     if (ds.planReady) {
-        const planText = (ds.planAssignments || []).map((a) => `第${a.floor}楼→task${a.taskId}`).join('，');
-        lines.push(`✅ 第${ds.runSeq}次执导计划就绪（${ds.planCount}个任务）${planText ? `：${planText}` : ''}`);
+        const planText = (ds.planAssignments || []).map((a) => isVi ? `Lầu ${a.floor} → Nhiệm vụ #${a.taskId}` : `第${a.floor}楼→task${a.taskId}`).join('，');
+        lines.push(isVi
+            ? `✅ Kế hoạch chỉ đạo lần thứ ${ds.runSeq} đã sẵn sàng (${ds.planCount} nhiệm vụ)${planText ? `: ${planText}` : ''}`
+            : `✅ 第${ds.runSeq}次执导计划就绪（${ds.planCount}个任务）${planText ? `：${planText}` : ''}`);
     } else {
-        lines.push(`⚠️ 第${ds.runSeq}次执导暂无计划——等待导演运行${ds.lastRunOk === false ? '（上次运行失败，可手动重新执行）' : ''}`);
+        const failSuffix = ds.lastRunOk === false ? (isVi ? ' (Lần chạy trước thất bại, có thể thực thi lại thủ công)' : '（上次运行失败，可手动重新执行）') : '';
+        lines.push(isVi
+            ? `⚠️ Lần chỉ đạo thứ ${ds.runSeq} chưa có kế hoạch — Đang chờ Đạo diễn vận hành${failSuffix}`
+            : `⚠️ 第${ds.runSeq}次执导暂无计划——等待导演运行${failSuffix}`);
     }
-    lines.push(`当前：偏移${ds.offset}（自上次导演起的AI回复数）｜下次导演：第${ds.nextDirectorFloor}楼${ds.aggressive ? '（激进模式，间隔由导演自决）' : `（周期${ds.cycleLength}）`}｜已触发${ds.wokenCount || 0}｜本周期手动${ds.manualRuns || 0}次`);
-    lines.push(ds.apiOverride
-        ? `导演API：独立（model=${ds.apiOverride.model || '跟随模型'}｜url${ds.apiOverride.urlSet ? '已覆盖' : '跟随'}｜key${ds.apiOverride.keySet ? '已覆盖' : '跟随'}）`
-        : '导演API：跟随RUBY基础API（未勾选独立导演API）');
-    if (ds.lastRunOk === false && ds.lastRunReason) lines.push(`上次失败原因：${h(ds.lastRunReason)}`);
+    if (isVi) {
+        const nextMode = ds.aggressive ? '(Chế độ tích cực, khoảng cách do Đạo diễn tự quyết)' : `(Chu kỳ ${ds.cycleLength})`;
+        lines.push(`Hiện tại: Độ lệch ${ds.offset} (Số phản hồi AI tính từ lần Đạo diễn trước) | Lần Đạo diễn tới: Lầu ${ds.nextDirectorFloor} ${nextMode} | Đã kích hoạt: ${ds.wokenCount || 0} | Thủ công chu kỳ này: ${ds.manualRuns || 0} lần`);
+        lines.push(ds.apiOverride
+            ? `API Đạo diễn: Độc lập (model=${ds.apiOverride.model || 'Theo model chính'} | url: ${ds.apiOverride.urlSet ? 'Đã ghi đè' : 'Theo API chính'} | key: ${ds.apiOverride.keySet ? 'Đã ghi đè' : 'Theo API chính'})`
+            : 'API Đạo diễn: Dùng theo API RUBY cơ bản (Chưa tích chọn API Đạo diễn độc lập)');
+        if (ds.lastRunOk === false && ds.lastRunReason) lines.push(`Lý do thất bại lần trước: ${h(ds.lastRunReason)}`);
+    } else {
+        lines.push(`当前：偏移${ds.offset}（自上次导演起的AI回复数）｜下次导演：第${ds.nextDirectorFloor}楼${ds.aggressive ? '（激进模式，间隔由导演自决）' : `（周期${ds.cycleLength}）`}｜已触发${ds.wokenCount || 0}｜本周期手动${ds.manualRuns || 0}次`);
+        lines.push(ds.apiOverride
+            ? `导演API：独立（model=${ds.apiOverride.model || '跟随模型'}｜url${ds.apiOverride.urlSet ? '已覆盖' : '跟随'}｜key${ds.apiOverride.keySet ? '已覆盖' : '跟随'}）`
+            : '导演API：跟随RUBY基础API（未勾选独立导演API）');
+        if (ds.lastRunOk === false && ds.lastRunReason) lines.push(`上次失败原因：${h(ds.lastRunReason)}`);
+    }
     el.innerHTML = lines.join('<br>');
 }
 
@@ -2760,7 +2782,7 @@ function renderDirectorView() {
             <div class="form-body">
                 <div id="ra_director_status" class="status-box">加载中...</div>
                 <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
-                    <button id="ra_director_run" class="btn red">🎬 立即执行导演排期</button>
+                    <button id="ra_director_run" class="btn red">🎬 ${t('立即执行导演排期')}</button>
                 </div>
                 <div class="tip" style="margin-top:8px;">手动执行会让导演立即重新规划本周期（重读正文生成新调度表），不影响已保存的周期参数。</div>
             </div>
@@ -2916,7 +2938,7 @@ function wireDirectorViewInputs(container) {
         let title = '';
         let text = '';
         if (String(task.directorSummary || '').trim()) {
-            title = '✍️ 手动简介（优先使用）';
+            title = t('✍️ 手动简介（优先使用）');
             text = task.directorSummary;
         } else {
             try {
@@ -2925,16 +2947,16 @@ function wireDirectorViewInputs(container) {
                 const content = task.promptKey ? await worldbook.readEntry(charBook, chatBook, task.promptKey, true) : '';
                 const brief = director.extractTaskBrief(content);
                 if (brief) {
-                    title = '🔍 自动提取简介';
+                    title = t('🔍 自动提取简介');
                     text = brief;
                 } else {
-                    title = '⚠️ 未捕捉到简介';
+                    title = t('⚠️ 未捕捉到简介');
                     text = task.promptKey
-                        ? '提示词条目内容为空，或不含「该任务是为了/任务说明」等标记——导演将只收到任务名称。'
-                        : '该任务未配置提示词条目——导演将只收到任务名称。';
+                        ? t('提示词条目内容为空，或不含「该任务是为了/任务说明」等标记——导演将只收到任务名称。')
+                        : t('该任务未配置提示词条目——导演将只收到任务名称。');
                 }
             } catch (err) {
-                title = '⚠️ 提取失败';
+                title = t('⚠️ 提取失败');
                 text = String(err?.message || err);
             }
         }
@@ -2948,7 +2970,7 @@ function showBriefPopup(anchor, taskLabel, title, text) {
     const pop = document.createElement('div');
     pop.id = 'ra_director_brief_pop';
     pop.innerHTML = `
-        <div class="brief-pop-title">${h(taskLabel)}·简介预览</div>
+        <div class="brief-pop-title">${h(taskLabel)} · ${h(t('简介预览'))}</div>
         <div class="brief-pop-sub">${h(title)}</div>
         <div class="brief-pop-body"></div>`;
     pop.querySelector('.brief-pop-body').textContent = text;

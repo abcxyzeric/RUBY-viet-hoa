@@ -27,7 +27,7 @@ export function directorRound(aiCount, anchor, cycleLength) {
 // ---------- 任务简介自动提取 ----------
 // 创作者未手写简介时，从任务提示词条目内容中捕捉标记词附近约200字作为任务切面简介。
 
-const BRIEF_MARKERS = ['该任务是为了', '任务说明', '任务简介', '任务目标', '任务内容', '本任务'];
+const BRIEF_MARKERS = ['该任务是为了', '任务说明', '任务简介', '任务目标', '任务内容', '本任务', 'nhiệm vụ này nhằm', 'nhiệm vụ này để', 'mô tả nhiệm vụ', 'giải thích nhiệm vụ', 'mục tiêu nhiệm vụ', 'nội dung nhiệm vụ', 'nhiệm vụ này'];
 const BRIEF_MAX_CHARS = 200;
 
 export function extractTaskBrief(content, maxChars = BRIEF_MAX_CHARS) {
